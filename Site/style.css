@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=DM+Serif+Display:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', serif;
+    padding-top: 10vh;
+}
+
+                            /* Nav-Bar */
+.nav-bar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(235, 172, 210);
+}
+
+.logo{
+    width: 40%;
+}
+
+.links-nav-bar{
+    width: 70%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.links-nav-bar a{
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.links-nav-bar a:hover{
+    text-decoration: underline;
+}
+
+
+                            /* Álbuns */
+.albuns{
+    width: 100vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.album {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 20px auto;
+    background-color: #fce4ec;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.info_album {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info_album h3{
+    align-self: center;
+    font-size: 30px;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.info_album p{
+    font-size: 17px;
+}
+
+.dados_album ul{
+    list-style-type: none
+}
+
+
+.img_album_debut{
+    background-image: url('imagens/albuns/debut.jpg');
+}
+
+.img_album_fearless{
+    background-image: url('imagens/albuns/fearless.jpg');
+}
+
+.img_album_speak_now{
+    background-image: url('imagens/albuns/speaknow.jpg');
+}
+
+.img_album_red{
+    background-image: url('imagens/albuns/red.jpg');
+}
+
+.img_album_pop{
+    background-image: url('imagens/albuns/1989.jpg');
+}
+
+.img_album_reputation{
+    background-image: url('imagens/albuns/reputation.jpg');
+}
+
+.img_album_lover{
+    background-image: url('imagens/albuns/lover.png');
+}
+
+.img_album_folklore{
+    background-image: url('imagens/albuns/folklore.png');
+}
+
+.img_album_evermore{
+    background-image: url('imagens/albuns/evermore.png');
+}
+
+.img_album_fearless_tv{
+    background-image: url('imagens/albuns/fearlesstv.png');
+}
+
+.img_album_red_tv{
+    background-image: url('imagens/albuns/redtv.png');
+}
+
+.img_album_midnights{
+    background-image: url('imagens/albuns/midnights.png');
+}
+
+.img_album_speak_now_tv{
+    background-image: url('imagens/albuns/speaknowtv.png');
+}
+
+.img_album_pop_tv{
+    background-image: url('imagens/albuns/1989tv.png');
+}
+
+.img_album_ttpd{
+    background-image: url('imagens/albuns/ttpd.jpg');
+}
+
+[class^="img_album_"] {
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    margin: 20px;
+}
+
+
+                            /* Turnês */
+.turnes{
+    background-color: rgb(235, 172, 210);
+    width: 100vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tour{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.info_tour{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.info_tour h3{
+    font-size: 30px;
+    margin: 0;
+}
+
+.info_tour p{
+    font-size: 17px;
+}
+
+.img_tour_fearless_tour{
+    background-image: url('imagens/turnes/fearless3.jpg');
+}
+
+.img_tour_speak_now_tour{
+    background-image: url('imagens/turnes/speaknow2.png');
+}   
+
+.img_tour_red_tour{
+    background-image: url('imagens/turnes/red1.png');
+}
+
+.img_tour_1989_tour{
+    background-image: url('imagens/turnes/pop3.png');
+}
+
+.img_tour_reputation_tour{
+    background-image: url('imagens/turnes/rep4.png');
+}
+
+.img_tour_the_eras_tour{
+    background-image: url('imagens/turnes/theeras3.png');
+}
+
+[class^="img_tour_"] {
+    width: 70%;
+    height: 50vh;
+    background-size: contain;
+    background-position: center;
+    border-radius: 12px;
+    margin: 20px;
+}
