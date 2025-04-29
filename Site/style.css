@@ -39,10 +39,15 @@ body{
     color: black;
     font-weight: 500;
     font-size: 20px;
+    padding: 10px;
 }
 
 .links-nav-bar a:hover{
-    text-decoration: underline;
+    text-decoration: none;
+    color: black;
+    background-color: rgb(255, 223, 228);
+    border-radius: 10px;
+    transition: 0.3s;
 }
 
 
@@ -181,13 +186,13 @@ body{
     width: 40%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
 }
 
 .info_tour h3{
     font-size: 30px;
     margin: 0;
+    align-self: center;
 }
 
 .info_tour p{
