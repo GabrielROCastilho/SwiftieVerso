@@ -1,0 +1,46 @@
+body{
+    margin: 0;
+}
+
+.container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.banner{
+    height: 100vh;
+    width: 100vw;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    display: inline-block;
+}
+
+.logo{
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 25%;
+    left: 20%;
+    width: 20%;
+    height: 20%;
+}
+
+                                /* DEBUT */
+.banner_debut{
+    background-image: url('imagens/debut.png');
+}
+
+.logo_debut{
+    background-image: url('imagens/debut-logo.png');
+}
+
+                                /* 1989 */
+.banner_1989{
+    background-image: url('imagens/1989.png');
+}
+
+.logo_1989{
+    background-image: url('imagens/1989-logo.png');
+}
