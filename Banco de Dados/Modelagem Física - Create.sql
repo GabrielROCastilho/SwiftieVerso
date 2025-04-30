@@ -20,11 +20,11 @@ create table cidade(
 -- Criando a tabela "Endereço"
 create table endereco(
 	idEndereco int primary key auto_increment,
+    logradouro varchar(200),
     numero int not null,
     complemento varchar(50),
-    logradouro varchar(200),
-    fkCidade int,
-    fkEstado int,
+    fkCidade int not null, 
+    fkEstado int not null,
     constraint fk_cidade_endereco foreign key(fkCidade) references cidade(idCidade),
     constraint fk_estado_endereco foreign key(fkEstado) references estado(idEstado)
 );
@@ -37,7 +37,7 @@ create table usuario(
     cpf char(11) not null,
     email varchar(100) not null,
     pontuacao_total int,
-    fkEndereco int,
+    fkEndereco int not null,
     constraint fk_endereco foreign key(fkEndereco) references endereco(idEndereco)
 );
 
