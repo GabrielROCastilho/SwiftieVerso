@@ -34,8 +34,10 @@ create table usuario(
 	idUsuario int primary key auto_increment,
     primeiro_nome varchar(20) not null,
     sobrenome varchar(20) not null,
+    dtNascimento date not null,
     cpf char(11) not null,
     email varchar(100) not null,
+    senha varchar(15) not null,
     pontuacao_total int,
     fkEndereco int not null,
     constraint fk_endereco foreign key(fkEndereco) references endereco(idEndereco)

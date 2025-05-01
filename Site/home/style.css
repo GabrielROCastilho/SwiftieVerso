@@ -50,7 +50,6 @@ body{
     transition: 0.3s;
 }
 
-
                             /* Álbuns */
 .albuns {
     width: 100vw;
@@ -240,4 +239,133 @@ body{
     background-position: center;
     border-radius: 12px;
     margin: 20px;
+}
+
+                                /* LOGIN */
+.body-cadastro{
+    background-image: url('imagens/login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    padding: 0;
+}
+
+.container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card{
+    background-color: rgba(255, 255, 255, 0.8);
+    width: fit-content;
+    height: fit-content;
+    padding: 50px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ipt-campos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.ipt-campos input{
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+}
+
+.ipt-campos label{
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.btn{
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgb(235, 172, 210);
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.btn-login{
+    width: 100%;
+}
+
+.btn-login:hover{
+    transform: scale(1.05);
+}
+
+.btn-cadastro{
+    width: 50%;
+}
+
+.btn-cadastro:hover{
+    transform: scale(1.05);
+}
+
+.mensagem-cadastro {
+    font-size: 14px;
+    border-top: 1.5px solid black;
+    padding-top: 10px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.mensagem-cadastro a{
+    text-decoration: none;
+    color: black;
+}
+
+.mensagem-cadastro a:hover{
+    text-decoration: underline;
+}
+
+.nome-completo{
+    display: flex;
+    flex-direction: row;
+}
+
+.cidade-estado{
+    display: flex;
+    flex-direction: row;
+}
+
+.numero-complemento{
+    display: flex;
+    flex-direction: row;
+}
+
+#ipt_primeiro_nome{
+    width: 50%;
+}
+
+#ipt_sobrenome{
+    width: 50%;
+}
+
+#ipt_estado{
+    width: 50%;
+}
+
+#ipt_cidade{
+    width: 50%;
+}
+
+#ipt_numero{
+    width: 30%;
 }
