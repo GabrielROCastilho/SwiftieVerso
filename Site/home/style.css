@@ -18,6 +18,7 @@ body{
     left: 0;
     width: 100%;
     height: 10vh;
+    z-index: 10;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -167,16 +168,11 @@ body{
     margin: 20px;
 }
 
-[class^="img_album_"]:hover{
-    cursor: pointer;
-    transform: scale(1.1);
-    transition: 0.55s;
-}
-
 
                             /* Turnês */
 .turnes{
-    background-color: rgb(235, 172, 210);
+    background-color: white;
+    color: black;
     width: 100vw;
     height: fit-content;
     display: flex;
@@ -185,7 +181,7 @@ body{
 }
 
 .tour{
-    width: 80%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -199,47 +195,64 @@ body{
 }
 
 .info_tour h3{
-    font-size: 30px;
-    margin: 0;
+    font-size: 40px;
+    text-decoration: underline;
+    margin: 0px 0px 20px 0px;
     align-self: center;
 }
 
 .info_tour p{
-    font-size: 17px;
+    font-size: 20px;
+}
+
+.dados_tour ul{
+    margin-top: 10px;
+    padding: 20px;
+    margin: 0;
+    font-size: 20px;
 }
 
 .img_tour_fearless_tour{
-    background-image: url('imagens/turnes/fearless3.jpg');
+    background-image: url('imagens/turnes/fearless.jpg');
 }
 
 .img_tour_speak_now_tour{
-    background-image: url('imagens/turnes/speaknow2.png');
+    background-image: url('imagens/turnes/speaknow.png');
 }   
 
 .img_tour_red_tour{
-    background-image: url('imagens/turnes/red1.png');
+    background-image: url('imagens/turnes/red.png');
 }
 
 .img_tour_1989_tour{
-    background-image: url('imagens/turnes/pop3.png');
+    background-image: url('imagens/turnes/pop.png');
 }
 
 .img_tour_reputation_tour{
-    background-image: url('imagens/turnes/rep4.png');
+    background-image: url('imagens/turnes/rep.png');
 }
 
 .img_tour_the_eras_tour{
-    background-image: url('imagens/turnes/theeras3.png');
+    background-image: url('imagens/turnes/theeras.png');
 }
 
 [class^="img_tour_"] {
-    width: 70%;
-    height: 50vh;
-    background-size: contain;
+    width: 50%;
+    height: 60vh;
+    background-size: cover;
     background-position: center;
     border-radius: 12px;
-    margin: 20px;
+    margin: 20px 20px 10px 0px;
+    position: relative;
+    z-index: 1;
+    transition: 0.55s;
 }
+
+[class^="img_tour_"]:hover{
+    cursor: pointer;
+    transform: scale(1.03);
+}
+
 
                                 /* LOGIN */
 .body-cadastro{

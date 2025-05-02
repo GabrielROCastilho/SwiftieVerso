@@ -1,6 +1,6 @@
 window.onload = function () {
 
-    // Álbuns
+                                    // Álbuns
     var div_albuns = document.getElementById("div_albuns");
 
     var albuns = ['Taylor Swift', 'Fearless', 'Speak Now', 'Red', '1989', 'reputation', 'Lover', 'folklore', 'evermore', 'Fearless (Taylors Version)', 'Red (Taylors Version)','Midnights', 'Speak Now (Taylors Version)', '1989 (Taylors Version)', 'The Tortured Poets Department']
@@ -48,7 +48,7 @@ window.onload = function () {
         conteudoAlbum +=
             `
             <div class="album">
-                <a class="img_album_${classAlbuns[i]}" href="../albuns/${classAlbuns[i]}.html" target="_blank"></a>
+                <div class="img_album_${classAlbuns[i]}"></div>
                 <div class="info_album">
                     <h3>${albuns[i]}</h3>
                     <p>${infoAlbum}</p>
@@ -68,40 +68,108 @@ window.onload = function () {
     div_albuns.innerHTML = conteudoAlbum
 
 
-    // Turnês
-    var div_turnes = document.getElementById("div_turnes");
+                                // Turnês
+    var div_turnes = document.getElementById("div_turnes")
 
     var turnes = ['Fearless Tour', 'Speak Now World Tour', 'The Red Tour', 'The 1989 World Tour', 'Reputation Stadium Tour', 'The Eras Tour']
     var classTurnes = ['fearless_tour', 'speak_now_tour', 'red_tour', '1989_tour', 'reputation_tour', 'the_eras_tour']
-    var infoTour = ''
-    var conteudoTour = ''
 
+    var conteudoTour = ''
+    
     for (var i = 0; i < turnes.length; i++) {
+
+        var infoTour = ''
+        var dadosTour = ''
+    
         if (turnes[i] == 'Fearless Tour') {
             infoTour = 'A primeira turnê mundial da Taylor, baseada no álbum Fearless, marcou sua transição definitiva do country para o mainstream. Com cenários que remetiam a contos de fadas, vestidos de princesa e violões com glitter, Taylor encantava com autenticidade e emoção crua.'
+            dadosTour = 
+            `
+                <li><b>Países</b>: Estados Unidos, Canadá, Inglaterra, Austrália, Japão e Bahamas</li>
+                <li><b>Shows</b>: 118</li>
+                <li><b>Público total</b>: 1.207.887 pessoas</li>
+                <li><b>Arrecadação</b>: US$ 66,5 milhões</li>
+            `
         } else if (turnes[i] == 'Speak Now World Tour') {
             infoTour = 'A Speak Now Tour foi sua primeira grande produção autoral. Com performances teatrais e elementos de conto de fadas e drama, ela trouxe um espetáculo mais visual, incorporando narrativa e coreografia pela primeira vez.'
+            dadosTour = 
+            `
+                <li><b>Países</b>: Estados Unidos, Canadá, Austrália, Nova Zelândia, Singapura, Japão, Coreia do Sul, Filipinas, Hong Kong, Bélgica, Noruega, Alemanha, Países Baixos, Itália, França, Espanha, Inglaterra, Irlanda e Irlanda do Norte</li>
+                <li><b>Shows</b>: 110</li>
+                <li><b>Público total</b>: 1.642.435 pessoas</li>
+                <li><b>Arrecadação</b>: US$ 123,7 milhões</li>
+            `
         } else if (turnes[i] == 'The Red Tour') {
             infoTour = 'A Red Tour foi quando Taylor começou a flertar com o pop de forma mais intensa. As apresentações misturavam momentos intimistas e performances energéticas com fogos, luzes e um tom mais maduro.'
+            dadosTour = 
+            `
+                <li><b>Países</b>: Estados Unidos, Canadá, Nova Zelândia, Austrália, Reino Unido, Alemanha, China, Japão, Indonésia, Filipinas, Singapura e Malásia</li>
+                <li><b>Shows</b>: 86</li>
+                <li><b>Público total</b>: 1.700.000 pessoas</li>
+                <li><b>Arrecadação</b>: US$ 150,2 milhões</li>
+            `
         } else if (turnes[i] == 'The 1989 World Tour') {
             infoTour = 'Com um ar futurista e pop maximalista, a 1989 Tour foi uma explosão de hits dançantes, visuais brilhantes e participações especiais. Taylor trocou o violão por sintetizadores e palco com passarela elevada.'
+            dadosTour = 
+            `
+                <li><b>Países</b>: Japão, Estados Unidos, Alemanha, Países Baixos, Escócia, Inglaterra, Irlanda, Canadá, Singapura, China e Austrália</li>
+                <li><b>Shows</b>: 85</li>
+                <li><b>Público total</b>: 2.280.000 pessoas</li>
+                <li><b>Arrecadação</b>: US$ 250,7 milhões</li>
+            `
         } else if (turnes[i] == 'Reputation Stadium Tour') {
             infoTour = 'Sombria, poderosa e cheia de atitude, essa turnê foi uma resposta direta à era de polêmicas que Taylor enfrentou. Com cobras gigantes, chamas e coreografias ousadas, ela usou a estética de vingança com força.'
-        } else {
-            infoTour = 'Um verdadeiro presente para os fãs, The Eras Tour é uma celebração de todas as fases da carreira da Taylor. Ela recria as atmosferas de cada álbum com figurinos, cenários e setlists dedicados — um show com mais de 3 horas de duração.'
-        }
-
-        conteudoTour +=
+            dadosTour = 
             `
-            <div class="tour">
-                <div class="img_tour_${classTurnes[i]}"></div>
-                <div class="info_tour">
-                    <h3>${turnes[i]}</h3>
-                    <p>${infoTour}</p>
+                <li><b>Países</b>: Estados Unidos, Inglaterra, Irlanda, Canadá, Austrália, Nova Zelândia e Japão</li>
+                <li><b>Shows</b>: 53</li>
+                <li><b>Público total</b>: 2.888.922 pessoas</li>
+                <li><b>Arrecadação</b>: US$ 345,7 milhões</li>
+            `
+        } else {
+            infoTour = 'Mais do que um show, The Eras Tour é um fenômeno cultural sem precedentes — uma celebração épica de todas as fases da carreira de Taylor Swift. Com figurinos deslumbrantes, cenários meticulosamente elaborados e setlists que atravessam mais de uma década de sucessos, a turnê redefine o que significa espetáculo no mundo da música. Reconhecida como a maior turnê da história, tanto em impacto quanto em arrecadação, ela eterniza o legado de uma artista no auge de seu poder criativo'
+            dadosTour = 
+            `
+                <li><b>Países</b>: Estados Unidos, México, Argentina, Brasil, Japão, Austrália, Singapura, França, Suécia, Portugal e Espanha</li>
+                <li><b>Shows</b>: 149</li>
+                <li><b>Público total</b>: 10.168.008 pessoas</li>
+                <li><b>Arrecadação</b>: US$ 2,077 bilhões</li>
+            `
+        }
+    
+        if (i % 2 === 0) {
+            conteudoTour += 
+            `
+                <div class="tour">
+                <a class="img_tour_${classTurnes[i]}" href="../tours/${classTurnes[i]}.html" target="_blank"></a>
+                    <div class="info_tour">
+                        <h3>${turnes[i]}</h3>
+                        <p>${infoTour}</p>
+                        <div class="dados_tour">
+                            <ul>${dadosTour}</ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        `
+            `
+        } else {
+            conteudoTour += 
+            `
+                <div class="tour">
+                    <div class="info_tour">
+                        <h3>${turnes[i]}</h3>
+                        <p>${infoTour}</p>
+                        <div class="dados_tour">
+                            <ul>${dadosTour}</ul>
+                        </div>
+                    </div>
+                    <a class="img_tour_${classTurnes[i]}" href="../tours/${classTurnes[i]}.html" target="_blank"></a>
+                </div>
+            `
+        }
     }
-
+    
     div_turnes.innerHTML = conteudoTour
+    
+
+                                    // Prêmios
 }
