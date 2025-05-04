@@ -1,5 +1,61 @@
 window.onload = function () {
 
+                                    // Timeline
+    var datas = [2006, 2010, 2014, 2016, 2017, 2019, 2020, 2021, 2021, 2022, 2023, 2023, 2024]
+    var titulos = [
+        'Lançamento do Álbum de Estreia "Taylor Swift"',
+        'Vitória no Grammy com "Fearless"',
+        'Transição para o Pop com "1989"',
+        'Cancelamento Público Após Polêmica com Kanye West e Kim Kardashian',
+        'Vitória no Processo por Assédio Sexual',
+        'Disputa pelos Direitos de Seus Masters',
+        'Lançamento Surpresa de "Folklore"',
+        'Início das Regravações com Fearless (Taylor’s Version)',
+        'Taylor Swift Ganha o Global Icon Award no BRITs',
+        'Reconhecimento Acadêmico',
+        'Início da "The Eras Tour"',
+        'Tornou-se Bilionária',
+        'Taylor Swift Faz História com 4º Álbum do Ano no Grammy'
+    ]
+    var conteudos = [
+        'Taylor Swift lançou seu álbum de estreia autointitulado, apresentando-se como uma jovem cantora country com talento promissor. A faixa "Tim McGraw" destacou-se, marcando o início de sua jornada musical.',
+        'Taylor tornou-se a artista mais jovem a ganhar o Grammy de "Álbum do Ano" com "Fearless", consolidando sua posição como uma das principais cantoras e compositoras da música country.',
+        'Com o lançamento de "1989", Taylor migrou do country para o pop, apresentando hits como "Shake It Off" e "Blank Space". O álbum foi um sucesso comercial e crítico, vencendo o Grammy de "Álbum do Ano".',
+        'Taylor enfrentou intensa reação pública após Kim Kardashian divulgar gravações que supostamente mostravam Taylor aprovando a letra de "Famous", de Kanye West — música na qual ele dizia que "fez aquela vadia famosa". Kim a chamou de "falsa" e lançou a hashtag #TaylorSwiftIsOverParty, que viralizou. Taylor sumiu da mídia por um ano, o que afetou fortemente sua imagem pública. Mais tarde, ela revelou que passou por um período difícil de saúde mental e se reinventou completamente com o álbum "Reputation".',
+        'Taylor enfrentou e venceu um processo judicial contra um ex-DJ que a assediou durante um meet and greet. Ela buscou apenas US$1 em danos simbólicos, destacando a importância de defender vítimas de assédio.',
+        'Após a venda de sua antiga gravadora, Taylor perdeu os direitos sobre os masters de seus primeiros álbuns. Em resposta, iniciou a regravação desses álbuns para recuperar o controle sobre sua música.',
+        'Durante a pandemia, Taylor lançou "Folklore", um álbum introspectivo e alternativo que recebeu aclamação crítica e comercial, vencendo o Grammy de "Álbum do Ano".',
+        'Após uma disputa pelos direitos de seus álbuns antigos, Taylor decidiu regravar todo o seu catálogo até Reputation para recuperar o controle sobre suas músicas. O projeto começou com o lançamento de Fearless (Taylor’s Version), provando seu poder artístico e comercial. Foi um movimento histórico de resistência contra a indústria.',
+        'Taylor foi homenageada no BRIT Awards com o prêmio de Ícone Global, se tornando a primeira mulher e primeira artista não britânica a receber esse reconhecimento. O prêmio celebrou sua influência mundial, resiliência e impacto cultural.',
+        'Universidades como NYU e UT Austin introduziram cursos focados na obra de Taylor, reconhecendo sua influência na música e na cultura contemporânea.',
+        'Taylor iniciou a "The Eras Tour", uma celebração de sua carreira musical. A turnê tornou-se a mais lucrativa da história, arrecadando mais de US$1 bilhão.',
+        'Com o sucesso de sua turnê e regravações, Taylor atingiu um patrimônio líquido estimado em US$1,6 bilhão, tornando-se a primeira artista a alcançar esse marco com base exclusivamente em sua música.',
+        'Em 2024, Taylor venceu o Grammy de Álbum do Ano por Midnights, se tornando a primeira artista da história a ganhar essa categoria quatro vezes. A vitória consolidou seu legado como uma das maiores compositoras e artistas de todos os tempos.'
+    ]
+    var conteudoTimeline = ''
+
+    for(var i = 0; i < datas.length; i++){
+        conteudoTimeline += 
+        `
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">${datas[i]}</div>
+                <div class="timeline-content">
+                    <h3>${titulos[i]}</h3>
+                    <p>${conteudos[i]}</p>
+                </div>
+            </div>
+        `
+    }
+
+    timeline.innerHTML = 
+    `
+        <div class="timeline-items">
+            ${conteudoTimeline}
+        </div>
+    `    
+    
+
                                     // Álbuns
     var div_albuns = document.getElementById("div_albuns");
 
