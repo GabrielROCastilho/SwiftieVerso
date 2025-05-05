@@ -228,4 +228,42 @@ window.onload = function () {
     
 
                                     // Prêmios
+    var videos = ['videos/album do ano.mp4', 'videos/global-icon.mp4', 'videos/the-eras-tour.mp4']
+    
+    var titulosPremios = [
+        'Em 2024, Taylor Swift fez história ao se tornar a primeira artista a vencer o prêmio de Álbum do Ano quatro vezes no Grammy, com o aclamado Midnights.',
+        'Em 2021, Taylor Swift foi homenageada com o prêmio Global Icon no BRIT Awards, tornando-se a primeira mulher e a primeira artista internacional a receber essa distinção, que é a mais alta honraria concedida pela indústria fonográfica britânica.',
+        'Com a The Eras Tour, a Taylor Swift fez história ao realizar a turnê de maior bilheteria da história da música.'
+    ]
+
+    var conteudosPremios = [
+        'Antes desse feito inédito, o recorde era de três vitórias e era compartilhado por três lendas da música: Frank Sinatra, Paul Simon e Stevie Wonder.',
+        'Antes dela, apenas artistas britânicos como Elton John, David Bowie e Robbie Williams haviam recebido esse reconhecimento. Esse prêmio consolidou ainda mais a posição de Taylor Swift como uma das artistas mais influentes de sua geração, reconhecida não apenas por seu talento musical, mas também por seu engajamento social e impacto cultural global.',
+        'A turnê arrecadou mais de <strong>US$ 2 bilhões</strong> em vendas de ingressos, com mais de 10 milhões de fãs presentes ao redor do mundo. Ela contou com 149 shows espalhados por cinco continentes e apresentou uma média impressionante de 67 mil espectadores por noite. Para completar, o filme-concerto <em>"Taylor Swift: The Eras Tour"</em> também bateu recordes, arrecadando mais de <strong>US$ 260 milhões</strong> nas bilheteiras mundiais e se tornando o maior filme-concerto da história.'
+    ]
+
+    var conteudoPremio = ''
+
+    for(var i = 0; i < videos.length; i++){
+        conteudoPremio += 
+        `
+        <div class="container-premios">
+            <div class="premio">
+                <video controls class="video">
+                    <source src="${videos[i]}" type="video/mp4"/>
+                </video>
+                <div class="text-premio">
+                    <h3>${titulosPremios[i]}</h3>
+                    <p>${conteudosPremios[i]}</p>
+                </div>
+            </div>
+        </div>  
+        `
+    }
+    div_premios.innerHTML = 
+    `
+        <div class="container-premios">
+               ${conteudoPremio} 
+        </div>
+    `
 }

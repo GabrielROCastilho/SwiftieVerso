@@ -412,9 +412,8 @@ body{
                                 /* Prêmios */
 /* Prêmios */
 .container-premios {
-    margin-top: 50px;
     width: 100vw;
-    padding: 60px 20px;
+    padding: 30px;
     background-color: #fbd5e5;
     display: flex;
     flex-direction: column;
@@ -438,13 +437,13 @@ body{
     transform: scale(1.01);
 }
 
-.video-album-do-ano,
-.video-global-icon,
-.video-the-eras-tour {
+.video {
     width: 100%;
     max-width: 400px;
     border-radius: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0;
+    margin: 0;
 }
 
 .text-premio {
