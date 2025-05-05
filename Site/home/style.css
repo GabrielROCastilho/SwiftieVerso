@@ -2,6 +2,7 @@
 
 html{
     scroll-behavior: smooth;
+    max-width: 100vw;
 }
 
 body{
@@ -468,20 +469,24 @@ body{
 
 
                                 /* Login / Cadastro */
-.body-cadastro{
-    background-image: url('imagens/login.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    overflow: hidden;
+.body-login-cadastro{
     padding: 0;
 }
 
-.container{
+.container-login-cadastro{
     width: 100vw;
     height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
+}
+
+.img-login-cadastro{
+    background-image: url('imagens/login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 50%;
+    height: 100vh;
 }
 
 .card{
@@ -493,6 +498,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-left: 10%;
 }
 
 .form{
