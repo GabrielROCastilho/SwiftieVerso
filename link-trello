@@ -1,1 +1,23 @@
 https://trello.com/b/mNFUdrIQ/swiftieverso
+
+Acrescentar na modelagem lógica do usuário o campo 'apelido'. 
+Esse apelido será definido pelo usuário ao realizar o cadastro.
+E esse nickname representará a pessoa dentro do site. 
+
+Acrescentar na modelagem lógica do usuário o campo 'minutagem', onde armazena os minutos totais que a pessoa escutou no site.
+
+Ao fazer o cadastro, terá as seções:
+1. Quiz;
+2. Monte seu álbum;
+3. Personalize seu perfil: 
+  3.1: Álbum favorito.
+  3.2: Música favorita.
+4. Montar sua tier list;
+5. Ver Ranking Mundial:
+  5.1: Ranking dos quizes.
+  5.2: Ranking dos álbuns.
+  5.3: Ranking das músicas.
+  5.4: Ranking das pessoas que mais minutagem.
+6. Vídeos das turnês;
+7. Vídeos com os fãs;
+8. Área para escutar as músicas.
