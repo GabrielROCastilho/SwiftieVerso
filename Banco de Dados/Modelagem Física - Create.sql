@@ -36,6 +36,8 @@ create table usuario(
     email varchar(100) not null,
     senha varchar(15) not null,
     pontuacao_total int,
+    nickname varchar(50) not null,
+    constraint unq_nickname unique (nickname),
     fkEndereco int not null,
     constraint fk_endereco foreign key(fkEndereco) references endereco(idEndereco)
 );
