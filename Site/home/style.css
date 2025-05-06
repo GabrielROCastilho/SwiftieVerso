@@ -372,9 +372,13 @@ body{
     margin-bottom: 10px;
 }
 
-.dados_tour ul {
+.dados_tour ul{
     font-size: 17px;
     padding-left: 20px;
+}
+
+.dados_tour ul li{
+    margin-bottom: 10px;
 }
 
 [class^="img_tour_"] {

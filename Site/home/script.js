@@ -63,7 +63,7 @@ window.onload = function () {
     var classAlbuns = ['debut', 'fearless', 'speak_now', 'red', 'pop', 'reputation', 'lover', 'folklore', 'evermore', 'fearless_tv', 'red_tv', 'midnights', 'speak_now_tv', 'pop_tv', 'ttpd']
     var anoLancamento = [2006, 2008, 2010, 2012, 2014, 2017, 2019, 2020, 2020, 2021, 2021, 2022, 2023, 2023, 2024]
     var qtdMusicas = [15, 19, 14, 16, 13, 15, 18, 17, 17, 26, 30, 23, 22, 22, 31]
-    var qtdStramings = ['0', '0', '0', '0', '0', '0', '55.000,000', '80.600,000', '67.360,000', '50.200,000', '90.800,000', '185.600,000', '126.300,000', '176.100,000', '313.700,000']
+    var qtdStramings = ['X', 'X', 'X', 'X', 'X', 'X', '55.000,000', '80.600,000', '67.360,000', '50.200,000', '90.800,000', '185.600,000', '126.300,000', '176.100,000', '313.700,000']
     var musicaMaisFamosa = ['Our Song', 'Love Story', 'Enchanted', 'I Knew You Were Touble', 'Blank Space', 'Dont Blame Me', 'Cruel Summer', 'cardigan', 'willow', 'Love Story', 'All Too Well (10 Minutes Version)', 'Anti-Hero', 'Enchanted', 'Wildest Dreams', 'Fortnight']
     var infoAlbum = ''
     var conteudoAlbum = ''
@@ -197,7 +197,7 @@ window.onload = function () {
             conteudoTour += 
             `
                 <div class="tour">
-                <a class="img_tour_${classTurnes[i]}" href="../tours/${classTurnes[i]}.html" target="_blank"></a>
+                <div class="img_tour_${classTurnes[i]}"></div>
                     <div class="info_tour">
                         <h3>${turnes[i]}</h3>
                         <p>${infoTour}</p>
@@ -218,7 +218,7 @@ window.onload = function () {
                             <ul>${dadosTour}</ul>
                         </div>
                     </div>
-                    <a class="img_tour_${classTurnes[i]}" href="../tours/${classTurnes[i]}.html" target="_blank"></a>
+                    <div class="img_tour_${classTurnes[i]}"></div>
                 </div>
             `
         }
