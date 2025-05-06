@@ -8,7 +8,7 @@ insert into cidade (nome, fkEstado) values ('São Paulo', 1);
 insert into endereco (fkCidade, fkEstado) values (1, 1);
 
 -- USUARIO
-insert into usuario (primeiro_nome, sobrenome, cpf, dtNascimento, email, senha, fkEndereco) values ('Gabriel', 'Castilho', 52437201866, '2004-05-20', 'gabrielcastilho08@gmail.com', 'root', 1);
+insert into usuario (primeiro_nome, sobrenome, cpf, dtNascimento, email, senha, nickname, fkEndereco) values ('Gabriel', 'Castilho', 52437201866, '2004-05-20', 'gabrielcastilho08@gmail.com', 'root', 'ts1fan', 1);
 
 -- QUIZ
 insert into quiz (nivel_dificuldade, numero_questoes, descricao) values (5, 10, 'Quiz sobre a infância da Taylor');
