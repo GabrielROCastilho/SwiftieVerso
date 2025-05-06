@@ -20,9 +20,6 @@ create table cidade(
 -- Criando a tabela "Endereço"
 create table endereco(
 	idEndereco int primary key auto_increment,
-    logradouro varchar(200),
-    numero int not null,
-    complemento varchar(50),
     fkCidade int not null, 
     fkEstado int not null,
     constraint fk_cidade_endereco foreign key(fkCidade) references cidade(idCidade),

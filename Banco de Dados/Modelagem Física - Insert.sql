@@ -5,7 +5,7 @@ insert into estado (nome, sigla) values ('São Paulo', 'SP');
 insert into cidade (nome, fkEstado) values ('São Paulo', 1);
 
 -- ENDERECO
-insert into endereco (logradouro, numero, complemento, fkCidade, fkEstado) values ('Avenida Alberto Byington', 332, 'Apto 112B', 1, 1);
+insert into endereco (fkCidade, fkEstado) values (1, 1);
 
 -- USUARIO
 insert into usuario (primeiro_nome, sobrenome, cpf, dtNascimento, email, senha, fkEndereco) values ('Gabriel', 'Castilho', 52437201866, '2004-05-20', 'gabrielcastilho08@gmail.com', 'root', 1);

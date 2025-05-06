@@ -2,7 +2,6 @@
 
 html{
     scroll-behavior: smooth;
-    max-width: 100vw;
 }
 
 body{
@@ -14,7 +13,8 @@ body{
 
                                 /* Container Home Page */
 .container_home_page {
-    width: 100vw;
+    width: 100%;
+    box-sizing: border-box; 
     height: 90vh;
     background-image: url('imagens/home.png');
     background-repeat: no-repeat;
@@ -192,7 +192,8 @@ body{
 
                                 /* Álbuns */
 .albuns {
-    width: 100vw;
+    width: 100%;
+    box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px 20px;
@@ -324,7 +325,8 @@ body{
 
 .turnes {
     background-color: #fff0f5;
-    width: 100vw;
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -413,7 +415,8 @@ body{
                                 /* Prêmios */
 /* Prêmios */
 .container-premios {
-    width: 100vw;
+    width: 100%;
+    box-sizing: border-box;
     padding: 30px;
     background-color: #fbd5e5;
     display: flex;
@@ -467,6 +470,14 @@ body{
     line-height: 1.6;
 }
 
+.container_home_page,
+.albuns,
+.turnes,
+.container-premios {
+    width: 100%;
+    box-sizing: border-box; /* importante para que padding não aumente a largura */
+}
+
 
                                 /* Login / Cadastro */
 .body-login-cadastro{
@@ -490,7 +501,7 @@ body{
 }
 
 .card{
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: #fce4ec;
     width: fit-content;
     height: fit-content;
     padding: 50px;
@@ -499,6 +510,10 @@ body{
     flex-direction: column;
     align-items: center;
     margin-left: 10%;
+}
+
+.card h2{
+    margin: 0px 0px 30px 0px;
 }
 
 .form{
