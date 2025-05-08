@@ -35,11 +35,12 @@ create table usuario(
     cpf char(11) not null,
     email varchar(100) not null,
     senha varchar(15) not null,
-    pontuacao_total int,
     nickname varchar(50) not null,
-    constraint unq_nickname unique (nickname),
+    pontuacao_total int default 0,
+    minutagem decimal(5.2) default 0,
     fkEndereco int not null,
-    constraint fk_endereco foreign key(fkEndereco) references endereco(idEndereco)
+    constraint fk_endereco foreign key(fkEndereco) references endereco(idEndereco),
+    constraint unq_nickname unique(nickname)
 );
 
 -- Criando a tabela "Quiz"
@@ -55,7 +56,7 @@ create table quiz(
 create table desempenho(
 	fkUsuario int,
     fkQuiz int,
-    pontucao int not null,
+    pontuacao int not null,
     primary key(fkUsuario, fkQuiz),
     constraint fk_usuario_desempenho foreign key(fkUsuario) references usuario(idUsuario),
 	constraint fk_quiz foreign key(fkQuiz) references quiz(idQuiz),
@@ -67,7 +68,7 @@ create table album_personalizado(
 	idAlbum int primary key auto_increment,
     nome varchar(50) not null,
     qtd_musica int not null,
-    duracao decimal(5,2) not null,
+    duracao_album decimal(5,2) not null,
     fkUsuario int,
     constraint fk_usuario_album foreign key(fkUsuario) references usuario(idUsuario)
 );
@@ -76,7 +77,7 @@ create table album_personalizado(
 create table musica(
 	idMusica int primary key auto_increment,
     nome varchar(100) not null,
-    duracao decimal(5,2) not null
+    duracao_musica decimal(5,2) not null
 );
 
 -- Criando a tabela "Composição"

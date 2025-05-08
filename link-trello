@@ -1,10 +1,6 @@
 https://trello.com/b/mNFUdrIQ/swiftieverso
 
-Acrescentar na modelagem lógica do usuário o campo 'apelido'. 
 Esse apelido será definido pelo usuário ao realizar o cadastro.
-E esse nickname representará a pessoa dentro do site. 
-
-Acrescentar na modelagem lógica do usuário o campo 'minutagem', onde armazena os minutos totais que a pessoa escutou no site.
 
 Ao fazer o cadastro, terá as seções:
 1. Quiz;
@@ -22,4 +18,4 @@ Ao fazer o cadastro, terá as seções:
 7. Vídeos com os fãs;
 8. Área para escutar as músicas.
 
-Verificar a modelage lógica e os comandos MySQL!!!
+Verificar a modelagem lógica e os comandos MySQL!!!
