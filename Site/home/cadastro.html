@@ -42,20 +42,37 @@
                         </div>
                         <div class="ipt-campos">
                             <label>Informe seu estado</label>
-                            <input type="text" id="ipt_estado">
+                            <select id="slc_estado"></select>
+                        </div>
+                    </div>
+                    <div class="senha-confirmar_senha">
+                        <div class="ipt-campos">
+                            <label>Crie uma senha</label>
+                            <input type="password" id="ipt_senha">
+                        </div>
+                        <div class="ipt-campos">
+                            <label>Confirme sua senha</label>
+                            <input type="password" id="ipt_senha_confirmada">
                         </div>
                     </div>
                     <div class="ipt-campos">
-                        <label>Crie uma senha</label>
-                        <input type="password" id="ipt_senha">
-                    </div>
-                    <div class="ipt-campos">
-                        <label>Confirme sua senha</label>
-                        <input type="password" id="ipt_senha_confirmada">
+                        <label>Como quer ser chamado, swiftie?</label>
+                        <input type="text" id="ipt_nickname">
                     </div>
                     <button onclick="cadastrar()" class="btn btn-cadastro">Cadastrar-se</button>
                 </div>
             </div>
         </div>
     </body>
+    <script>
+        const estados = ["Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"]
+        const values = ["acre", "alagoas", "amapá", "amazonas", "bahia", "ceará", "distrito_federal", "espírito_santo", "goiás", "maranhão", "mato_grosso", "mato_grosso_do_sul", "minas_gerais", "pará", "paraíba", "paraná", "pernambuco", "piauí", "rio_de_janeiro", "rio_grande_do_norte", "rio_grande_do_sul", "rondônia", "roraima", "santa_catarina", "são_paulo", "sergipe", "tocantins"]
+        let options = '<option value=""></option>'
+
+        for(var i = 0; i < estados.length; i++){
+            options += `<option value="${values[i]}">${estados[i]}</option>`
+        }
+
+        document.getElementById("slc_estado").innerHTML = options
+    </script>
 </html>

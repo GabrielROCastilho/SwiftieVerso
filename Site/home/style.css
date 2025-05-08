@@ -586,6 +586,12 @@ body{
     text-decoration: underline;
 }
 
+select{
+    border-radius: 5px;
+    padding: 5px;
+    width: fit-content;
+}
+
 .nome-completo{
     display: flex;
     flex-direction: row;
@@ -596,7 +602,7 @@ body{
     flex-direction: row;
 }
 
-.numero-complemento{
+.senha-confirmar_senha{
     display: flex;
     flex-direction: row;
 }
@@ -617,6 +623,10 @@ body{
     width: 50%;
 }
 
-#ipt_numero{
-    width: 30%;
+#ipt_senha{
+    width: 50%;
+}
+
+#ipt_senha_confirmada{
+    width: 50%;
 }
