@@ -1,7 +1,5 @@
 https://trello.com/b/mNFUdrIQ/swiftieverso
 
-Esse apelido será definido pelo usuário ao realizar o cadastro.
-
 Ao fazer o cadastro, terá as seções:
 1. Quiz;
 2. Monte seu álbum;
@@ -18,4 +16,7 @@ Ao fazer o cadastro, terá as seções:
 7. Vídeos com os fãs;
 8. Área para escutar as músicas.
 
-Verificar a modelagem lógica e os comandos MySQL!!!
+Os quizes podem ser separados por categorias...
+1. Álbuns
+2. Músicas
+3. História da Taylor
