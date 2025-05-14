@@ -9,21 +9,10 @@ create table estado(
     sigla char(2) not null
 );
 
--- Criando a tabela "Cidade"
-create table cidade(
-	idCidade int primary key auto_increment,
-    nome varchar(50) not null,
-    fkEstado int not null,
-    constraint fk_estado_cidade foreign key(fkEstado) references estado(idEstado)
-);
-
 -- Criando a tabela "Endereço"
 create table endereco(
 	idEndereco int primary key auto_increment,
-    fkCidade int not null, 
-    fkEstado int not null,
-    constraint fk_cidade_endereco foreign key(fkCidade) references cidade(idCidade),
-    constraint fk_estado_endereco foreign key(fkEstado) references estado(idEstado)
+    fkEstado varchar(45)
 );
 
 -- Criando a tabela "Usuário"
@@ -60,7 +49,7 @@ create table desempenho(
     primary key(fkUsuario, fkQuiz),
     constraint fk_usuario_desempenho foreign key(fkUsuario) references usuario(idUsuario),
 	constraint fk_quiz foreign key(fkQuiz) references quiz(idQuiz),
-	constraint chk_pontuacao check(pontucao between 0 and 10)
+	constraint chk_pontuacao check(pontuacao between 0 and 10)
 );
 
 -- Criando a tabela "Álbum Personalizado"
