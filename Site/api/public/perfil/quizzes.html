@@ -1,75 +1,342 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz da Taylor Swift</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style_quiz.css">
+    <title>Quiz da Taylor Swift</title>
 </head>
 
-<body class="body_quiz">
-  <div class="container">
-    <h1>Quiz da Taylor Swift</h1>
-    <div class="menu-principal" id="menuPrincipal">
-      <button onclick="mostrarSubmenu('albuns')">Quiz de Álbum</button>
-      <button onclick="mostrarSubmenu('musicas')">Quiz de Músicas</button>
-      <button onclick="mostrarSubmenu('eras')">Quiz de Eras</button>
-      <button onclick="mostrarSubmenu('vida')">Quiz da Vida dela</button>
+<body onload="onloadEsconder()">
+    <div class="container_quiz">
+        <h2>Prove que você é um swiftie de verdade...</h2>
+        <h3>Não pela quantidade de questões certas...</h3>
+        <h3>mas pela vontade de aprender ao estar aqui!</h3>
+
+        <div id="pontuacaoEJogo">
+            <!--Envolve todo o conteúdo do quiz-->
+            <button id="btnIniciarQuiz" onclick="iniciarQuiz()">INICIAR QUIZ</button>
+
+            <div id="pontuacao" class="flex-colunar width-fit-content border-primary">
+                <div id="pontuacaoDuranteJogo" class="flex-colunar padding-8">
+                    <span class="width-fit-content">Quantidade de acertos: <span id="spanCertas"></span></span>
+                    <span class="width-fit-content">Quantidade de erros: <span id="spanErradas"></span></span>
+                </div>
+                <div id="pontuacaoFinalJogo" class="flex-colunar padding-8">
+                    <span id="pontuacaoFinal" class="width-fit-content">Pontuação Final:
+                        <span id="spanPontuacaoFinal">***</span>
+                    </span>
+                    <span id="msgFinal" class="width-fit-content">***</span>
+                </div>
+            </div>
+
+            <div id="jogo" class="width-fit-content flex-colunar border-secondary fade">
+                <div id="infoQuestao" class="padding-8">
+                    <span>Questão atual: <span id="spanNumeroDaQuestaoAtual"></span> de <span id="qtdQuestoes"></span>
+                        questões.</span>
+                </div>
+
+                <div id="perguntaDaQuestaoAtual" class="padding-8">
+                    <span id="spanQuestaoExibida" class="text-bold"></span>
+                </div>
+
+                <div id="infoAlternativas" class="padding-8">
+                    <span><em>Escolha uma opção dentre as abaixo:</em></span>
+                </div>
+
+                <div id="opcoes" class="flex-colunar padding-8">
+                    <span>
+                        <input type="radio" id="primeiraOpcao" name="option" class="radio" value="alternativaA" />
+                        <label for="primeiraOpcao" class="option" id="labelOpcaoUm"></label>
+                    </span>
+                    <span>
+                        <input type="radio" id="segundaOpcao" name="option" class="radio" value="alternativaB" />
+                        <label for="segundaOpcao" class="option" id="labelOpcaoDois"></label>
+                    </span>
+                    <span>
+                        <input type="radio" id="terceiraOpcao" name="option" class="radio" value="alternativaC" />
+                        <label for="terceiraOpcao" class="option" id="labelOpcaoTres"></label>
+                    </span>
+                    <span>
+                        <input type="radio" id="quartaOpcao" name="option" class="radio" value="alternativaD" />
+                        <label for="quartaOpcao" class="option" id="labelOpcaoQuatro"></label>
+                    </span>
+                </div>
+
+                <div id="botoes" class="flex-colunar padding-8">
+                    <button onclick="submeter()" id="btnSubmeter">Próxima Questão</button>
+                    <button onclick="tentarNovamente()" id="btnTentarNovamente" disabled>Tentar novamente</button>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="submenu" id="submenu"></div>
-    <div class="quiz-container" id="quizContainer"></div>
-    <div class="resultado" id="resultado"></div>
-  </div>
-
-  <script>
-    function mostrarSubmenu(tipo) {
-      const submenu = document.getElementById('submenu');
-      const opcoes = {
-        albuns: ["Fearless", "Red", "1989"],
-        musicas: ["All Too Well", "Love Story"],
-        eras: ["Debut Era", "Midnights Era"],
-        vida: ["Infância", "Carreira"]
-      };
-
-      submenu.innerHTML = '<h2>Escolha um quiz:</h2><div class="caixas-quiz">' +
-        opcoes[tipo].map(titulo => `
-          <div class="caixa">
-            <h3>${titulo}</h3>
-            <p>5 perguntas</p>
-            <button onclick="comecarQuiz('${titulo}')">Começar</button>
-          </div>`
-        ).join('') + '</div>';
-    }
-
-    function comecarQuiz(titulo) {
-      document.getElementById('menuPrincipal').style.display = 'none';
-      document.getElementById('submenu').style.display = 'none';
-      const quiz = document.getElementById('quizContainer');
-      quiz.style.display = 'block';
-      quiz.innerHTML = `<h2>Quiz: ${titulo}</h2><p>[QUESTÕES VÃO AQUI]</p>`;
-    }
-
-    function mostrarResultado(pontuacao) {
-      const resultado = document.getElementById('resultado');
-      resultado.style.display = 'block';
-      resultado.innerHTML = `
-        <h2>Você finalizou o quiz!</h2>
-        <p>Sua pontuação foi: ${pontuacao}</p>
-        <button class="btn-voltar" onclick="voltarInicio()">Voltar ao início</button>
-      `;
-    }
-
-    function voltarInicio() {
-      document.getElementById('menuPrincipal').style.display = 'grid';
-      document.getElementById('submenu').style.display = 'block';
-      document.getElementById('quizContainer').style.display = 'none';
-      document.getElementById('resultado').style.display = 'none';
-    }
-  </script>
 </body>
+<script>
+    // Lista com as perguntas e respostas corretas.
+    const listaDeQuestoes = [
+        {
+            pergunta: "Qual o nome do documentário de Taylor Swift lançado na Netflix em 2020?",
+            alternativaA: "Reputation Diaries",
+            alternativaB: "Miss Americana",
+            alternativaC: "The Eras Tour",
+            alternativaD: "Folklore Sessions",
+            alternativaCorreta: "alternativaB"
+        },
+        {
+            pergunta: "Em que ano Taylor Swift lançou seu primeiro álbum?",
+            alternativaA: "2004",
+            alternativaB: "2005",
+            alternativaC: "2006",
+            alternativaD: "2007",
+            alternativaCorreta: "alternativaC"
+        },
+        {
+            pergunta: "Qual é o nome da cidade natal de Taylor Swift?",
+            alternativaA: "Reading, Pensilvânia",
+            alternativaB: "Nashville, Tennessee",
+            alternativaC: "New York, NY",
+            alternativaD: "Los Angeles, CA",
+            alternativaCorreta: "alternativaA"
+        },
+        {
+            pergunta: "Qual foi o primeiro álbum de Taylor Swift a ganhar o Grammy de Álbum do Ano?",
+            alternativaA: "Fearless",
+            alternativaB: "1989",
+            alternativaC: "Red",
+            alternativaD: "Folklore",
+            alternativaCorreta: "alternativaA"
+        },
+        {
+            pergunta: "Em qual álbum está a música 'All Too Well'?",
+            alternativaA: "Speak Now",
+            alternativaB: "Red",
+            alternativaC: "1989",
+            alternativaD: "Evermore",
+            alternativaCorreta: "alternativaB"
+        },
+        {
+            pergunta: "Quantos álbuns regravados ('Taylor's Version') Taylor Swift lançou até 2024?",
+            alternativaA: "2",
+            alternativaB: "3",
+            alternativaC: "4",
+            alternativaD: "5",
+            alternativaCorreta: "alternativaC"
+        },
+        {
+            pergunta: "Qual música contém o verso 'Darling I'm a nightmare dressed like a daydream'?",
+            alternativaA: "Blank Space",
+            alternativaB: "Style",
+            alternativaC: "Bad Blood",
+            alternativaD: "Look What You Made Me Do",
+            alternativaCorreta: "alternativaA"
+        },
+        {
+            pergunta: "Qual o nome do álbum lançado por surpresa em julho de 2020?",
+            alternativaA: "Lover",
+            alternativaB: "Evermore",
+            alternativaC: "Midnights",
+            alternativaD: "Folklore",
+            alternativaCorreta: "alternativaD"
+        },
+        {
+            pergunta: "Qual ator aparece no clipe de 'The Man' dirigido por Taylor Swift?",
+            alternativaA: "Jake Gyllenhaal",
+            alternativaB: "Não há ator, é ela mesma maquiada",
+            alternativaC: "Joe Alwyn",
+            alternativaD: "Harry Styles",
+            alternativaCorreta: "alternativaB"
+        },
+        {
+            pergunta: "Qual é o nome da turnê que celebra todas as eras da carreira de Taylor Swift?",
+            alternativaA: "Fearless Tour",
+            alternativaB: "Reputation Tour",
+            alternativaC: "The Eras Tour",
+            alternativaD: "Lover Fest",
+            alternativaCorreta: "alternativaC"
+        }
+    ];
+
+    // Variáveis de controle do jogo.
+    let numeroDaQuestaoAtual = 0
+    let pontuacaoFinal = 0
+    let tentativaIncorreta = 0
+    let certas = 0
+    let erradas = 0
+    let quantidadeDeQuestoes = listaDeQuestoes.length
+
+    // Esconde tudo exceto o botão de iniciar.
+    function onloadEsconder() {
+        document.getElementById('pontuacao').style.display = "none"
+        document.getElementById('jogo').style.display = "none"
+    }
+
+    function iniciarQuiz() {
+        // Mostra o placar e a área do jogo.
+        document.getElementById('jogo').style.display = "flex"
+        document.getElementById('btnIniciarQuiz').style.display = "none"
+
+        document.getElementById('qtdQuestoes').innerHTML = quantidadeDeQuestoes
+
+        // Carrega a primeira pergunta com preencherHTMLcomQuestaoAtual
+        preencherHTMLcomQuestaoAtual(0)
+
+        btnSubmeter.disabled = false
+        // btnProx.disabled = true
+        btnTentarNovamente.disabled = true
+    }
+
+    // Preenche o HTML com os dados da pergunta atual.
+    function preencherHTMLcomQuestaoAtual(index) {
+        habilitarAlternativas(true)
+        const questaoAtual = listaDeQuestoes[index]
+        numeroDaQuestaoAtual = index
+        console.log("questaoAtual")
+        console.log(questaoAtual)
+        document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = Number(index) + 1 // ajustando porque o index começa em 0
+        document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.pergunta;
+        document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alternativaA;
+        document.getElementById("labelOpcaoDois").innerHTML = questaoAtual.alternativaB;
+        document.getElementById("labelOpcaoTres").innerHTML = questaoAtual.alternativaC;
+        document.getElementById("labelOpcaoQuatro").innerHTML = questaoAtual.alternativaD;
+    }
+
+    // Verifica se uma alternativa foi escolhida
+    function submeter() {
+        const options = document.getElementsByName("option"); // recupera alternativas no html
+
+        let hasChecked = false
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].checked) {
+                hasChecked = true
+                break
+            }
+        }
+
+        if (!hasChecked) {
+            alert("Não há alternativas escolhidas. Escolha uma opção.")
+        } else {
+            btnSubmeter.disabled = true
+
+            habilitarAlternativas(false)
+            checarResposta()
+        }
+
+        btnSubmeter.disabled = false
+
+        desmarcarRadioButtons()
+
+        if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+        } else if (numeroDaQuestaoAtual == quantidadeDeQuestoes - 1) {
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
+        } else {
+            finalizarJogo()
+        }
+        limparCoresBackgroundOpcoes()
+    }
+
+    function habilitarAlternativas(trueOrFalse) {
+        let opcaoEscolhida = trueOrFalse ? false : true
+
+        primeiraOpcao.disabled = opcaoEscolhida
+        segundaOpcao.disabled = opcaoEscolhida
+        terceiraOpcao.disabled = opcaoEscolhida
+        quartaOpcao.disabled = opcaoEscolhida
+
+    }
+
+    function tentarNovamente() {
+        // atualiza a página
+        window.location.reload()
+    }
+
+    // Recarrega a página para reiniciar o quiz do zero.
+    function checarResposta() {
+        const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual] // questão atual 
+        const respostaQuestaoAtual = questaoAtual.alternativaCorreta // qual é a resposta correta da questão atual
+
+        const options = document.getElementsByName("option"); // recupera alternativas no html
+
+        let alternativaCorreta = null // variável para armazenar a alternativa correta
+
+        options.forEach((option) => {
+            if (option.value === respostaQuestaoAtual) {
+                console.log("alternativaCorreta está no componente: " + alternativaCorreta)
+                alternativaCorreta = option.labels[0].id
+            }
+        })
+
+        // verifica se resposta assinalada é correta
+        options.forEach((option) => {
+            if (option.checked === true && option.value === respostaQuestaoAtual) {
+                document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
+                pontuacaoFinal++
+                certas++
+                document.getElementById("spanCertas").innerHTML = certas
+                numeroDaQuestaoAtual++
+            } else if (option.checked && option.value !== respostaQuestaoAtual) {
+                const wrongLabelId = option.labels[0].id
+
+                document.getElementById(wrongLabelId).classList.add("text-danger-with-bg")
+                document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
+                tentativaIncorreta++
+                erradas++
+                document.getElementById("spanErradas").innerHTML = erradas
+                numeroDaQuestaoAtual++
+            }
+        })
+    }
+
+    // Remove as cores (vermelho/verde) das alternativas entre perguntas.
+    function limparCoresBackgroundOpcoes() {
+        const options = document.getElementsByName("option");
+        options.forEach((option) => {
+            document.getElementById(option.labels[0].id).classList.remove("text-danger-with-bg")
+            document.getElementById(option.labels[0].id).classList.remove("text-success-with-bg")
+        })
+    }
+
+    // Desmarca os radio buttons antes de carregar a próxima pergunta.
+    function desmarcarRadioButtons() {
+        const options = document.getElementsByName("option");
+        for (let i = 0; i < options.length; i++) {
+            options[i].checked = false;
+        }
+    }
+
+    // Calcula a porcentagem de acertos.
+    function finalizarJogo() {
+        let textoParaMensagemFinal = null
+        let classComCoresParaMensagemFinal = null
+        const porcentagemFinalDeAcertos = pontuacaoFinal / quantidadeDeQuestoes
+
+        if (porcentagemFinalDeAcertos <= 0.3) {
+            textoParaMensagemFinal = "Parece que você não estudou..."
+            classComCoresParaMensagemFinal = "text-danger-with-bg"
+        }
+        else if (porcentagemFinalDeAcertos > 0.3 && porcentagemFinalDeAcertos < 0.9) {
+            textoParaMensagemFinal = "Pode melhorar na próxima, hein!"
+            classComCoresParaMensagemFinal = "text-warning-with-bg"
+        }
+        else if (porcentagemFinalDeAcertos >= 0.9) {
+            textoParaMensagemFinal = "Uau, parabéns!"
+            classComCoresParaMensagemFinal = "text-success-with-bg"
+        }
+
+        textoParaMensagemFinal += "<br> Você acertou " + Math.round((porcentagemFinalDeAcertos) * 100) + "% das questões."
+
+        document.getElementById('msgFinal').innerHTML = textoParaMensagemFinal
+        document.getElementById('msgFinal').classList.add(classComCoresParaMensagemFinal)
+        document.getElementById('spanPontuacaoFinal').innerHTML = pontuacaoFinal
+
+        document.getElementById('jogo').classList.add("text-new-gray")
+        document.getElementById('pontuacao').style.display = "flex"
+
+        btnProx.disabled = true
+        btnSubmeter.disabled = true
+        btnTentarNovamente.disabled = false
+    }
+</script>
 
 </html>
