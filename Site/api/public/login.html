@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -11,105 +11,100 @@
 </head>
 
 <body class="body-login-cadastro">
+    <!-- MENSAGEM DE ERRO -->
     <div class="alerta_erro">
-        <div class="card_erro" id="cardErro">
+        <div class="card_erro" id="cardErro" style="display: none;">
             <span id="mensagem_erro"></span>
         </div>
     </div>
+
+    <!-- CONTAINER -->
     <div class="container-login-cadastro">
         <div class="img-login-cadastro"></div>
+
         <div class="card">
             <h2>I was enchanted to meet you ❤️</h2>
+
             <div class="form">
                 <div class="ipt-campos">
-                    <label>Usuário ou e-mail</label>
+                    <label for="ipt_login_usuario">Usuário ou e-mail</label>
                     <input type="text" id="ipt_login_usuario" placeholder="aaaa@bbb.ccc">
                 </div>
+
                 <div class="ipt-campos">
-                    <label>Senha</label>
+                    <label for="ipt_login_senha">Senha</label>
                     <input type="password" id="ipt_login_senha" placeholder="******">
                 </div>
+
                 <button onclick="entrar()" class="btn btn-login">Entrar</button>
-                <div class="mensagem-cadastro"><a href="cadastro.html">Ainda não possui cadastro?</a></div>
-            </div>
-            <div id="div_aguardar" class="loading-div">
-                
+
+                <div class="mensagem-cadastro">
+                    <a href="cadastro.html">Ainda não possui cadastro?</a>
+                </div>
             </div>
 
+            <!-- LOADING -->
+            <div id="div_aguardar" class="loading-div" style="display: none;"></div>
+
+            <!-- ERROS -->
             <div id="div_erros_login"></div>
         </div>
+    </div>
+
+    <!-- SCRIPT DE LOGIN -->
+    <script>
+        function entrar() {
+            aguardar(); // Mostra loading (função no sessao.js)
+
+            var emailVar = document.getElementById("ipt_login_usuario").value;
+            var senhaVar = document.getElementById("ipt_login_senha").value;
+
+            if (!emailVar || !senhaVar) {
+                document.getElementById("cardErro").style.display = "block";
+                document.getElementById("mensagem_erro").innerText = "Por favor, preencha todos os campos.";
+                finalizarAguardar();
+                return;
+            }
+
+            fetch("http://localhost:3333/usuarios/autenticar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    emailServer: emailVar,
+                    senhaServer: senhaVar
+                })
+            })
+                .then(function (resposta) {
+                    if (resposta.ok) {
+                        resposta.json().then(json => {
+                            sessionStorage.EMAIL_USUARIO = json.email;
+                            sessionStorage.NOME_USUARIO = json.primeiro_nome;
+                            sessionStorage.ID_USUARIO = json.idusuario;
+
+                            setTimeout(() => {
+                                window.location = "perfil/index.html";
+                            }, 1000);
+                        });
+                    } else {
+                        resposta.text().then(texto => {
+                            document.getElementById("cardErro").style.display = "block";
+                            document.getElementById("mensagem_erro").innerText = "Usuário ou senha inválidos.";
+                            finalizarAguardar();
+                        });
+                    }
+                })
+                .catch(function (erro) {
+                    console.error("Erro ao tentar login:", erro);
+                    document.getElementById("mensagem_erro").innerText = "Erro ao conectar com o servidor.";
+                    document.getElementById("cardErro").style.display = "block";
+                    finalizarAguardar();
+                });
+        }
+
+        function sumirMensagem() {
+            document.getElementById("cardErro").style.display = "none";
+        }
+    </script>
 </body>
 
 </html>
-
-<script>
-
-    function entrar() {
-        aguardar();
-
-        var emailVar = ipt_login_usuario.value;
-        var senhaVar = ipt_login_senha.value;
-
-        if (emailVar == "" || senhaVar == "") {
-            cardErro.style.display = "block"
-            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
-            finalizarAguardar();
-            return false;
-        }
-        else {
-            setInterval(sumirMensagem, 5000)
-        }
-
-        console.log("FORM LOGIN: ", emailVar);
-        console.log("FORM SENHA: ", senhaVar);
-
-        fetch("http://localhost:3333/usuarios/autenticar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailServer: emailVar,
-                senhaServer: senhaVar
-            })
-        }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
-
-            if (resposta.ok) {
-                console.log(resposta);
-
-                resposta.json().then(json => {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.primeiro_nome;
-                    sessionStorage.ID_USUARIO = json.idUsuario;
-
-                    setTimeout(function () {
-                        window.location = "perfil/index.html";
-                    }, 1000);
-
-                });
-
-            } else {
-
-                console.log("Houve um erro ao tentar realizar o login!");
-
-                resposta.text().then(texto => {
-                    console.error(texto);
-                    finalizarAguardar(texto);
-                });
-            }
-
-        }).catch(function (erro) {
-            console.log(erro);
-        })
-
-        return false;
-    }
-
-    function sumirMensagem() {
-        cardErro.style.display = "none"
-    }
-
-</script>

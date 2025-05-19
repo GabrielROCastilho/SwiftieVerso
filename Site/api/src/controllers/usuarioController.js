@@ -81,8 +81,34 @@ function cadastrar(req, res) {
         );
 }
 
+function atualizar(req, res){
+    var idUsuario = req.body.idUsuarioServer;
+    var signo = req.body.signoServer;
+    var albumFavorito = req.body.albumFavoritoServer;
+    var musicaFavorita = req.body.musicaFavoritaServer;
+    var eraFavorita = req.body.eraFavoritaServer;
+
+    usuarioModel.atualizar(idUsuario, signo, albumFavorito, musicaFavorita, eraFavorita)
+    .then(
+        function (resultado) {
+            res.json(resultado);
+        }
+    ).catch(
+        function (erro) {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao realizar o cadastro! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        }
+    );
+
+}
+
 
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    atualizar
 }

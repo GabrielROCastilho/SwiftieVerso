@@ -15,6 +15,24 @@ create table endereco(
     fkEstado varchar(45)
 );
 
+-- Criando a tabela "Signo"
+create table signo(
+	idSigno int primary key auto_increment,
+    nome_signo varchar(50)
+);
+
+-- Criando a tabela "Álbum"
+create table album(
+	idAlbum int primary key auto_increment,
+    nome_album varchar(50)
+);
+
+-- Criando a tabela "Era"
+create table era(
+	idEra int primary key auto_increment,
+    nome_era varchar(50)
+);
+
 -- Criando a tabela "Usuário"
 create table usuario(
 	idUsuario int primary key auto_increment,
@@ -27,29 +45,67 @@ create table usuario(
     nickname varchar(50) not null,
     pontuacao_total int default 0,
     minutagem decimal(5.2) default 0,
+    musica_favorita varchar(50),
     fkEndereco int not null,
+    fkSigno int,
+    fkAlbumFavorito int,
+    fkEraFavorita int,
     constraint fk_endereco foreign key(fkEndereco) references endereco(idEndereco),
+    constraint fk_signo foreign key(fkSigno) references signo(idSigno),
+    constraint fk_album_favorito foreign key(fkAlbumFavorito) references album(idAlbum),
+    constraint fk_era_favorita foreign key(fkEraFavorita) references era(idEra),
     constraint unq_nickname unique(nickname)
 );
 
--- Criando a tabela "Quiz"
-create table quiz(
-	idQuiz int primary key auto_increment,
-    nivel_dificuldade int not null,
-    numero_questoes int not null,
-    descricao varchar(200) not null,
-    constraint chk_nivel_dificuldade check(nivel_dificuldade between 1 and 5)
+-- -- Criando a tabela "Quiz"
+CREATE TABLE quiz (
+  idQuiz           INT PRIMARY KEY AUTO_INCREMENT,
+  nivel_dificuldade INT      NOT NULL,
+  numero_questoes   INT      NOT NULL,
+  descricao         VARCHAR(200) NOT NULL,
+  CONSTRAINT chk_nivel_dificuldade CHECK (nivel_dificuldade BETWEEN 1 AND 5)
+);
+
+-- Criando a tabela "Pergunta"
+CREATE TABLE pergunta (
+  idPergunta        INT PRIMARY KEY AUTO_INCREMENT,
+  pergunta          VARCHAR(300),
+  nivel_dificuldade INT,
+  fkQuiz            INT,
+  CONSTRAINT fk_quiz_pergunta FOREIGN KEY (fkQuiz) REFERENCES quiz(idQuiz)
+);
+
+-- Criando a tabela "Alternativa"
+CREATE TABLE alternativa (
+  idAlternativa INT PRIMARY KEY AUTO_INCREMENT,
+  letra         CHAR(1),
+  texto         VARCHAR(200),
+  fkPergunta    INT,
+  CONSTRAINT fk_pergunta_alternativa FOREIGN KEY (fkPergunta) REFERENCES pergunta(idPergunta)
 );
 
 -- Criando a tabela "Desempenho"
-create table desempenho(
-	fkUsuario int,
-    fkQuiz int,
-    pontuacao int not null,
-    primary key(fkUsuario, fkQuiz),
-    constraint fk_usuario_desempenho foreign key(fkUsuario) references usuario(idUsuario),
-	constraint fk_quiz foreign key(fkQuiz) references quiz(idQuiz),
-	constraint chk_pontuacao check(pontuacao between 0 and 10)
+CREATE TABLE desempenho (
+  idDesempenho INT PRIMARY KEY AUTO_INCREMENT,
+  fkUsuario    INT,
+  fkQuiz       INT,
+  pontuacao    INT NOT NULL,
+  CONSTRAINT fk_usuario_desempenho FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario),
+  CONSTRAINT fk_quiz_desempenho      FOREIGN KEY (fkQuiz)    REFERENCES quiz(idQuiz),
+  CONSTRAINT chk_pontuacao           CHECK (pontuacao BETWEEN 0 AND 10)
+);
+
+-- Criando a tabela "Resposta"
+CREATE TABLE resposta (
+  idResposta    INT    PRIMARY KEY AUTO_INCREMENT,
+  resposta      CHAR(1),
+  correta       TINYINT,
+  fkDesempenho  INT,
+  fkPergunta    INT,
+  fkAlternativa INT,
+  CONSTRAINT fk_desempenho_resposta    FOREIGN KEY (fkDesempenho) REFERENCES desempenho(idDesempenho),
+  CONSTRAINT fk_pergunta_resposta      FOREIGN KEY (fkPergunta)    REFERENCES pergunta(idPergunta),
+  CONSTRAINT fk_alternativa_resposta   FOREIGN KEY (fkAlternativa) REFERENCES alternativa(idAlternativa)
 );
 
 -- Criando a tabela "Álbum Personalizado"
