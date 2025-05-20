@@ -9,12 +9,6 @@ create table estado(
     sigla char(2) not null
 );
 
--- Criando a tabela "Endereço"
-create table endereco(
-	idEndereco int primary key auto_increment,
-    fkEstado varchar(45)
-);
-
 -- Criando a tabela "Signo"
 create table signo(
 	idSigno int primary key auto_increment,
@@ -50,7 +44,7 @@ create table usuario(
     fkSigno int,
     fkAlbumFavorito int,
     fkEraFavorita int,
-    constraint fk_endereco foreign key(fkEndereco) references endereco(idEndereco),
+    constraint fk_endereco foreign key(fkEndereco) references estado(idEstado),
     constraint fk_signo foreign key(fkSigno) references signo(idSigno),
     constraint fk_album_favorito foreign key(fkAlbumFavorito) references album(idAlbum),
     constraint fk_era_favorita foreign key(fkEraFavorita) references era(idEra),

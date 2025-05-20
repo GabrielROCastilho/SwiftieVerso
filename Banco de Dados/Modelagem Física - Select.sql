@@ -35,22 +35,52 @@ from usuario u
 inner join era e on u.fkEraFavorita = e.idEra
 group by e.nome_era;
 
+-- Signos que mais aparecem
+select s.nome_signo AS Signo,
+	   COUNT(u.idUsuario) AS QtdDeUsuarios
+from signo s
+left join usuario u ON s.idSigno = u.fkSigno
+group by s.nome_signo
+order by QtdDeUsuarios DESC;
+
+
 -- Era favorita de cada estado
-WITH votos_por_era_estado AS (
-    SELECT 
-        es.nome AS nome_estado,
-        er.nome_era AS era_favorita,
-        COUNT(*) AS qtd_votos,
-        ROW_NUMBER() OVER (PARTITION BY es.nome ORDER BY COUNT(*) DESC, er.idEra) AS posicao
-    FROM usuario u
-    INNER JOIN endereco e ON u.fkEndereco = e.idEndereco
-    INNER JOIN estado es ON e.fkEstado = es.idEstado
-    INNER JOIN era er ON u.fkEraFavorita = er.idEra
-    GROUP BY es.nome, er.nome_era, er.idEra
+with votos_por_era_estado as (
+    select 
+        es.nome as nome_estado,
+        er.nome_era as era_favorita,
+        COUNT(*) as qtd_votos,
+        row_number() over (partition by es.nome order by COUNT(*) desc, er.idEra) as posicao
+    from usuario u
+    inner join estado es ON u.fkEndereco = es.idEstado
+    inner join era er ON u.fkEraFavorita = er.idEra
+    group by es.nome, er.nome_era, er.idEra
 )
-SELECT nome_estado, era_favorita, qtd_votos
-FROM votos_por_era_estado
-WHERE posicao = 1;
+select nome_estado, era_favorita, qtd_votos
+from votos_por_era_estado
+where posicao = 1;
+
+WITH votos_por_album_estado AS (
+    SELECT 
+        e.nome AS nome_estado,
+        a.nome_album AS album_favorito,
+        COUNT(*) AS qtd_votos,
+        ROW_NUMBER() OVER (
+            PARTITION BY e.nome ORDER BY COUNT(*) DESC, a.idAlbum
+        ) AS posicao
+    FROM usuario u
+    INNER JOIN estado e ON e.idEstado = u.fkEndereco
+    INNER JOIN album a ON u.fkAlbumFavorito = a.idAlbum
+    GROUP BY e.nome, a.nome_album, a.idAlbum
+)
+SELECT 
+    nome_estado,
+    album_favorito,
+    qtd_votos
+FROM votos_por_album_estado
+WHERE posicao = 1
+ORDER BY nome_estado;
+
 
 
 														/* DURAÇÃO TOTAL DO ÁLBUM */
