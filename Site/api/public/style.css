@@ -586,6 +586,12 @@ body{
     text-decoration: underline;
 }
 
+#mensagem_erro{
+    color: red;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
 select{
     border-radius: 5px;
     padding: 5px;

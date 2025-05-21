@@ -11,12 +11,6 @@
 </head>
 
 <body class="body-login-cadastro">
-    <!-- MENSAGEM DE ERRO -->
-    <div class="alerta_erro">
-        <div class="card_erro" id="cardErro" style="display: none;">
-            <span id="mensagem_erro"></span>
-        </div>
-    </div>
 
     <!-- CONTAINER -->
     <div class="container-login-cadastro">
@@ -37,6 +31,13 @@
                 </div>
 
                 <button onclick="entrar()" class="btn btn-login">Entrar</button>
+
+                <!-- MENSAGEM DE ERRO -->
+                <div class="alerta_erro">
+                    <div class="card_erro" id="cardErro" style="display: none;">
+                        <span id="mensagem_erro"></span>
+                    </div>
+                </div>
 
                 <div class="mensagem-cadastro">
                     <a href="cadastro.html">Ainda não possui cadastro?</a>
@@ -94,7 +95,6 @@
                     }
                 })
                 .catch(function (erro) {
-                    console.error("Erro ao tentar login:", erro);
                     document.getElementById("mensagem_erro").innerText = "Erro ao conectar com o servidor.";
                     document.getElementById("cardErro").style.display = "block";
                     finalizarAguardar();
