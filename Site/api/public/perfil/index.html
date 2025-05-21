@@ -11,29 +11,51 @@
 
 <body>
     <div class="container_home_page_perfil">
-        <!-- Nav-Bar -->
-        <div class="nav-bar" id="nav-bar">
-            <div class="logo"></div>
-            <div class="links-nav-bar">
-                <a href="quizzes.html">Quizes</a>
-                <a href="tier_lists.html">Tier Lists</a>
-                <a href="albuns_personalizados.html">Monte seus álbuns!</a>
-                <a href="estatisticas.html">Estatísticas</a>
-                <div class="divider"></div>
-                <a href="perfil.html">Perfil</a>
+        <div class="navegacao">
+            <div class="img-perfil"></div>
+            <div class="nome-usuario"></div>
+            <div class="btn-areas">
+                <ul>
+                    <li>
+                        <div class="btn-area">
+                            <div class="img-icone-dashboard img-perfil"></div>
+                            <button onclick="dashboard()">
+                                <h3>Dashboards</h3>
+                            </button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-area">
+                            <div class="img-icone-quizzes img-perfil"></div>
+                            <button onclick="quizzes()">
+                                <h3>Quizzes</h3>
+                            </button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-area">
+                            <div class="img-perfil-albuns img-perfil"></div>
+                            <button onclick="albuns()">
+                                <h3>Personalize seus álbuns</h3>
+                            </button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-area">
+                            <div class="img-icone-perfil img-perfil"></div>
+                            <button class="ativo"onclick="perfil()">
+                                <h3>Perfil</h3>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
-
-        <!-- Quizzes -->
-        <div class="quizzes" id="quizzes"></div>
-
-
-        <!-- Tier Lists -->
-        <div class="tier-lists" id="tier-lists">
-            <a href="tier_lists.html"><h2>Monte agora as suas Tier-Lists!!!</h2></a>
-        </div>
-
     </div>
+    <div class="conteudo" id="conteudo"></div>
 </body>
+<script>
+
+</script>
 
 </html>

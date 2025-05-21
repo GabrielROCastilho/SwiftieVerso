@@ -6,193 +6,93 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', serif;
-    padding-top: 10vh;
 }
 
-/* Nav-Bar */
-.nav-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 10vh;
-    z-index: 20;
+.container_home_page_perfil{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(235, 172, 210, 0.95);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
 }
 
-.links-nav-bar {
-    width: 80%;
+.navegacao{
     display: flex;
+    flex-direction: column;
+    width: 30%;
+    height: 100%;
+    background-color: #6d4b78;
     justify-content: space-evenly;
     align-items: center;
 }
 
-.links-nav-bar a {
-    text-decoration: none;
-    color: black;
-    font-weight: 600;
-    font-size: 18px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: 0.3s;
+.img-perfil{
+    margin: 0;
+    padding: 0;
+    height: 30%;
 }
 
-.links-nav-bar a:hover {
-    color: black;
-    text-decoration: none;
-    background-color: rgb(255, 223, 228);
+.nome-usuario{
+    margin: 0;
+    padding: 0;
+    height: 10%;
 }
 
-.divider {
-    width: 1px;
-    height: 20px;
-    background-color: black;
+.btn-areas{
+    margin: 0;
+    padding: 0;
+    height: 60%;
 }
 
-.body_quiz {
-    background-color: #f9f4fc;
-    color: #333;
-    padding: 20px;
+.btn-area{
     display: flex;
-    justify-content: center;
-}
-
-.container {
-    width: 100%;
-    max-width: 800px;
-}
-
-h1,
-h2,
-h3 {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.menu-principal {
-    display: grid;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.menu-principal button {
-    padding: 1rem;
-    border: none;
-    border-radius: 12px;
-    background-color: #d8b4e2;
-    color: #fff;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.menu-principal button:hover {
-    background-color: #b186c5;
-}
-
-.submenu {
-    margin-top: 2rem;
-}
-
-.caixas-quiz {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-
-.caixa {
-    border: 2px solid #caa3dd;
-    border-radius: 10px;
-    padding: 1rem;
-    background-color: #fdf6ff;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.caixa h3 {
-    margin-bottom: 0.5rem;
-}
-
-.caixa button {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 8px;
-    background-color: #b186c5;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.caixa button:hover {
-    background-color: #9d6bb0;
-}
-
-.quiz-container {
-    display: none;
-    margin-top: 2rem;
-    padding: 1rem;
-    border: 2px solid #d8b4e2;
-    border-radius: 12px;
-    background-color: #fff;
-}
-
-.resultado {
-    margin-top: 2rem;
-    text-align: center;
-    display: none;
-}
-
-.btn-voltar {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 8px;
-    background-color: #777;
-    color: #fff;
-    cursor: pointer;
-}
-
-.btn-voltar:hover {
-    background-color: #555;
-}
-
-                                /* ESTATÍSTICA */
-.container-estatistica{
-    width: 100vw;
-    height: fit-content;
-    display: flex; 
-    flex-direction: column;  
+    flex-direction: row;
     align-items: center;
 }
 
-.botoes-estatisticas button{
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    background-color: #d8b4e2;
+.navegacao ul{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height:100%;
+}
+
+.navegacao li{
+    list-style: none;
+}
+
+.navegacao a{
+    text-decoration: none;
     color: white;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
 }
 
-.botoes-estatisticas button.ativo {
-    background-color: #9d6bb0;
+.navegacao a:hover{
+    text-decoration: underline;
     color: white;
 }
 
-.signos{
-    height: fit-content;
-    width: 600px;
+.img-perfil{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
-.eras{
-    height: fit-content;
-    width: 600px;
+.img-icone-dashboard{
+    background-image: url('imagens/dashboard.png');
+}
+
+.img-icone-quizzes{
+    background-image: url('imagens/quiz.png');
+}
+
+.img-perfil-albuns{
+    background-image: url('imagens/album.png');
+}
+
+.img-icone-perfil{
+    background-image: url('imagens/perfil.png');
 }
 
