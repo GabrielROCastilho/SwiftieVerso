@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_graficos.css">
     <title>Estatísticas</title>
 </head>
 
-<body onload="obterDados()">
+<body>
     <div class="container-estatistica">
         <div class="botoes-estatisticas">
             <button class="ativo" onclick="estatisticaPessoal()">Pessoal</button>
@@ -45,36 +45,24 @@
 
         estatisticas.innerHTML =
             `
-        <div class="estados-com-as-maiores-pontuacoes">
-            <h2>Estados com as maiores pontuações</h2>
-            <canvas id="estados_pontuacoes"></canvas>
-        </div>
-        <div class="melhores-albuns-geral">
-            <h2>Melhores álbuns</h2>
-            <canvas id="melhores_albuns_geral"></canvas>
-        </div>
         <div class="signos">
             <h2>Os Swifties, em sua maioria, são...</h2>
             <canvas id="signos"></canvas>
         </div>
+        <div>
+            <h2>Eras favoritas</h2>
+            <canvas id="eras"></canvas>
+        </div>
+        <div>
+            <h2>Álbuns favoritos</h2>
+            <canvas id="albuns"></canvas>
+        </div>
         `
-        plotarGraficoEstadosComAsMaioresPontuacoes();
-        plotarGraficoAlbunsFavoritos();
-        plotarGraficoSignos();
+        obterDados();
     }
 
     // Função chamada ao carregar a página para obter e processar os dados
     function obterDados() {
-        fetch('/estadoscomasmaiorespontuacoes')
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (resposta) {
-                plotarGraficoEstadosComAsMaioresPontuacoes(resposta.labels, resposta.data);
-            })
-            .catch(function (err) {
-                console.error("Erro ao buscar os dados:", err);
-            });
 
         fetch('/graficos/signos')
             .then(function (response) {
@@ -86,66 +74,46 @@
             .catch(function (err) {
                 console.error("Erro ao buscar os dados:", err);
             });
+
+        fetch('/graficos/eras')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resposta) {
+                plotarGraficoEras(resposta.labels, resposta.data);
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+            });
+
+        fetch('/graficos/albuns')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resposta) {
+                plotarGraficoAlbuns(resposta.labels, resposta.data);
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+            });
     }
 
-    function plotarGraficoEstadosComAsMaioresPontuacoes(labels, data) {
-        var ctx = document.getElementById('estados_pontuacoes').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        '#FFCE56',
-                        '#8AFFC1',
-                        '#C586FF'
-                    ]
-                }]
-            }
-        });
-    }
-
-
-    function plotarGraficoAlbunsFavoritos() {
-        var ctx = document.getElementById('melhores_albuns_geral').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'polarArea',
-            data: {
-                datasets: [{
-                    data: [20, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
-                }],
-
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Red',
-                    'Yellow',
-                    'Blue',
-                    'Yellow',
-                    'Yellow',
-                    'Yellow',
-                    'Yellow',
-                    'Yellow',
-                    'Yellow',
-                    'Yellow',
-                    'Yellow',
-                ]
-            },
-        });
-    }
+    var graficoSignos = null; // <-- fora da função, no escopo global
 
     function plotarGraficoSignos(labels, data) {
         var ctx = document.getElementById('signos').getContext('2d');
-        var myChart = new Chart(ctx, {
+        if (graficoSignos !== null) {
+            graficoSignos.destroy();
+        }
+
+        graficoSignos = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['oi', 'oi', 'oi', 'oi', 'oi', 'oi', 'oi',],
+                labels: labels,
                 datasets: [{
                     axis: 'x',
-                    label: 'My First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
+                    label: 'Distribuição dos signos',
+                    data: data,
                     fill: false,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -154,16 +122,132 @@
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)'
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(251, 99, 132, 0.2)',
+                        'rgba(215, 159, 64, 0.2)',
+                        'rgba(200, 205, 86, 0.2)',
+                        'rgba(76, 192, 192, 0.2)',
+                        'rgba(64, 162, 235, 0.2)'
                     ],
                     borderColor: [
+                        'rgb(245, 99, 132)',
+                        'rgb(235, 159, 64)',
+                        'rgb(225, 205, 86)',
+                        'rgb(77, 192, 192)',
+                        'rgb(52, 162, 235)',
+                        'rgb(123, 102, 255)',
+                        'rgb(201, 203, 207)',
                         'rgb(255, 99, 132)',
                         'rgb(255, 159, 64)',
                         'rgb(255, 205, 86)',
                         'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
+                        'rgb(54, 162, 235)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+            }
+        });
+    }
+
+    var graficoEras = null;
+
+    function plotarGraficoEras(labels, data) {
+        var ctx = document.getElementById('eras').getContext('2d');
+        console.log(labels, data)
+        if (graficoEras !== null) {
+            graficoEras.destroy();
+        }
+
+        graficoEras = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    axis: 'x',
+                    label: 'Distribuição das eras',
+                    data: data,
+                    fill: false,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(251, 99, 132, 0.2)',
+                        'rgba(215, 159, 64, 0.2)',
+                        'rgba(200, 205, 86, 0.2)',
+                        'rgba(76, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(245, 99, 132)',
+                        'rgb(235, 159, 64)',
+                        'rgb(225, 205, 86)',
+                        'rgb(77, 192, 192)',
+                        'rgb(52, 162, 235)',
+                        'rgb(123, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+            }
+        });
+    }
+
+    var graficoAlbuns = null;
+
+    function plotarGraficoAlbuns(labels, data) {
+        var ctx = document.getElementById('albuns').getContext('2d');
+        console.log(labels, data)
+        if (graficoAlbuns !== null) {
+            graficoAlbuns.destroy();
+        }
+
+        graficoAlbuns = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    axis: 'x',
+                    label: 'Distribuição dos álbuns',
+                    data: data,
+                    fill: false,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(251, 99, 132, 0.2)',
+                        'rgba(215, 159, 64, 0.2)',
+                        'rgba(200, 205, 86, 0.2)',
+                        'rgba(76, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(245, 99, 132)',
+                        'rgb(235, 159, 64)',
+                        'rgb(225, 205, 86)',
+                        'rgb(77, 192, 192)',
+                        'rgb(52, 162, 235)',
+                        'rgb(123, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)'
                     ],
                     borderWidth: 1
                 }]

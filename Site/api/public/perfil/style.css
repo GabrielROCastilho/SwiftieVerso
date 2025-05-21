@@ -186,3 +186,13 @@ h3 {
     color: white;
 }
 
+.signos{
+    height: fit-content;
+    width: 600px;
+}
+
+.eras{
+    height: fit-content;
+    width: 600px;
+}
+

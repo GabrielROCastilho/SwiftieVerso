@@ -1,0 +1,94 @@
+:root {
+    --taylor-lilac: #d8b4e2;
+    --taylor-purple: #9d6bb0;
+    --taylor-pink: rgb(255, 223, 228);
+    --taylor-dark: #6d4b78;
+    --taylor-light: #f9f0fb;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+    background-color: var(--taylor-light);
+    color: var(--taylor-dark);
+    line-height: 1.6;
+}
+
+.container-estatistica {
+    width: 90%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(157, 107, 176, 0.2);
+}
+
+.botoes-estatisticas {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.botoes-estatisticas button {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 2rem;
+    background-color: var(--taylor-pink);
+    color: var(--taylor-dark);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.botoes-estatisticas button:hover {
+    background-color: var(--taylor-lilac);
+    transform: translateY(-2px);
+    box-shadow: 
+    0 0 7px rgb(255, 0, 149),
+    0 0 82px rgb(254, 62, 174),
+    0 0 92px rgb(254, 62, 174),
+    0 0 102px rgb(254, 62, 174),
+    0 0 151px rgb(254, 62, 174);
+}
+
+.botoes-estatisticas button.ativo {
+    background-color: var(--taylor-purple);
+    color: white;
+}
+
+.estatisticas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+.estatisticas > div {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 3px 10px rgba(157, 107, 176, 0.1);
+    transition: transform 0.3s ease;
+    width: 90%;
+    height: fit-content;
+}
+
+.estatisticas > div:hover {
+    transform: translateY(-5px);
+}
+
+h2 {
+    color: var(--taylor-purple);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--taylor-lilac);
+    padding-bottom: 0.5rem;
+}

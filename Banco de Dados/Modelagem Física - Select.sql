@@ -43,7 +43,6 @@ left join usuario u ON s.idSigno = u.fkSigno
 group by s.nome_signo
 order by QtdDeUsuarios DESC;
 
-
 -- Era favorita de cada estado
 with votos_por_era_estado as (
     select 
