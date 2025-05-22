@@ -23,15 +23,25 @@
 </html>
 <script>
 
+    // Essa linha escuta o evento DOMContentLoaded, que significa "quando a página terminou de carregar o conteúdo HTML"
+    // Ou seja, quando a página termina de carregar o conteúdo HTML, ela chama, automaticamente, a função estatisticaPessoal()
     document.addEventListener('DOMContentLoaded', function () {
         estatisticaPessoal();
     });
 
     function estatisticaPessoal() {
+        // Seleciona todos os botões dentro do conteiner 'botoes-estatisticas' -> antes do forEach
+        // Depois do forEach -> Percorre todos eles e garante que nenhum deles fique com a classe "ativo" antes de ser escolhido 
         document.querySelectorAll('.botoes-estatisticas button').forEach(button => {
             button.classList.remove('ativo');
         });
+        // Pega o primeiro botão dentro desse container e adiciona  classe "ativo" a esse primeiro botão, deixando ele selecionado
         document.querySelector('.botoes-estatisticas button:first-child').classList.add('ativo');
+
+        // Pelo meu design, o primeiro botão dentro da div "botoes-estatística" é o que possui a função "estatisticaPessoal", ele pega esse botão (first-child)
+        // Entretanto, se quisessemos pegar um botão que não é o primeiro (first-child), nem o último (last-child), podemos pegá-los de duas maneiras...
+        //1. Pegar pelo nome do onclick do botão: document.querySelectorAll('.botoes-estatisticas button.esttisticaPessoa')
+        //2. Pegar pelo índice do botão: document.querySelectorAll('.botoes-estatisticas button')[0]
 
         estatisticas.innerHTML =
             ``

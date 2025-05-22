@@ -15,6 +15,12 @@ body {
     height: 100vh;
 }
 
+.img-perfil{
+    background-image: url('imagens/perfil.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .navegacao{
     display: flex;
     flex-direction: column;
@@ -46,17 +52,19 @@ body {
     flex-direction: column;
 }
 
+.btn-areas a.ativo {
+    color: white;
+    background-color: #d36da3;
+    font-weight: bolder;
+    width: 100%;
+}
+
 .btn-area{
     display: flex;
     flex-direction: row;
     cursor: pointer;
     align-items: center;
     width: 100%;
-}
-
-.btn-area:hover{
-    background-color: #d36da3;
-    font-weight: bolder;
 }
 
 
@@ -89,12 +97,3 @@ body {
     color: white;
     max-width: fit-content;
 }
-
-.img-perfil{
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
