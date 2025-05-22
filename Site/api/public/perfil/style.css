@@ -18,9 +18,9 @@ body {
 .navegacao{
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 20%;
     height: 100%;
-    background-color: #6d4b78;
+    background-color: #812cb3;
     justify-content: space-evenly;
     align-items: center;
 }
@@ -41,13 +41,24 @@ body {
     margin: 0;
     padding: 0;
     height: 60%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn-area{
     display: flex;
     flex-direction: row;
+    cursor: pointer;
     align-items: center;
+    width: 100%;
 }
+
+.btn-area:hover{
+    background-color: #d36da3;
+    font-weight: bolder;
+}
+
 
 .navegacao ul{
     padding: 0;
@@ -62,6 +73,12 @@ body {
     list-style: none;
 }
 
+.navegacao span{
+    font-size: 20px;
+    margin-left: 25px;
+    margin-right: 10px;
+}
+
 .navegacao a{
     text-decoration: none;
     color: white;
@@ -70,6 +87,7 @@ body {
 .navegacao a:hover{
     text-decoration: underline;
     color: white;
+    max-width: fit-content;
 }
 
 .img-perfil{
@@ -78,21 +96,5 @@ body {
     margin-right: 10px;
     background-repeat: no-repeat;
     background-size: cover;
-}
-
-.img-icone-dashboard{
-    background-image: url('imagens/dashboard.png');
-}
-
-.img-icone-quizzes{
-    background-image: url('imagens/quiz.png');
-}
-
-.img-perfil-albuns{
-    background-image: url('imagens/album.png');
-}
-
-.img-icone-perfil{
-    background-image: url('imagens/perfil.png');
 }
 

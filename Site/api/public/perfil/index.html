@@ -18,34 +18,34 @@
                 <ul>
                     <li>
                         <div class="btn-area">
-                            <div class="img-icone-dashboard img-perfil"></div>
-                            <button onclick="dashboard()">
+                            <span>📊</span>
+                            <a href="">
                                 <h3>Dashboards</h3>
-                            </button>
+                            </a>
                         </div>
                     </li>
                     <li>
                         <div class="btn-area">
-                            <div class="img-icone-quizzes img-perfil"></div>
-                            <button onclick="quizzes()">
+                            <span>❔</span>
+                            <a href="">
                                 <h3>Quizzes</h3>
-                            </button>
+                            </a>
                         </div>
                     </li>
                     <li>
                         <div class="btn-area">
-                            <div class="img-perfil-albuns img-perfil"></div>
-                            <button onclick="albuns()">
+                            <span>🎵</span>
+                            <a href="">
                                 <h3>Personalize seus álbuns</h3>
-                            </button>
+                            </a>
                         </div>
                     </li>
                     <li>
                         <div class="btn-area">
-                            <div class="img-icone-perfil img-perfil"></div>
-                            <button class="ativo"onclick="perfil()">
+                            <span>👻</span>
+                            <a class="ativo" href="">
                                 <h3>Perfil</h3>
-                            </button>
+                            </a>
                         </div>
                     </li>
                 </ul>
@@ -55,7 +55,19 @@
     <div class="conteudo" id="conteudo"></div>
 </body>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        estatisticaPessoal();
+    });
 
+    function estatisticaPessoal() {
+        document.querySelectorAll('.botoes-estatisticas button').forEach(button => {
+            button.classList.remove('ativo');
+        });
+        document.querySelector('.botoes-estatisticas button:first-child').classList.add('ativo');
+
+        estatisticas.innerHTML =
+            ``
+    }
 </script>
 
 </html>
