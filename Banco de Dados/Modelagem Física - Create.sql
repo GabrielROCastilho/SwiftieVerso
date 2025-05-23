@@ -1,4 +1,5 @@
 -- Criando e usando o database "SwiftieVerso"
+drop database swiftie_verso;
 create database swiftie_verso;
 use swiftie_verso;
 
@@ -12,19 +13,32 @@ create table estado(
 -- Criando a tabela "Signo"
 create table signo(
 	idSigno int primary key auto_increment,
-    nome_signo varchar(50)
+    nome_signo varchar(50) not null
 );
 
 -- Criando a tabela "Álbum"
 create table album(
 	idAlbum int primary key auto_increment,
-    nome_album varchar(50)
+    nome_album varchar(50) not null
 );
 
 -- Criando a tabela "Era"
 create table era(
 	idEra int primary key auto_increment,
-    nome_era varchar(50)
+    nome_era varchar(50) not null
+);
+
+-- Criando a tabela "Avatar"
+create table avatar(
+	idAvatar int primary key auto_increment,
+    nome_avatar varchar(45) not null
+);
+
+-- Criando a tabela "Música"
+create table musica(
+	idMusica int primary key auto_increment,
+    nome varchar(100) not null,
+    duracao_musica decimal(5,2) not null
 );
 
 -- Criando a tabela "Usuário"
@@ -39,15 +53,18 @@ create table usuario(
     nickname varchar(50) not null,
     pontuacao_total int default 0,
     minutagem decimal(5.2) default 0,
-    musica_favorita varchar(50),
-    fkEndereco int not null,
+    fkEstado int not null,
     fkSigno int,
     fkAlbumFavorito int,
     fkEraFavorita int,
-    constraint fk_endereco foreign key(fkEndereco) references estado(idEstado),
+    fkAvatar int,
+    fkMusicaFavorita int,
+    constraint fk_estado foreign key(fkEstado) references estado(idEstado),
     constraint fk_signo foreign key(fkSigno) references signo(idSigno),
     constraint fk_album_favorito foreign key(fkAlbumFavorito) references album(idAlbum),
     constraint fk_era_favorita foreign key(fkEraFavorita) references era(idEra),
+    constraint fk_avatar foreign key(fkAvatar) references avatar(idAvatar),
+    constraint fk_musica_favorita foreign key(fkMusicaFavorita) references musica(idMusica),
     constraint unq_nickname unique(nickname)
 );
 
@@ -110,13 +127,6 @@ create table album_personalizado(
     duracao_album decimal(5,2) not null,
     fkUsuario int,
     constraint fk_usuario_album foreign key(fkUsuario) references usuario(idUsuario)
-);
-
--- Criando a tabela "Música"
-create table musica(
-	idMusica int primary key auto_increment,
-    nome varchar(100) not null,
-    duracao_musica decimal(5,2) not null
 );
 
 -- Criando a tabela "Composição"

@@ -1,12 +1,635 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Monte seus álbuns!</title>
-    </head>
-    <body>
-        
-    </body>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Novo Álbum</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #574864 0%, #a267c3 50%, #ffb3e6 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ffb3e6, rgba(235, 172, 210, 0.95));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .form-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .album-info {
+            background: rgba(235, 172, 210, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(235, 172, 210, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .album-info:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(235, 172, 210, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #a267c3;
+            box-shadow: 0 0 0 3px rgba(162, 103, 195, 0.3);
+            transform: scale(1.02);
+        }
+
+        .cover-preview {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, #ffb3e6, rgba(235, 172, 210, 0.95));
+            border-radius: 20px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cover-preview:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .cover-preview i {
+            font-size: 3rem;
+            color: white;
+            opacity: 0.7;
+        }
+
+        .songs-section {
+            background: rgba(255, 179, 230, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 179, 230, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .songs-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 179, 230, 0.3);
+        }
+
+        .songs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .songs-header h3 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            box-shadow: 0 0 0 3px rgba(162, 103, 195, 0.3);
+            transform: scale(1.02);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a267c3;
+            font-size: 1.1rem;
+        }
+
+        .songs-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .songs-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .songs-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .songs-list::-webkit-scrollbar-thumb {
+            background: rgba(162, 103, 195, 0.6);
+            border-radius: 10px;
+        }
+
+        .song-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .song-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        .song-info h4 {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .song-info p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .add-btn {
+            background: linear-gradient(45deg, #a267c3, #ffb3e6);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(162, 103, 195, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(162, 103, 195, 0.4);
+        }
+
+        .selected-songs {
+            margin-top: 20px;
+        }
+
+        .selected-songs h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .selected-song {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(87, 72, 100, 0.3);
+            margin-bottom: 8px;
+            border-radius: 10px;
+            border-left: 4px solid #a267c3;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .selected-song span {
+            color: white;
+            font-weight: 500;
+        }
+
+        .remove-btn {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: rgba(255, 0, 0, 0.4);
+            transform: scale(1.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #a267c3, #ffb3e6);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(162, 103, 195, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 968px) {
+            .form-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 179, 230, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Criar Novo Álbum</h1>
+            <p>Monte sua coleção musical perfeita</p>
+        </div>
+
+        <div class="form-section">
+            <div class="album-info">
+                <div class="form-group">
+                    <label for="albumName">Nome do Álbum</label>
+                    <input type="text" id="albumName" placeholder="Digite o nome do seu álbum..." />
+                </div>
+
+                <div class="form-group">
+                    <label for="artistName">Artista Principal</label>
+                    <input type="text" id="artistName" placeholder="Nome do artista..." />
+                </div>
+
+                <div class="form-group">
+                    <label for="releaseYear">Ano de Lançamento</label>
+                    <input type="number" id="releaseYear" placeholder="2024" min="1900" max="2030" />
+                </div>
+
+                <div class="cover-preview" onclick="selectCover()">
+                    <span style="color: white; font-size: 1rem;">📷 Adicionar Capa</span>
+                </div>
+            </div>
+
+            <div class="songs-section">
+                <div class="songs-header">
+                    <h3>🎶 Adicionar Músicas</h3>
+                    <div class="search-box">
+                        <input type="text" id="songSearch" placeholder="Buscar músicas..." oninput="filterSongs()" />
+                        <i>🔍</i>
+                    </div>
+                </div>
+
+                <div class="songs-list" id="songsList">
+                    <!-- Músicas do banco de dados simulado -->
+                </div>
+
+                <div class="selected-songs">
+                    <h4>🎵 Músicas Selecionadas (<span id="songCount">0</span>)</h4>
+                    <div id="selectedSongsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="clearAll()">Limpar Tudo</button>
+            <button class="btn btn-primary" onclick="createAlbum()">Criar Álbum</button>
+        </div>
+    </div>
+
+    <script>
+        // Banco de dados simulado de músicas
+        const songsDatabase = [
+            { id: 1, title: "Bohemian Rhapsody", artist: "Queen", duration: "5:55" },
+            { id: 2, title: "Hotel California", artist: "Eagles", duration: "6:30" },
+            { id: 3, title: "Stairway to Heaven", artist: "Led Zeppelin", duration: "8:02" },
+            { id: 4, title: "Imagine", artist: "John Lennon", duration: "3:07" },
+            { id: 5, title: "Sweet Child O' Mine", artist: "Guns N' Roses", duration: "5:03" },
+            { id: 6, title: "Billie Jean", artist: "Michael Jackson", duration: "4:54" },
+            { id: 7, title: "Yesterday", artist: "The Beatles", duration: "2:05" },
+            { id: 8, title: "Purple Haze", artist: "Jimi Hendrix", duration: "2:50" },
+            { id: 9, title: "Good Vibrations", artist: "The Beach Boys", duration: "3:39" },
+            { id: 10, title: "Like a Rolling Stone", artist: "Bob Dylan", duration: "6:13" },
+            { id: 11, title: "Smells Like Teen Spirit", artist: "Nirvana", duration: "5:01" },
+            { id: 12, title: "What's Going On", artist: "Marvin Gaye", duration: "3:53" },
+            { id: 13, title: "Respect", artist: "Aretha Franklin", duration: "2:28" },
+            { id: 14, title: "Hey Jude", artist: "The Beatles", duration: "7:11" },
+            { id: 15, title: "Satisfaction", artist: "The Rolling Stones", duration: "3:44" }
+        ];
+
+        let selectedSongs = [];
+        let filteredSongs = [...songsDatabase];
+
+        function renderSongs() {
+            const songsList = document.getElementById('songsList');
+            songsList.innerHTML = '';
+
+            filteredSongs.forEach(song => {
+                const isSelected = selectedSongs.find(s => s.id === song.id);
+                const songItem = document.createElement('div');
+                songItem.className = 'song-item';
+                
+                songItem.innerHTML = `
+                    <div class="song-info">
+                        <h4>${song.title}</h4>
+                        <p>${song.artist} • ${song.duration}</p>
+                    </div>
+                    <button class="add-btn" onclick="addSong(${song.id})" ${isSelected ? 'disabled style="opacity: 0.5"' : ''}>
+                        ${isSelected ? 'Adicionada' : 'Adicionar'}
+                    </button>
+                `;
+
+                songsList.appendChild(songItem);
+            });
+        }
+
+        function addSong(songId) {
+            const song = songsDatabase.find(s => s.id === songId);
+            if (song && !selectedSongs.find(s => s.id === songId)) {
+                selectedSongs.push(song);
+                updateSelectedSongs();
+                renderSongs();
+            }
+        }
+
+        function removeSong(songId) {
+            selectedSongs = selectedSongs.filter(s => s.id !== songId);
+            updateSelectedSongs();
+            renderSongs();
+        }
+
+        function updateSelectedSongs() {
+            const selectedList = document.getElementById('selectedSongsList');
+            const songCount = document.getElementById('songCount');
+            
+            songCount.textContent = selectedSongs.length;
+            
+            selectedList.innerHTML = '';
+            selectedSongs.forEach((song, index) => {
+                const selectedSong = document.createElement('div');
+                selectedSong.className = 'selected-song';
+                
+                selectedSong.innerHTML = `
+                    <span>${index + 1}. ${song.title} - ${song.artist}</span>
+                    <button class="remove-btn" onclick="removeSong(${song.id})">Remover</button>
+                `;
+                
+                selectedList.appendChild(selectedSong);
+            });
+        }
+
+        function filterSongs() {
+            const searchTerm = document.getElementById('songSearch').value.toLowerCase();
+            filteredSongs = songsDatabase.filter(song => 
+                song.title.toLowerCase().includes(searchTerm) || 
+                song.artist.toLowerCase().includes(searchTerm)
+            );
+            renderSongs();
+        }
+
+        function selectCover() {
+            alert('Funcionalidade de upload de capa será implementada aqui!');
+        }
+
+        function clearAll() {
+            document.getElementById('albumName').value = '';
+            document.getElementById('artistName').value = '';
+            document.getElementById('releaseYear').value = '';
+            document.getElementById('songSearch').value = '';
+            selectedSongs = [];
+            filteredSongs = [...songsDatabase];
+            updateSelectedSongs();
+            renderSongs();
+        }
+
+        function createAlbum() {
+            const albumName = document.getElementById('albumName').value;
+            const artistName = document.getElementById('artistName').value;
+            const releaseYear = document.getElementById('releaseYear').value;
+
+            if (!albumName.trim()) {
+                alert('Por favor, digite o nome do álbum!');
+                return;
+            }
+
+            if (selectedSongs.length === 0) {
+                alert('Por favor, adicione pelo menos uma música ao álbum!');
+                return;
+            }
+
+            // Aqui você enviaria os dados para o backend
+            const albumData = {
+                name: albumName,
+                artist: artistName,
+                year: releaseYear,
+                songs: selectedSongs
+            };
+
+            console.log('Dados do álbum criado:', albumData);
+            alert(`Álbum "${albumName}" criado com sucesso com ${selectedSongs.length} músicas!`);
+        }
+
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            renderSongs();
+            updateSelectedSongs();
+        });
+    </script>
+</body>
 </html>

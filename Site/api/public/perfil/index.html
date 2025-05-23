@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_perfil.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Perfil</title>
 </head>
 
@@ -14,7 +16,7 @@
         <div class="navegacao">
             <div class="img-perfil"></div>
             <div class="nome-usuario">
-                <h2>Gabriel Castilho</h2>
+                <h2 id="b_usuario"></h2>
             </div>
             <div class="btn-areas">
                 <ul>
@@ -43,9 +45,9 @@
                         </div>
                     </li>
                     <li>
-                        <div class="btn-area">
+                        <div class="btn-area ativo">
                             <span>👻</span>
-                            <a class="ativo perfil" onclick="carregarPerfil(event)" href="#">
+                            <a class="perfil" onclick="carregarPerfil(event)" href="#">
                                 <h3>Perfil</h3>
                             </a>
                         </div>
@@ -57,29 +59,219 @@
     </div>
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        carregarPerfil();
-    });
 
-    document.querySelectorAll('.btn-areas a').forEach(link => {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            document.querySelectorAll('.btn-areas a').forEach(a => a.classList.remove('ativo'));
-            link.classList.add('ativo');
-            if (link.classList.contains('Perfil')) {
-                carregarPerfil();
-            } else if (link.textContent.includes('Dashboards')) {
-                carregarDashboards();
-            } else if (link.textContent.includes('Personalize seus álbuns')) {
-                carregarAlbuns()
-            } else {
-                carregarQuizzes()
-            }
-        });
-    });
+    function obterDados() {
+
+        fetch('/graficos/signos')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resposta) {
+                plotarGraficoSignos(resposta.labels, resposta.data);
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+            });
+
+        fetch('/graficos/eras')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resposta) {
+                plotarGraficoEras(resposta.labels, resposta.data);
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+            });
+
+        fetch('/graficos/albuns')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (resposta) {
+                plotarGraficoAlbuns(resposta.labels, resposta.data);
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+            });
+    }
 
     function carregarDashboards() {
-        conteudo.innerHTML = `Oi`
+        conteudo.innerHTML =
+            `
+        <div class="container-estatistica">
+            <div class="botoes-estatisticas">
+                <button class="ativo-estatistica" onclick="estatisticaPessoal()">Pessoal</button>
+                <button onclick="estatisticaGeral()">Geral</button>
+            </div>
+            <div class="estatisticas" id="estatisticas"></div>
+        </div>
+        `
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        estatisticaPessoal();
+    });
+
+    function estatisticaPessoal() {
+        // Seleciona todos os botões dentro do conteiner 'botoes-estatisticas' -> antes do forEach
+        // Depois do forEach -> Percorre todos eles e garante que nenhum deles fique com a classe "ativo" antes de ser escolhido 
+        document.querySelectorAll('.botoes-estatisticas button').forEach(button => {
+            button.classList.remove('ativo-estatistica');
+        });
+        // Pega o primeiro botão dentro desse container e adiciona  classe "ativo" a esse primeiro botão, deixando ele selecionado
+        document.querySelector('.botoes-estatisticas button:first-child').classList.add('ativo-estatistica');
+
+        // Pelo meu design, o primeiro botão dentro da div "botoes-estatística" é o que possui a função "estatisticaPessoal", ele pega esse botão (first-child)
+        // Entretanto, se quisessemos pegar um botão que não é o primeiro (first-child), nem o último (last-child), podemos pegá-los de duas maneiras...
+        //1. Pegar pelo nome do onclick do botão: document.querySelectorAll('.botoes-estatisticas button.esttisticaPessoa')
+        //2. Pegar pelo índice do botão: document.querySelectorAll('.botoes-estatisticas button')[0]
+
+        estatisticas.innerHTML =
+            ``
+    }
+
+    function estatisticaGeral() {
+        document.querySelectorAll('.botoes-estatisticas button').forEach(button => {
+            button.classList.remove('ativo-estatistica');
+        });
+        document.querySelector('.botoes-estatisticas button:last-child').classList.add('ativo-estatistica');
+
+        estatisticas.innerHTML =
+            `
+        <div class="card-dashboard">
+            <h2>Os Swifties são, em sua maioria, dos signos de...</h2>
+            <canvas id="signos"></canvas>
+        </div>
+        <div>
+            <div class="card-dashboard">
+                <h2>Top 5 eras favoritas dos swifties</h2>
+                <canvas id="eras"></canvas>
+            </div>
+            <div class="card-dashboard">
+                <h2>Top 5 álbuns favoritos dos swifties</h2>
+                <canvas id="albuns"></canvas>
+            </div>
+        </div>
+        `
+        obterDados();
+    }
+
+    var graficoSignos = null;
+    function plotarGraficoSignos(labels, data) {
+        var ctx = document.getElementById('signos').getContext('2d');
+        if (graficoSignos !== null) {
+            graficoSignos.destroy();
+        }
+
+        graficoSignos = new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: [{
+                    axis: 'x',
+                    label: 'Distribuição dos signos',
+                    data: data,
+                    fill: false,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(245, 99, 132)',
+                        'rgb(235, 159, 64)',
+                        'rgb(225, 205, 86)',
+                        'rgb(77, 192, 192)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+            }
+        });
+    }
+
+    var graficoEras = null;
+    function plotarGraficoEras(labels, data) {
+        var ctx = document.getElementById('eras').getContext('2d');
+        console.log(labels, data)
+        if (graficoEras !== null) {
+            graficoEras.destroy();
+        }
+
+        graficoEras = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    axis: 'x',
+                    label: 'Distribuição das eras',
+                    data: data,
+                    fill: false,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(245, 99, 132)',
+                        'rgb(235, 159, 64)',
+                        'rgb(225, 205, 86)',
+                        'rgb(77, 192, 192)',
+                        'rgb(52, 162, 235)'
+                    ],
+                    borderWidth: 3,
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+            }
+        });
+    }
+
+    var graficoAlbuns = null;
+    function plotarGraficoAlbuns(labels, data) {
+        var ctx = document.getElementById('albuns').getContext('2d');
+        console.log(labels, data)
+        if (graficoAlbuns !== null) {
+            graficoAlbuns.destroy();
+        }
+
+        graficoAlbuns = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    axis: 'x',
+                    label: 'Distribuição dos álbuns',
+                    data: data,
+                    fill: false,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(245, 99, 132)',
+                        'rgb(235, 159, 64)',
+                        'rgb(225, 205, 86)',
+                        'rgb(77, 192, 192)',
+                        'rgb(52, 162, 235)'
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+            }
+        });
     }
 
     function carregarQuizzes() {
@@ -87,13 +279,147 @@
     }
 
     function carregarAlbuns() {
-        conteudo.innerHTML = `Oiii`
+        conteudo.innerHTML =
+            `
+        <div class="container-album">
+            <h2>🎵 Criar Novo Álbum</h2>
+            <h3>Não limite sua criatividade</h3>
+            <div class="campos-album">
+                <div class="campo-album">
+                    
+                </div>
+            </div> 
+        </div>  
+        `
     }
 
     function carregarPerfil() {
-        conteudo.innerHTML = `Oiiii`
+        conteudo.innerHTML =
+            `
+        <div class="profile-container">
+            <h1>Seu Perfil</h1>
+
+        <div class="profile-header">
+            <div class="profile-pic">
+                <img id="zodiac-image" src="imagens/fundo-transparente.jpg" alt="Signo">
+            </div>
+            <div>
+                <div class="user-name" id="b_usuario">Usuário</div>
+                <div class="tag-line">Sempre no lugar certo, na hora certa</div>
+            </div>
+        </div>
+
+        <div class="profile-info">
+            <div class="info-item">
+                <div class="info-label">Seu Signo</div>
+                <select id="signos" class="info-input"></select>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Álbum Favorito</div>
+                <select id="albuns" class="info-input"></select>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Música Favorita</div>
+                <input type="text" class="info-input" id="musica_favorita" placeholder="Digite sua música favorita da Taylor Swift">
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Era Favorita</div>
+                <div class="era-favorita" id="era_favorita"></div>
+            </div>
+
+            <div id="cardErro" style="display: none; color: red; margin: 10px 0;">
+                <span id="mensagem_erro"></span>
+            </div>
+
+                <button class="btn-save" onclick="salvarPerfil()">Salvar Perfil</button>
+            </div>
+        </div>
+        `
+        validarSessao()
     }
 
+    function validarSessao() {
+        var email = sessionStorage.EMAIL_USUARIO;
+        var nome = sessionStorage.NOME_USUARIO;
+        var b_usuario = document.getElementById("b_usuario");
+
+        if (email != null && nome != null) {
+            b_usuario.innerHTML = nome;
+        } else {
+            window.location = "../login.html";
+        }
+    }
+
+    // SIGNOS
+    var signosArray = ["Áries", "Touro", "Gêmeos", "Câncer", "Leão", "Virgem", "Libra", "Escorpião", "Sagitário", "Capricórnio", "Aquário", "Peixes"];
+    var signosSelect = document.getElementById("signos");
+    signosSelect.innerHTML = '<option value="">Selecione seu signo</option>' + signosArray.map(s => `<option value="${s}">${s}</option>`).join("");
+
+    signosSelect.addEventListener("change", function () {
+        var imagem = document.getElementById("zodiac-image");
+        if (this.value) {
+            imagem.src = `imagens/${this.value}.png`;
+        }
+    });
+
+    // ÁLBUNS
+    var albunsArray = ["Taylor Swift", "Fearless", "Speak Now", "Red", "1989", "reputation", "Lover", "folklore", "evermore", "Midnights", "The Tortured Poets Department"];
+    var albunsSelect = document.getElementById("albuns");
+    albunsSelect.innerHTML = '<option value="">Selecione seu álbum favorito</option>' + albunsArray.map(a => `<option value="${a}">${a}</option>`).join("");
+
+    // ERA FAVORITA
+    var eraDiv = document.getElementById("era_favorita");
+    eraDiv.innerHTML = albunsArray.map(album => `
+            <input type="radio" id="era-${album}" name="era" class="era-option">
+            <label for="era-${album}" class="era-label">${album}</label>
+        `).join("");
+
+    // SALVAR PERFIL
+    function salvarPerfil() {
+        var idUsuarioVar = sessionStorage.ID_USUARIO;
+        var signoVar = document.getElementById("signos").value;
+        var albumFavoritoVar = document.getElementById("albuns").value;
+        var musicaFavoritaVar = document.getElementById("musica_favorita").value;
+        var eraFavoritaInput = document.querySelector('input[name="era"]:checked');
+        var eraFavoritaVar = eraFavoritaInput ? eraFavoritaInput.nextElementSibling.innerText : "";
+
+        if (!signoVar || !albumFavoritoVar || !musicaFavoritaVar || !eraFavoritaVar) {
+            document.getElementById("cardErro").style.display = "block";
+            document.getElementById("mensagem_erro").innerText = "Por favor, preencha todos os campos.";
+            return;
+        }
+
+        fetch("/usuarios/atualizar", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuarioVar,
+                signoServer: signoVar,
+                albumFavoritoServer: albumFavoritoVar,
+                musicaFavoritaServer: musicaFavoritaVar,
+                eraFavoritaServer: eraFavoritaVar
+            }),
+        })
+            .then(function (resposta) {
+                if (resposta.ok) {
+                    document.getElementById("cardErro").style.display = "block";
+                    document.getElementById("mensagem_erro").innerText = "Perfil atualizado com sucesso!";
+                    setTimeout(() => document.getElementById("cardErro").style.display = "none", 5000);
+                } else {
+                    throw "Houve um erro ao tentar atualizar o perfil.";
+                }
+            })
+            .catch(function (erro) {
+                console.error("#ERRO:", erro);
+                document.getElementById("cardErro").style.display = "block";
+                document.getElementById("mensagem_erro").innerText = "Erro na atualização. Tente novamente.";
+            });
+    }
 </script>
 
 </html>

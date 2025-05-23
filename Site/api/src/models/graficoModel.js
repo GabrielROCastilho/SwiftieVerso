@@ -8,7 +8,8 @@ function signos() {
     from signo s
     left join usuario u ON s.idSigno = u.fkSigno
     group by s.nome_signo
-    order by QtdDeUsuarios desc;
+    order by QtdDeUsuarios desc
+    limit 4;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -22,7 +23,8 @@ function eras() {
     from usuario u 
     inner join era e on u.fkEraFavorita = e.idEra
     group by e.nome_era
-    order by QtdDeUsuarios desc;
+    order by QtdDeUsuarios desc
+    limit 5;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -36,7 +38,8 @@ function albuns() {
     from usuario u 
     inner join album a on u.fkAlbumFavorito = a.idAlbum
     group by a.nome_album
-    order by QtdDeUsuarios desc;
+    order by QtdDeUsuarios desc
+    limit 5;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

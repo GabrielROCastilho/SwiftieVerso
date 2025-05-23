@@ -10,7 +10,7 @@
     <title>Cadastro</title>
 </head>
 
-<body class="body-login-cadastro">
+<body class="body-login-cadastro" onload="carregarDados()">
     <div class="container-login-cadastro">
         <div class="img-login-cadastro"></div>
         <div class="card">
@@ -56,22 +56,86 @@
                     <label>Como quer ser chamado, swiftie?</label>
                     <input type="text" id="ipt_nickname">
                 </div>
+                <div class="ipt-campos">
+                    <label>Informe seu avatar</label>
+                    <select id="slc_avatar"></select>
+                </div>
                 <button onclick="cadastrar()" class="btn btn-cadastro">Cadastrar-se</button>
             </div>
             <div class="alerta_erro">
                 <div class="card_erro" id="cardErro">
-                  <span id="mensagem_erro"></span>
+                    <span id="mensagem_erro"></span>
                 </div>
-              </div>
+            </div>
             <div id="div_aguardar" class="loading-div"></div>
             <div id="div_erros_login"></div>
         </div>
     </div>
 </body>
 <script>
+
+    var avatares = []
+    function carregarDados() {
+        fetch('/avatares/buscar')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(function (resposta) {
+                const avatarVetor = [];
+                for (let i = 0; i < resposta.labels.length; i++) {
+                    avatarVetor.push({
+                        nome: resposta.labels[i],
+                        id: resposta.data[i]
+                    });
+                }
+                avatares = avatarVetor;
+                plotarAvatares(avatares);
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+                cardErro.style.display = "block";
+                mensagem_erro.innerHTML = "Não foi possível carregar os avatares. Tente novamente mais tarde.";
+            });
+
+        fetch('/estados/buscar')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(function (resposta) {
+                const estadoVetor = [];
+                for (let i = 0; i < resposta.labels.length; i++) {
+                    estadoVetor.push({
+                        nome: resposta.labels[i],
+                        id: resposta.data[i]
+                    });
+                }
+                estados = estadoVetor;
+                plotarAvatares(estados);
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+                cardErro.style.display = "block";
+                mensagem_erro.innerHTML = "Não foi possível carregar os avatares. Tente novamente mais tarde.";
+            });
+    }
+
+    function plotarAvatares(avatares) {
+        let optionsAvatares = '<option value="">Selecione um avatar</option>'; // Added a default option for avatars
+        for (var i = 0; i < avatares.length; i++) {
+            optionsAvatares += `<option value="${avatares[i].id}">${avatares[i].nome}</option>`; // Use avatar ID as value
+        }
+        document.getElementById("slc_avatar").innerHTML = optionsAvatares;
+    }
+
     const estados = ["Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"]
     const values = ["Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"]
-    let options = '<option value=""></option>'
+    let options = '<option value="">Selecione um estado</option>'
 
     for (var i = 0; i < estados.length; i++) {
         options += `<option value="${values[i]}">${estados[i]}</option>`
@@ -91,6 +155,7 @@
         var senhaVar = ipt_senha.value;
         var senhaConfirmadaVar = ipt_senha_confirmada.value;
         var nicknameVar = ipt_nickname.value;
+        var avatarVar = slc_avatar.value;
 
         if (
             primeiroNomeVar == "" ||
@@ -101,7 +166,8 @@
             estadoVar == "" ||
             senhaVar == "" ||
             senhaConfirmadaVar == "" ||
-            nicknameVar == "" 
+            nicknameVar == "" ||
+            avatarVar == ""
         ) {
             cardErro.style.display = "block";
             mensagem_erro.innerHTML =
@@ -126,7 +192,8 @@
                 emailServer: emailVar,
                 estadoServer: estadoVar,
                 senhaServer: senhaVar,
-                nicknameServer: nicknameVar
+                nicknameServer: nicknameVar,
+                avatarServer: avatarVar
             }),
         })
             .then(function (resposta) {
