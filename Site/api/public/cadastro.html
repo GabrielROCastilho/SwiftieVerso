@@ -14,54 +14,65 @@
     <div class="container-login-cadastro">
         <div class="img-login-cadastro"></div>
         <div class="card">
-            <h2>This is the very first page! 🪩</h2>
-            <div class="form">
-                <div class="nome-completo">
-                    <div class="ipt-campos">
-                        <label>Primeiro nome</label>
-                        <input type="text" id="ipt_primeiro_nome">
+            <h2>This is the very first page! <span>🪩</span></h2>
+            <div class="form-cadastro">
+                <div class="parte">
+                    <div class="form-group">
+                        <div class="ipt-campos">
+                            <label>Primeiro nome</label>
+                            <input type="text" id="ipt_primeiro_nome">
+                        </div>
+                        <div class="ipt-campos">
+                            <label>Sobrenome</label>
+                            <input type="text" id="ipt_sobrenome">
+                        </div>
                     </div>
                     <div class="ipt-campos">
-                        <label>Sobrenome</label>
-                        <input type="text" id="ipt_sobrenome">
-                    </div>
-                </div>
-                <div class="ipt-campos">
-                    <label>Informe sua data de nascimento</label>
-                    <input type="date" id="ipt_dt_nascimento">
-                </div>
-                <div class="ipt-campos">
-                    <label>Informe seu CPF</label>
-                    <input type="number" id="ipt_cpf">
-                </div>
-                <div class="ipt-campos">
-                    <label>Informe seu e-mail</label>
-                    <input type="text" id="ipt_email">
-                </div>
-                <div class="ipt-campos">
-                    <label>Informe seu estado</label>
-                    <select id="slc_estado"></select>
-                </div>
-                <div class="senha-confirmar_senha">
-                    <div class="ipt-campos">
-                        <label>Crie uma senha</label>
-                        <input type="password" id="ipt_senha">
+                        <label>Informe sua data de nascimento</label>
+                        <input type="date" id="ipt_dt_nascimento">
                     </div>
                     <div class="ipt-campos">
-                        <label>Confirme sua senha</label>
-                        <input type="password" id="ipt_senha_confirmada">
+                        <label>Informe seu CPF</label>
+                        <input type="number" id="ipt_cpf">
+                    </div>
+                    <div class="ipt-campos">
+                        <label>Informe seu e-mail</label>
+                        <input type="text" id="ipt_email">
+                    </div>
+                    <div class="ipt-campos">
+                        <label>Informe seu estado</label>
+                        <select id="slc_estado"></select>
                     </div>
                 </div>
-                <div class="ipt-campos">
-                    <label>Como quer ser chamado, swiftie?</label>
-                    <input type="text" id="ipt_nickname">
+                <div class="parte">
+                    <div class="form-group">
+                        <div class="ipt-campos">
+                            <label>Crie uma senha</label>
+                            <input type="password" id="ipt_senha">
+                        </div>
+                        <div class="ipt-campos">
+                            <label>Confirme sua senha</label>
+                            <input type="password" id="ipt_senha_confirmada">
+                        </div>
+                    </div>
+                    <div class="ipt-campos">
+                        <label>Como quer ser chamado, swiftie?</label>
+                        <input type="text" id="ipt_nickname">
+                    </div>
+                    <div class="ipt-campos">
+                        <label>Informe seu avatar</label>
+                        <div class="avatar-section">
+                            <div class="avatar-select-container">
+                                <select id="slc_avatar" onchange="avatarSelecionado()"></select>
+                            </div>
+                            <div class="avatar-preview" id="avatar_preview">
+                                <span class="avatar-placeholder">👤</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ipt-campos">
-                    <label>Informe seu avatar</label>
-                    <select id="slc_avatar"></select>
-                </div>
-                <button onclick="cadastrar()" class="btn btn-cadastro">Cadastrar-se</button>
             </div>
+            <button onclick="cadastrar()" class="btn btn-cadastro">Cadastrar-se</button>
             <div class="alerta_erro">
                 <div class="card_erro" id="cardErro">
                     <span id="mensagem_erro"></span>
@@ -74,7 +85,9 @@
 </body>
 <script>
 
-    var avatares = []
+    var estados = [];
+    var avatares = [];
+
     function carregarDados() {
         fetch('/avatares/buscar')
             .then(function (response) {
@@ -108,7 +121,7 @@
                 return response.json();
             })
             .then(function (resposta) {
-                const estadoVetor = [];
+                var estadoVetor = [];
                 for (let i = 0; i < resposta.labels.length; i++) {
                     estadoVetor.push({
                         nome: resposta.labels[i],
@@ -116,7 +129,7 @@
                     });
                 }
                 estados = estadoVetor;
-                plotarAvatares(estados);
+                plotarEstados(estados);
             })
             .catch(function (err) {
                 console.error("Erro ao buscar os dados:", err);
@@ -126,36 +139,79 @@
     }
 
     function plotarAvatares(avatares) {
-        let optionsAvatares = '<option value="">Selecione um avatar</option>'; // Added a default option for avatars
+        let optionsAvatares = '<option value="">Selecione um avatar</option>';
         for (var i = 0; i < avatares.length; i++) {
-            optionsAvatares += `<option value="${avatares[i].id}">${avatares[i].nome}</option>`; // Use avatar ID as value
+            optionsAvatares += `<option value="${avatares[i].id}">${avatares[i].nome}</option>`;
         }
         document.getElementById("slc_avatar").innerHTML = optionsAvatares;
     }
 
-    const estados = ["Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"]
-    const values = ["Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"]
-    let options = '<option value="">Selecione um estado</option>'
+    function avatarSelecionado() {
+        const avatarSelect = document.getElementById("slc_avatar");
+        const avatarPreview = document.getElementById("avatar_preview");
+        const selectedId = avatarSelect.value;
 
-    for (var i = 0; i < estados.length; i++) {
-        options += `<option value="${values[i]}">${estados[i]}</option>`
+        avatarPreview.classList.remove('has-selection');
+        avatarPreview.style.backgroundImage = '';
+
+        if (selectedId) {
+            avatarPreview.classList.add('has-selection');
+            if (selectedId == 10) {
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/aaron.png')";
+            } else if (selectedId == 5) {
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/andrea.png')";
+            } else if (selectedId == 7) {
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/austin.png')";
+            } else if (selectedId == 13){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/becky.png')";
+            } else if (selectedId == 3){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/benjamin.png')";
+            } else if (selectedId == 12){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/cobra.png')";
+            } else if (selectedId == 11){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/corcunda.png')";
+            } else if (selectedId == 9){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/jack.png')";
+            } else if (selectedId == 1){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/meredith.png')";
+            } else if (selectedId == 2){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/olivia.png')";
+            } else if (selectedId == 6){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/scott.png')";
+            } else if (selectedId == 8){
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/selena.png')";
+            } else if (selectedId == 4) {
+                avatarPreview.style.backgroundImage = "url('imagens/avatares/travis.png')";
+            }else{
+                avatarPreview.innerHTML = '<span class="avatar-placeholder">👤</span>';
+            }
+        } else {
+            avatarPreview.innerHTML = '<span class="avatar-placeholder">👤</span>';
+        }
     }
 
-    document.getElementById("slc_estado").innerHTML = options
+    function plotarEstados(estados) {
+        let optionsEstados = '<option value="">Selecione um estado</option>';
+        for (var i = 0; i < estados.length; i++) {
+            optionsEstados += `<option value="${estados[i].id}">${estados[i].nome}</option>`;
+        }
+        document.getElementById("slc_estado").innerHTML = optionsEstados;
+    }
 
     function cadastrar() {
-        // aguardar();
 
         var primeiroNomeVar = ipt_primeiro_nome.value;
         var sobrenomeVar = ipt_sobrenome.value;
         var dtNascimentoVar = ipt_dt_nascimento.value;
         var cpfVar = ipt_cpf.value;
         var emailVar = ipt_email.value;
-        var estadoVar = slc_estado.value;
         var senhaVar = ipt_senha.value;
         var senhaConfirmadaVar = ipt_senha_confirmada.value;
         var nicknameVar = ipt_nickname.value;
+        var estadoVar = slc_estado.value;
+        sessionStorage.ID_ESTADO = estadoVar;
         var avatarVar = slc_avatar.value;
+        sessionStorage.ID_AVATAR = avatarVar;
 
         if (
             primeiroNomeVar == "" ||

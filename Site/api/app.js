@@ -20,7 +20,10 @@ var usuarioRouter = require("./src/routes/usuarios");
 var perguntaRouter = require("./src/routes/perguntas");
 var graficoRouter = require("./src/routes/graficos");
 var avatarRouter = require("./src/routes/avatares");
-var estadoRouter = require("./src/routes/estados")
+var estadoRouter = require("./src/routes/estados");
+var signoRouter = require("./src/routes/signos");
+var albumRouter = require("./src/routes/albuns");
+var musicaRouter = require("./src/routes/musicas");
 
 
 app.use(express.json());
@@ -31,10 +34,13 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
-app.use("/perguntas", perguntaRouter)
-app.use("/graficos", graficoRouter)
-app.use("/avatares", avatarRouter)
-app.use("/estados", estadoRouter)
+app.use("/perguntas", perguntaRouter);
+app.use("/graficos", graficoRouter);
+app.use("/avatares", avatarRouter);
+app.use("/estados", estadoRouter);
+app.use("/signos", signoRouter);
+app.use("/albuns", albumRouter);
+app.use("/musicas", musicaRouter);
 
 
 app.listen(PORTA_APP, function () {

@@ -45,6 +45,7 @@ function cadastrar(req, res) {
     var estado = req.body.estadoServer;
     var senha = req.body.senhaServer;
     var nickname = req.body.nicknameServer;
+    var avatar = req.body.avatarServer;
 
     if (primeiroNome == undefined) {
         res.status(400).send("Seu nome está undefined!");
@@ -62,9 +63,11 @@ function cadastrar(req, res) {
         res.status(400).send("Sua senha está undefined!");
     } else if (nickname == undefined) {
         res.status(400).send("Seu nickname está undefined!");
+    } else if (avatar == undefined) {
+        res.status(400).send("Seu avatar está undefined!");
     }
 
-    usuarioModel.cadastrar(primeiroNome, sobrenome, dtNascimento, cpf, email, senha, nickname, estado)
+    usuarioModel.cadastrar(primeiroNome, sobrenome, dtNascimento, cpf, email, senha, nickname, estado, avatar)
         .then(
             function (resultado) {
                 res.json(resultado);

@@ -15,11 +15,10 @@
     <!-- CONTAINER -->
     <div class="container-login-cadastro">
         <div class="img-login-cadastro"></div>
-
         <div class="card">
-            <h2>I was enchanted to meet you ❤️</h2>
+            <h2>I was enchanted to meet you <span>❤️</span></h2>
 
-            <div class="form">
+            <div class="form-login">
                 <div class="ipt-campos">
                     <label for="ipt_login_usuario">Usuário ou e-mail</label>
                     <input type="text" id="ipt_login_usuario" placeholder="aaaa@bbb.ccc">
@@ -78,8 +77,9 @@
                 .then(function (resposta) {
                     if (resposta.ok) {
                         resposta.json().then(json => {
-                            sessionStorage.EMAIL_USUARIO = json.email;
+                            sessionStorage.AVATAR_USUARIO = json.fkAvatar;
                             sessionStorage.NOME_USUARIO = json.primeiro_nome;
+                            sessionStorage.SOBRENOME_USUARIO = json.sobrenome;
                             sessionStorage.ID_USUARIO = json.idusuario;
 
                             setTimeout(() => {

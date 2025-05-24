@@ -1,11 +1,11 @@
-var estadoModel = require("../models/estadoModel");
+var signoModel = require("../models/signoModel");
 
 function buscar(_, res){
-    estadoModel.buscar()
+    signoModel.buscar()
         .then(function (resultado) {
             if (resultado.length > 0) {
                 const nome = resultado.map(registro => registro.Nome);
-                const id = resultado.map(registro => registro.IdEstado);
+                const id = resultado.map(registro => registro.IdSigno);
 
                 res.json({
                     labels: nome,

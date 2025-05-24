@@ -26,12 +26,6 @@ body {
     height: 100vh;
 }
 
-.img-perfil{
-    background-image: url('imagens/perfil.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
 .navegacao{
     display: flex;
     flex-direction: column;
@@ -64,13 +58,6 @@ body {
     flex-direction: column;
 }
 
-.btn-areas a.ativo {
-    color: white;
-    background-color: #d36da3;
-    font-weight: bolder;
-    width: 100%;
-}
-
 .btn-area{
     display: flex;
     flex-direction: row;
@@ -88,13 +75,11 @@ body {
     text-decoration: underline;
 }
 
-.btn-area.ativo {
-    background-color: #d36da3;
-}
-
-.btn-area.ativo a {
+.ativo {
     color: white;
+    background-color: #d36da3;
     font-weight: bolder;
+    width: 100%;
 }
 
 .navegacao ul{
@@ -214,4 +199,36 @@ body {
 
 #albuns{
     max-height: fit-content;
+}
+
+.dropdown-lista {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    width: calc(100% - 2px);
+    z-index: 10;
+    padding: 0;
+    margin-top: 2px;
+    list-style: none;
+}
+
+.dropdown-lista li {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-lista li:hover {
+    background-color: #f3f3f3;
+}
+
+.oculto {
+    display: none;
+}
+
+.info-item {
+    position: relative;
 }

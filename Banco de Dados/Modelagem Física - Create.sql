@@ -65,7 +65,9 @@ create table usuario(
     constraint fk_era_favorita foreign key(fkEraFavorita) references era(idEra),
     constraint fk_avatar foreign key(fkAvatar) references avatar(idAvatar),
     constraint fk_musica_favorita foreign key(fkMusicaFavorita) references musica(idMusica),
-    constraint unq_nickname unique(nickname)
+    constraint unq_nickname unique(nickname),
+    constraint unq_email unique(email),
+    constraint unq_cpf unique(cpf)
 );
 
 -- -- Criando a tabela "Quiz"

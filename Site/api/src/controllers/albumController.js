@@ -1,11 +1,11 @@
-var estadoModel = require("../models/estadoModel");
+var albumModel = require("../models/albumModel");
 
 function buscar(_, res){
-    estadoModel.buscar()
+    albumModel.buscar()
         .then(function (resultado) {
             if (resultado.length > 0) {
                 const nome = resultado.map(registro => registro.Nome);
-                const id = resultado.map(registro => registro.IdEstado);
+                const id = resultado.map(registro => registro.IdAlbum);
 
                 res.json({
                     labels: nome,
