@@ -73,9 +73,9 @@ create table usuario(
 -- -- Criando a tabela "Quiz"
 CREATE TABLE quiz (
   idQuiz           INT PRIMARY KEY AUTO_INCREMENT,
+  titulo varchar(45) not null,
   nivel_dificuldade INT      NOT NULL,
-  numero_questoes   INT      NOT NULL,
-  descricao         VARCHAR(200) NOT NULL,
+  descricao         VARCHAR(100) NOT NULL,
   CONSTRAINT chk_nivel_dificuldade CHECK (nivel_dificuldade BETWEEN 1 AND 5)
 );
 
@@ -83,9 +83,10 @@ CREATE TABLE quiz (
 CREATE TABLE pergunta (
   idPergunta        INT PRIMARY KEY AUTO_INCREMENT,
   pergunta          VARCHAR(300),
-  nivel_dificuldade INT,
+  nivel_dificuldade int,
   fkQuiz            INT,
-  CONSTRAINT fk_quiz_pergunta FOREIGN KEY (fkQuiz) REFERENCES quiz(idQuiz)
+  CONSTRAINT fk_quiz_pergunta FOREIGN KEY (fkQuiz) REFERENCES quiz(idQuiz),
+  constraint chk_nive_dificuldade_pergunta check (nivel_dificuldade between 1 and 5)
 );
 
 -- Criando a tabela "Alternativa"

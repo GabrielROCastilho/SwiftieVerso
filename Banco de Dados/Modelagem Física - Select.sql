@@ -47,7 +47,12 @@ from usuario u
 inner join era e on u.fkEraFavorita = e.idEra
 inner join musica m on u.fkMusicaFavorita = m.idMusica
 inner join album a on u.fkAlbumFavorito = a.idAlbum
-inner join signo s on u.fkSigno = s.idSigno;
+inner join signo s on u.fkSigno = s.idSigno
+where u.email = "gabriel.castilho@sptech.school" and u.senha = "badliar2004";
+
+select pergunta, fkQuiz from pergunta;
+select count(*) from quiz;
+select * from usuario;
 
 -- Signos que mais aparecem
 select s.nome_signo AS Signo,

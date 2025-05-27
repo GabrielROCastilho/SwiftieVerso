@@ -3,8 +3,8 @@ var router = express.Router();
 
 var perguntaController = require("../controllers/perguntaController");
 
-router.get("/", function (req, res) {
-    perguntaController.buscarPergunta(req, res);
+router.get("/buscar", function (req, res) {
+    perguntaController.buscar(req, res);
 });
 
 module.exports = router;

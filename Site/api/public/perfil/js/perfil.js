@@ -6,7 +6,34 @@ var avatares = [];
 
 function carregarPagina() {
     validarSessao()
-    obterDadosPerfil()
+    avatarSelecionado()
+    var idUsuarioVar = sessionStorage.ID_USUARIO
+fetch("/usuarios/buscarDados", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        idUsuarioServer: idUsuarioVar,
+    })
+})
+    .then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(json => {
+                sessionStorage.AVATAR_USUARIO = json.FkAvatar;
+                console.log(sessionStorage.AVATAR_USUARIO = json.FkAvatar);
+                sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
+                sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
+                sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
+                sessionStorage.SIGNO_USUARIO = json.NomeSigno;
+            });
+            carregarPerfil()
+        } else {
+            resposta.text().then(texto => {
+                document.getElementById("cardErro").style.display = "block";
+                document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
+                finalizarAguardar();
+            });
+        }
+    })
 }
 
 function obterDadosPerfil() {
@@ -103,33 +130,6 @@ function obterDadosPerfil() {
             cardErro.style.display = "block";
             mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
         });
-
-    var idUsuarioVar = sessionStorage.ID_USUARIO
-    fetch("/usuarios/buscarDados", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            idUsuarioServer: idUsuarioVar,
-        })
-    })
-        .then(function (resposta) {
-            if (resposta.ok) {
-                resposta.json().then(json => {
-                    sessionStorage.AVATAR_USUARIO = json.FkAvatar;
-                    sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
-                    sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
-                    sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
-                    sessionStorage.SIGNO_USUARIO = json.NomeSigno;
-                });
-                carregarPerfil()
-            } else {
-                resposta.text().then(texto => {
-                    document.getElementById("cardErro").style.display = "block";
-                    document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
-                    finalizarAguardar();
-                });
-            }
-        })
 }
 
 function validarSessao(){
@@ -138,6 +138,7 @@ function validarSessao(){
 }
 
 function carregarPerfil() {
+    obterDadosPerfil()
     document.querySelectorAll('.btn-areas div').forEach(div => {
         div.classList.remove('ativo');
     });
@@ -151,6 +152,7 @@ function carregarPerfil() {
     var nome = sessionStorage.NOME_USUARIO
     var sobrenome = sessionStorage.SOBRENOME_USUARIO
     var avatar = sessionStorage.AVATAR_USUARIO
+    console.log(signo, album, musica, era, avatar)
 
     if (signo != null && album != null && musica != null && era != null) {
         conteudo.innerHTML = `
@@ -188,10 +190,6 @@ function carregarPerfil() {
         <div class="info-item">
             <div class="info-label">Era Favorita</div>
             <h2 class="info-input">${era}</h2>
-        </div>
-
-        <div id="cardErro" style="display: none; color: red; margin: 10px 0;">
-            <span id="mensagem_erro"></span>
         </div>
             <button class="btn-perfil" onclick="editarPerfil()">Editar Perfil</button>
         </div>
@@ -282,14 +280,13 @@ function carregarPerfil() {
         </div>
     </div>
     `
-        avatarSelecionado()
         obterDadosPerfil()
     }
 }
 
 function avatarSelecionado() {
     const avatarSelecionado = sessionStorage.AVATAR_USUARIO;
-    const avatarPerfil = document.getElementById("avatar-imagem-perfil");
+    const avatarPerfil = document.getElementById("avatar-imagem-navegacao");
     let imagem = "";
 
     if (avatarSelecionado == 10) {

@@ -1,11 +1,14 @@
-function cadastrar(resposta) {
-    var instrucaoSql = `
-        insert into resposta (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEndereco) VALUES ('${primeiroNome}', '${sobrenome}',  '${dtNascimento}', '${cpf}', '${email}', '${senha}', '${nickname}', '${estado}');
+var database = require("../database/config")
+
+function buscar() {
+    var instrucaoSql =
+    `
+    select idQuiz as IdQuiz, titulo as Titulo, descricao as Descricao, nivel_dificuldade as NivelDificuldade from quiz;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 module.exports = {
-    cadastrar
+    buscar
 };

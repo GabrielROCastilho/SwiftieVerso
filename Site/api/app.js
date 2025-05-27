@@ -25,6 +25,7 @@ var signoRouter = require("./src/routes/signos");
 var albumRouter = require("./src/routes/albuns");
 var musicaRouter = require("./src/routes/musicas");
 var eraRouter = require("./src/routes/eras");
+var quizRouter = require("./src/routes/quizzes")
 
 
 app.use(express.json());
@@ -42,7 +43,8 @@ app.use("/estados", estadoRouter);
 app.use("/signos", signoRouter);
 app.use("/albuns", albumRouter);
 app.use("/musicas", musicaRouter);
-app.use("/eras", eraRouter)
+app.use("/eras", eraRouter);
+app.use("/quizzes/", quizRouter);
 
 
 app.listen(PORTA_APP, function () {

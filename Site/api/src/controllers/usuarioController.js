@@ -84,7 +84,7 @@ function cadastrar(req, res) {
         );
 }
 
-function atualizar(req, res){
+function atualizar(req, res) {
     var idUsuario = req.body.idUsuarioServer;
     var signo = req.body.signoServer;
     var albumFavorito = req.body.albumFavoritoServer;
@@ -92,44 +92,48 @@ function atualizar(req, res){
     var eraFavorita = req.body.eraFavoritaServer;
 
     usuarioModel.atualizar(idUsuario, signo, albumFavorito, musicaFavorita, eraFavorita)
-    .then(
-        function (resultado) {
-            res.json(resultado);
-        }
-    ).catch(
-        function (erro) {
-            console.log(erro);
-            console.log(
-                "\nHouve um erro ao realizar o cadastro! Erro: ",
-                erro.sqlMessage
-            );
-            res.status(500).json(erro.sqlMessage);
-        }
-    );
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
 }
 
-function buscarDados(req, res){
+function buscarDados(req, res) {
 
     var idUsuario = req.body.idUsuarioServer;
 
     usuarioModel.buscarDados(idUsuario)
-        .then(function (resultado) {
-            if (resultado.length > 0) {
-                const nome = resultado.map(registro => registro.Nome);
-                const id = resultado.map(registro => registro.IdAvatar);
+        .then(
+            function (resultadoAutenticar) {
+                console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);
+                console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`);
 
-                res.json({
-                    labels: nome,
-                    data: id
-                });
-            } else {
-                res.status(204).send("Nenhum resultado encontrado!");
+                if (resultadoAutenticar.length == 1) {
+                    console.log(resultadoAutenticar);
+                    res.json(resultadoAutenticar[0]);
+                } else if (resultadoAutenticar.length == 0) {
+                    res.status(403).send("Email e/ou senha inválido(s)");
+                } else {
+                    res.status(403).send("Mais de um usuário com o mesmo login e senha!");
+                }
             }
-        })
-        .catch(function (erro) {
-            console.log(erro);
-            res.status(500).json(erro.sqlMessage);
-        });
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("\nHouve um erro ao realizar o login! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
 }
 
 

@@ -1,10 +1,14 @@
-var database = require("../database/config");
+var database = require("../database/config")
 
-function listar() {
-    const query = `SELECT idPergunta, pergunta FROM pergunta;`;
-    return database.executar(query);
+function buscar() {
+    var instrucaoSql =
+    `
+    select pergunta as Pergunta, fkQuiz as Quiz from pergunta;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 module.exports = {
-    listar
+    buscar
 };

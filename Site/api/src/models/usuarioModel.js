@@ -3,7 +3,7 @@ var database = require("../database/config")
 function autenticar(email, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
     var instrucaoSql = `
-    select primeiro_nome as PrimeiroNome, sobrenome as Sobrenome, idUsuario as IdUsuario from usuario where email = '${email}' AND senha = '${senha}';
+    select primeiro_nome as PrimeiroNome, sobrenome as Sobrenome, idUsuario as IdUsuario, fkAvatar as FkAvatar from usuario where email = '${email}' AND senha = '${senha}';
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -21,7 +21,7 @@ function cadastrar(primeiroNome, sobrenome, dtNascimento, cpf, email, senha, nic
     return database.executar(instrucaoSql);
 }
 
-function atualizar(idUsuario, signo, albumFavorito, musicaFavorita, eraFavorita){
+function atualizar(idUsuario, signo, albumFavorito, musicaFavorita, eraFavorita) {
     var instrucaoSql = `        
         update usuario set fkSigno = ${signo}, fkAlbumFavorito = ${albumFavorito}, 
                            fkEraFavorita = ${eraFavorita}, 

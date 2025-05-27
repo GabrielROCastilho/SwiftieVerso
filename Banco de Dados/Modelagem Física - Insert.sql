@@ -283,10 +283,10 @@ INSERT INTO musica (nome, duracao_musica) VALUES('Tim McGraw', 3.54),
 												('Is It Over Now? (From The Vault)', 3.49),
 												('Now That We Don\'t Talk (From The Vault)', 2.26);
 
-insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEstado, fkSigno, fkEraFavorita, fkAlbumFavorito) values ('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3),
-																																						('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3);
+insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEstado, fkSigno, fkEraFavorita, fkAlbumFavorito) values ('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3);
+
 -- USUARIO
-insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEndereco, fkSigno, fkEraFavorita, fkAlbumFavorito) values ('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3),
+insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEstado, fkSigno, fkEraFavorita, fkAlbumFavorito) values ('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3),
 																																					  ('Joaquim', 'Souza', '2007-01-06', 03629758410, 'ycavalcanti@gmail.com', 'xuFEq4Vj$*', 'vmartins', 11, 12, 11, 1),
 																																					  ('Francisco', 'Mendes', '1989-07-28', 84127935600, 'lavinia62@lopes.com', 'Y&9Tu(jPDJ', 'pietrogoncalves', 27, 4, 5, 6),
 																																					  ('Thiago', 'Castro', '2000-11-14', 97863214050, 'carlos-eduardo27@uol.com.br', 'bZ*uFyAt)6', 'jda-costa', 18, 2, 1, 7),
@@ -590,7 +590,7 @@ insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, 
 
                                                                                                                                                     
 -- QUIZ
-insert into quiz (nivel_dificuldade, numero_questoes, descricao) values (1, 0, 'Conhecimentos Gerais da Loirinha');
+insert into quiz (titulo, nivel_dificuldade, descricao) values ('Conhecimentos Gerais da Loirinha', 1, 'Teste seus conhecimentos gerais sobre a loirinha');
 
 -- PERGUNTA
 insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values ('Qual o nome do documentário de Taylor Swift lançado na Netflix em 2020?',          3, 1),
@@ -605,7 +605,7 @@ insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values ('Qual o nome 
 																  ('Qual é o nome da turnê que celebra todas as eras da carreira de Taylor Swift?',   1, 1);
 
 -- ATUALIZANDO O QUIZ
-update quiz set nivel_dificuldade = round((select avg(nivel_dificuldade) from pergunta where fkQuiz = 1)), numero_questoes = (select count(*) from pergunta where fkQuiz = 1) where idQuiz = 1;
+update quiz set nivel_dificuldade = round((select avg(nivel_dificuldade) from pergunta where fkQuiz = 1)) where idQuiz = 1;
 
 -- ALTERNATIVA
 insert into alternativa (letra, texto, fkPergunta) values

@@ -1,16 +1,26 @@
 var perguntaModel = require("../models/perguntaModel");
 
-function buscarPergunta(req, res) {
-    perguntaModel.listar()
-        .then(resultado => {
-            res.json(resultado);
+function buscar(_, res){
+    perguntaModel.buscar()
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                const pergunta = resultado.map(registro => registro.Pergunta);
+                const quiz = resultado.map(registro => registro.Quiz);
+
+                res.json({
+                    labels: pergunta,
+                    data: quiz
+                });
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!");
+            }
         })
-        .catch(erro => {
-            console.error("Erro ao buscar perguntas:", erro);
-            res.status(500).json({ erro: "Erro ao buscar perguntas" });
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
         });
 }
 
 module.exports = {
-    buscarPergunta
+    buscar
 };
