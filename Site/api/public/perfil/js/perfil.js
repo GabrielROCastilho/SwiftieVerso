@@ -1,6 +1,13 @@
 var signos = [];
 var albuns = [];
 var musicas = [];
+var eras = [];
+var avatares = [];
+
+function carregarPagina() {
+    validarSessao()
+    obterDadosPerfil()
+}
 
 function obterDadosPerfil() {
     fetch('/signos/buscar')
@@ -72,6 +79,62 @@ function obterDadosPerfil() {
             cardErro.style.display = "block";
             mensagem_erro.innerHTML = "Não foi possível carregar as músicas. Tente novamente mais tarde.";
         });
+
+    fetch('/eras/buscar')
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(function (resposta) {
+            var erasVetor = [];
+            for (let i = 0; i < resposta.labels.length; i++) {
+                erasVetor.push({
+                    nome: resposta.labels[i],
+                    id: resposta.data[i]
+                });
+            }
+            eras = erasVetor;
+            plotarEras(eras);
+        })
+        .catch(function (err) {
+            console.error("Erro ao buscar os dados:", err);
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
+        });
+
+    var idUsuarioVar = sessionStorage.ID_USUARIO
+    fetch("/usuarios/buscarDados", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            idUsuarioServer: idUsuarioVar,
+        })
+    })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    sessionStorage.AVATAR_USUARIO = json.FkAvatar;
+                    sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
+                    sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
+                    sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
+                    sessionStorage.SIGNO_USUARIO = json.NomeSigno;
+                });
+                carregarPerfil()
+            } else {
+                resposta.text().then(texto => {
+                    document.getElementById("cardErro").style.display = "block";
+                    document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
+                    finalizarAguardar();
+                });
+            }
+        })
+}
+
+function validarSessao(){
+    var b_usuario = document.getElementById("b_usuario")
+    b_usuario.innerHTML = `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`
 }
 
 function carregarPerfil() {
@@ -80,18 +143,111 @@ function carregarPerfil() {
     });
 
     document.querySelectorAll('.btn-areas div')[3].classList.add('ativo');
-    
-    conteudo.innerHTML =
+
+    var signo = sessionStorage.SIGNO_USUARIO
+    var album = sessionStorage.ALBUM_FAVORITO_USUARIO
+    var musica = sessionStorage.MUSICA_FAVORITA_USUARIO
+    var era = sessionStorage.ERA_FAVORITA_USUARIO
+    var nome = sessionStorage.NOME_USUARIO
+    var sobrenome = sessionStorage.SOBRENOME_USUARIO
+    var avatar = sessionStorage.AVATAR_USUARIO
+
+    if (signo != null && album != null && musica != null && era != null) {
+        conteudo.innerHTML = `
+        <div class="profile-container">
+        <h1>Seu Perfil</h1>
+
+    <div class="profile-header">
+        <a href="#" class="mudar_foto_perfil" onclick="mudarAvatarPerfil()">
+            <div class="imagem-perfil" id="avatar-imagem-perfil">
+                <span class="avatar-placeholder">👤</span>
+            </div>
+        </a>
+        <div>
+            <h2>${nome} ${sobrenome}</h2>
+            <span>Sempre no lugar certo, na hora certa</span>
+        </div>
+    </div>
+
+    <div class="profile-info">
+        <div class="info-item">
+            <div class="info-label">Seu Signo</div>
+            <h2 class="info-input">${signo}</h2>
+        </div>
+
+        <div class="info-item">
+            <div class="info-label">Álbum Favorito</div>
+            <h2 class="info-input">${album}</h2>
+        </div>
+
+        <div class="info-item">
+            <div class="info-label">Música Favorita</div>
+            <h2 class="info-input">${musica}</h2>
+        </div>
+
+        <div class="info-item">
+            <div class="info-label">Era Favorita</div>
+            <h2 class="info-input">${era}</h2>
+        </div>
+
+        <div id="cardErro" style="display: none; color: red; margin: 10px 0;">
+            <span id="mensagem_erro"></span>
+        </div>
+            <button class="btn-perfil" onclick="editarPerfil()">Editar Perfil</button>
+        </div>
+    </div>
         `
+        var avatarPerfil = document.getElementById("avatar-imagem-perfil")
+        var avatarPerfilNavegacao = document.getElementById("avatar-imagem-navegacao");
+
+        if (avatar == 10) {
+            imagem = "aaron.png";
+        } else if (avatar == 5) {
+            imagem = "andrea.png";
+        } else if (avatar == 7) {
+            imagem = "austin.png";
+        } else if (avatar == 13) {
+            imagem = "becky.png";
+        } else if (avatar == 3) {
+            imagem = "benjamin.png";
+        } else if (avatar == 12) {
+            imagem = "cobra.png";
+        } else if (avatar == 11) {
+            imagem = "corcunda.png";
+        } else if (avatar == 9) {
+            imagem = "jack.png";
+        } else if (avatar == 1) {
+            imagem = "meredith.png";
+        } else if (avatar == 2) {
+            imagem = "olivia.png";
+        } else if (avatar == 6) {
+            imagem = "scott.png";
+        } else if (avatar == 8) {
+            imagem = "selena.png"
+        } else if (avatar == 4) {
+            imagem = "travis.png"
+        }
+
+        if (imagem != "") {
+            avatarPerfil.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
+            avatarPerfil.innerHTML = '';
+            avatarPerfilNavegacao.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
+            avatarPerfilNavegacao.innerHTML = `url('../imagens/avatares/${imagem}')`;
+        }
+    } else {
+        conteudo.innerHTML =
+            `
     <div class="profile-container">
         <h1>Seu Perfil</h1>
 
     <div class="profile-header">
-        <div class="imagem-perfil" id="avatar-imagem-perfil">
-            <span class="avatar-placeholder">👤</span>
-        </div>
+        <a href="#" class="mudar_foto_perfil" onclick="mudarAvatarPerfil()">
+            <div class="imagem-perfil" id="avatar-imagem-perfil">
+                <span class="avatar-placeholder">👤</span>
+            </div>
+        </a>
         <div>
-            <h2 id="b_usuario1"></h2>
+            <h2>${nome} ${sobrenome}</h2>
             <span>Sempre no lugar certo, na hora certa</span>
         </div>
     </div>
@@ -122,18 +278,13 @@ function carregarPerfil() {
             <span id="mensagem_erro"></span>
         </div>
 
-            <button class="btn-save" onclick="salvarPerfil()">Salvar Perfil</button>
+            <button class="btn-perfil" onclick="salvarPerfil()">Salvar Perfil</button>
         </div>
     </div>
     `
-    nomeUsuario()
-    avatarSelecionado()
-    obterDadosPerfil()
-}
-
-function nomeUsuario() {
-    var b_usuario1 = document.getElementById("b_usuario1")
-    b_usuario1.innerHTML = `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`
+        avatarSelecionado()
+        obterDadosPerfil()
+    }
 }
 
 function avatarSelecionado() {
@@ -172,9 +323,6 @@ function avatarSelecionado() {
     if (imagem !== "") {
         avatarPerfil.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
         avatarPerfil.innerHTML = '';
-    } else {
-        avatarPerfil.style.backgroundImage = '';
-        avatarPerfil.innerHTML = '<span class="avatar-placeholder">👤</span>';
     }
 }
 
@@ -212,7 +360,7 @@ function filtrarMusicas() {
         const li = document.createElement("li");
         li.textContent = musica.nome;
         li.onclick = () => {
-            input.value = musica.nome;
+            input.value = musica.id;
             lista.classList.add("oculto");
         };
         lista.appendChild(li);
@@ -220,9 +368,65 @@ function filtrarMusicas() {
 
     lista.classList.remove("oculto");
 }
+
 document.addEventListener("click", (e) => {
     if (!document.getElementById("musica_favorita").contains(e.target) &&
         !document.getElementById("sugestoes_musicas").contains(e.target)) {
         document.getElementById("sugestoes_musicas").classList.add("oculto");
     }
 });
+
+function plotarEras(eras) {
+    var optionsEras = '';
+    var eraDiv = document.getElementById("era_favorita");
+    for (var i = 0; i < eras.length; i++) {
+        optionsEras += `
+            <input type="radio" id="era-${eras[i].id}" name="era" class="era-option" value="${eras[i].id}">
+            <label for="era-${eras[i].id}" class="era-label">${eras[i].nome}</label>
+        `;
+    }
+    eraDiv.innerHTML = optionsEras;
+}
+
+function salvarPerfil() {
+    var idUsuarioVar = sessionStorage.ID_USUARIO;
+    var signoVar = document.getElementById("slc_signo").value;
+    var albumFavoritoVar = document.getElementById("slc_album").value;
+    var musicaFavoritaVar = document.getElementById("musica_favorita").value;;
+    var eraFavoritaInput = document.querySelector('input[name="era"]:checked');
+    var eraFavoritaVar = eraFavoritaInput ? eraFavoritaInput.value : "";
+
+    if (signoVar == null || albumFavoritoVar == null || musicaFavoritaVar == null || eraFavoritaVar == null) {
+        document.getElementById("cardErro").style.display = "block";
+        document.getElementById("mensagem_erro").innerText = "Por favor, preencha todos os campos.";
+        return;
+    }
+
+    fetch("/usuarios/atualizar", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            idUsuarioServer: idUsuarioVar,
+            signoServer: signoVar,
+            albumFavoritoServer: albumFavoritoVar,
+            musicaFavoritaServer: musicaFavoritaVar,
+            eraFavoritaServer: eraFavoritaVar
+        }),
+    })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                document.getElementById("cardErro").style.display = "block";
+                document.getElementById("mensagem_erro").innerText = "Perfil atualizado com sucesso! Recarregue a página para que as alterações sejam salvas!";
+                setTimeout(() => document.getElementById("cardErro").style.display = "none", 5000);
+            } else {
+                throw "Houve um erro ao tentar atualizar o perfil.";
+            }
+        })
+        .catch(function (erro) {
+            console.error("#ERRO:", erro);
+            document.getElementById("cardErro").style.display = "block";
+            document.getElementById("mensagem_erro").innerText = "Erro na atualização. Tente novamente.";
+        });
+}

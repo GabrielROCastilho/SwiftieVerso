@@ -45,8 +45,8 @@ h1 {
 }
 
 .imagem-perfil {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea, #764ba2);
     display: flex;
@@ -81,6 +81,10 @@ h1 {
     display: none;
 }
 
+.mudar_foto_perfil:hover{
+    cursor: pointer;
+}
+
 .profile-info {
     margin-top: 30px;
 }
@@ -111,7 +115,7 @@ select.info-input {
     background-size: 12px;
 }
 
-.btn-save {
+.btn-perfil {
     background: linear-gradient(135deg, #ff9cda, #9b59b6);
     color: white;
     border: none;
@@ -125,7 +129,7 @@ select.info-input {
     transition: all 0.3s ease;
 }
 
-.btn-save:hover {
+.btn-perfil:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
 }

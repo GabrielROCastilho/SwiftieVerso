@@ -35,6 +35,20 @@ from usuario u
 inner join era e on u.fkEraFavorita = e.idEra
 group by e.nome_era;
 
+select e.nome_era as NomeEra,
+	   a.nome_album as NomeAlbum,
+       m.nome as NomeMusica,
+       s.nome_signo as NomeSigno,
+       u.idUsuario as IdUsuario,
+       u.primeiro_nome as PrimeiroNome,
+       u.sobrenome as Sobrenome,
+       u.fkAvatar as FkAvatar
+from usuario u
+inner join era e on u.fkEraFavorita = e.idEra
+inner join musica m on u.fkMusicaFavorita = m.idMusica
+inner join album a on u.fkAlbumFavorito = a.idAlbum
+inner join signo s on u.fkSigno = s.idSigno;
+
 -- Signos que mais aparecem
 select s.nome_signo AS Signo,
 	   COUNT(u.idUsuario) AS QtdDeUsuarios

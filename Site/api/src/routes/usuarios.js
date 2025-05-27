@@ -15,4 +15,8 @@ router.put("/atualizar", function (req, res){
     usuarioController.atualizar(req, res);
 });
 
+router.post("/buscarDados", function (req, res){
+    usuarioController.buscarDados(req, res);
+});
+
 module.exports = router;

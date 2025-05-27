@@ -3,7 +3,7 @@ var database = require("../database/config")
 function autenticar(email, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
     var instrucaoSql = `
-        SELECT idusuario, primeiro_nome, sobrenome, fkAvatar from usuario where email = '${email}' AND senha = '${senha}';
+    select primeiro_nome as PrimeiroNome, sobrenome as Sobrenome, idUsuario as IdUsuario from usuario where email = '${email}' AND senha = '${senha}';
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -22,27 +22,39 @@ function cadastrar(primeiroNome, sobrenome, dtNascimento, cpf, email, senha, nic
 }
 
 function atualizar(idUsuario, signo, albumFavorito, musicaFavorita, eraFavorita){
-    var instrucaoSql = `
-        -- Pega o idSigno com base no nome do signo
-        SET @idSigno := (SELECT idSigno FROM signo WHERE nome_signo = '${signo}');
-
-        -- Pega o idAlbum com base no nome do album
-        SET @idAlbum := (SELECT idAlbum FROM album WHERE nome_album = '${albumFavorito}');
-
-        -- Pega o idEra com base no nome da era
-        SET @idEra := (SELECT idEra FROM era WHERE nome_era = '${eraFavorita}');
-        
-        update usuario set fkSigno = @idSigno, fkAlbumFavorito = @idAlbum, 
-                           fkEraFavorita = @idEra, 
-                           musica_favorita = '${musicaFavorita}'
-                        where idUsuario = '${idUsuario}';
+    var instrucaoSql = `        
+        update usuario set fkSigno = ${signo}, fkAlbumFavorito = ${albumFavorito}, 
+                           fkEraFavorita = ${eraFavorita}, 
+                           fkMusicaFavorita = ${musicaFavorita}
+                        where idUsuario = ${idUsuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
+function buscarDados(idUsuario) {
+    var instrucaoSql = `
+    select e.nome_era as NomeEra,
+        a.nome_album as NomeAlbum,
+        m.nome as NomeMusica,
+        s.nome_signo as NomeSigno,
+        u.fkAvatar as FkAvatar
+    from usuario u
+    inner join era e on u.fkEraFavorita = e.idEra
+    inner join musica m on u.fkMusicaFavorita = m.idMusica
+    inner join album a on u.fkAlbumFavorito = a.idAlbum
+    inner join signo s on u.fkSigno = s.idSigno 
+    where u.idUsuario = ${idUsuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+
+
 module.exports = {
     autenticar,
     cadastrar,
-    atualizar
+    atualizar,
+    buscarDados
 };

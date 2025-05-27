@@ -1,11 +1,11 @@
-var musicaModel = require("../models/musicaModel");
+var eraModel = require("../models/eraModel");
 
 function buscar(_, res){
-    musicaModel.buscar()
+    eraModel.buscar()
         .then(function (resultado) {
             if (resultado.length > 0) {
                 const nome = resultado.map(registro => registro.Nome);
-                const id = resultado.map(registro => registro.IdMusica);
+                const id = resultado.map(registro => registro.IdEra);
 
                 res.json({
                     labels: nome,
