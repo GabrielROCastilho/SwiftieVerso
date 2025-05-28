@@ -8,32 +8,31 @@ function carregarPagina() {
     validarSessao()
     avatarSelecionado()
     var idUsuarioVar = sessionStorage.ID_USUARIO
-fetch("/usuarios/buscarDados", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-        idUsuarioServer: idUsuarioVar,
+    fetch("/usuarios/buscarDados", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            idUsuarioServer: idUsuarioVar,
+        })
     })
-})
-    .then(function (resposta) {
-        if (resposta.ok) {
-            resposta.json().then(json => {
-                sessionStorage.AVATAR_USUARIO = json.FkAvatar;
-                console.log(sessionStorage.AVATAR_USUARIO = json.FkAvatar);
-                sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
-                sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
-                sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
-                sessionStorage.SIGNO_USUARIO = json.NomeSigno;
-            });
-            carregarPerfil()
-        } else {
-            resposta.text().then(texto => {
-                document.getElementById("cardErro").style.display = "block";
-                document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
-                finalizarAguardar();
-            });
-        }
-    })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    sessionStorage.AVATAR_USUARIO = json.FkAvatar;
+                    sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
+                    sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
+                    sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
+                    sessionStorage.SIGNO_USUARIO = json.NomeSigno;
+                });
+                carregarPerfil()
+            } else {
+                resposta.text().then(texto => {
+                    document.getElementById("cardErro").style.display = "block";
+                    document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
+                    finalizarAguardar();
+                });
+            }
+        })
 }
 
 function obterDadosPerfil() {
@@ -132,7 +131,7 @@ function obterDadosPerfil() {
         });
 }
 
-function validarSessao(){
+function validarSessao() {
     var b_usuario = document.getElementById("b_usuario")
     b_usuario.innerHTML = `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`
 }

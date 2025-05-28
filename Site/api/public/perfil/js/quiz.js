@@ -1,31 +1,89 @@
-// var perguntas = []
+var perguntas = []
 
-// function obterDadosQuiz(idQuiz){
-//     fetch('/perguntas/buscar')
-//     .then(function (response) {
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok ' + response.statusText);
-//         }
-//         return response.json();
-//     })
-//     .then(function (resposta) {
-//         var perguntasVetor = [];
-//         for (let i = 0; i < resposta.labels.length; i++) {
-//             perguntasVetor.push({
-//                 pergunta: resposta.labels[i],
-//                 quiz: resposta.data[i]
-//             });
-//         }
-//         perguntas = perguntasVetor;
-//         plotarPerguntas(perguntas);
-//         console.log(perguntas)
-//     })
-//     .catch(function (err) {
-//         console.error("Erro ao buscar os dados:", err);
-//         cardErro.style.display = "block";
-//         mensagem_erro.innerHTML = "Não foi possível carregar as perguntas desse quiz. Tente novamente mais tarde.";
-//     });
-// }
+function obterDadosQuiz(id){
+    var idQuizVar = id
+
+    // Buscar perguntas pelo id do quiz
+    fetch("/perguntas/buscar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            idQuizServer: idQuizVar
+        })
+    })
+    .then(function (response) {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(function (resposta) {
+        var perguntasVetor = [];
+        for (let i = 0; i < resposta.pergunta.length; i++) {
+            perguntasVetor.push({
+                pergunta: resposta.pergunta[i],
+                id: resposta.id[i]
+            });
+        }
+        perguntas = perguntasVetor;
+        plotarPerguntas(perguntas);
+    })
+    .catch(function (err) {
+        console.error("Erro ao buscar os dados:", err);
+        cardErro.style.display = "block";
+        mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
+    });
+}
+
+function plotarPerguntas(perguntas){
+    conteudo.innerHTML = ''
+    for(var i = 0; i < perguntas.length; i++){
+        conteudo.innerHTML += 
+        `
+        <div id="perguntaDaQuestaoAtual" class="padding-8">
+            <span id="spanQuestaoExibida" class="text-bold">${perguntas[i].pergunta}</span>
+        </div>
+        `
+        var idPerguntaVar = perguntas[i].id
+        var alternativas = []
+
+        // Buscar alternativas pelo id do da pergunta
+        fetch("/alternativas/buscar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                idPerguntaServer: idPerguntaVar
+            })
+        })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(function (resposta) {
+            var alternativasVetor = [];
+            for (let i = 0; i < resposta.id.length; i++) {
+                alternativasVetor.push({
+                    id: resposta.id[i],
+                    letra: resposta.letra[i],
+                    texto: resposta.texto[i]
+                });
+            }
+            alternativas = alternativasVetor;
+            plotarAlternativas(alternativas);
+        })
+    }
+}
+
+function plotarAlternativas(alternativas) {
+    for(var i = 0; i < alternativas.length; i++){
+        conteudo.innerHTML += 
+        `
+        <p>Alternativa ${i + 1}: ${alternativas[i].texto}</p>
+        `
+    }
+}
 
 // conteudo.innerHTML = `
 // <div id="pontuacaoEJogo">
@@ -56,17 +114,7 @@
 //                 questões.</span>
 //         </div>
 
-//         <!-- Texto da pergunta atual -->
-//         <div id="perguntaDaQuestaoAtual" class="padding-8">
-//             <span id="spanQuestaoExibida" class="text-bold"></span>
-//         </div>
-
-//         <!-- Alternativas (input + label) -->
-//         <div id="infoAlternativas" class="padding-8">
-//             <span><em>Escolha uma opção dentre as abaixo:</em></span>
-//         </div>
-
-//         <!-- Grupo de 4 op´ções de resposta -->
+//         <!-- Grupo de 4 opções de resposta -->
 //         <div id="opcoes" class="flex-colunar padding-8">
 //             <span>
 //                 <input type="radio" id="primeiraOpcao" name="option" class="radio" value="alternativaA" />

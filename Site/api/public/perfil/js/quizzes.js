@@ -19,6 +19,7 @@ function obterDadosQuizzes() {
                 });
             }
             quizzes = quizzesVetor;
+            console.log(quizzes)
             plotarCards(quizzes);
         })
         .catch(function (err) {
@@ -30,7 +31,6 @@ function obterDadosQuizzes() {
 
 function carregarQuizzes() {
     obterDadosQuizzes()
-    plotarCards()
 }
 
 function plotarCards(quizzes) {

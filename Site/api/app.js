@@ -17,7 +17,6 @@ var app = express();
 
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
-var perguntaRouter = require("./src/routes/perguntas");
 var graficoRouter = require("./src/routes/graficos");
 var avatarRouter = require("./src/routes/avatares");
 var estadoRouter = require("./src/routes/estados");
@@ -25,7 +24,9 @@ var signoRouter = require("./src/routes/signos");
 var albumRouter = require("./src/routes/albuns");
 var musicaRouter = require("./src/routes/musicas");
 var eraRouter = require("./src/routes/eras");
-var quizRouter = require("./src/routes/quizzes")
+var quizRouter = require("./src/routes/quizzes");
+var perguntaRouter = require("./src/routes/perguntas");
+var alternativaRouter = require("./src/routes/alternativas");
 
 
 app.use(express.json());
@@ -36,7 +37,6 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
-app.use("/perguntas", perguntaRouter);
 app.use("/graficos", graficoRouter);
 app.use("/avatares", avatarRouter);
 app.use("/estados", estadoRouter);
@@ -45,6 +45,8 @@ app.use("/albuns", albumRouter);
 app.use("/musicas", musicaRouter);
 app.use("/eras", eraRouter);
 app.use("/quizzes/", quizRouter);
+app.use("/perguntas", perguntaRouter);
+app.use("/alternativas", alternativaRouter);
 
 
 app.listen(PORTA_APP, function () {

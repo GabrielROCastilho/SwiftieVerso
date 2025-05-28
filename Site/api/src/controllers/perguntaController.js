@@ -1,15 +1,17 @@
 var perguntaModel = require("../models/perguntaModel");
 
-function buscar(_, res){
-    perguntaModel.buscar()
+function buscar(req, res){
+    var idQuiz = req.body.idQuizServer;
+
+    perguntaModel.buscar(idQuiz)
         .then(function (resultado) {
             if (resultado.length > 0) {
-                const pergunta = resultado.map(registro => registro.Pergunta);
-                const quiz = resultado.map(registro => registro.Quiz);
+                const Pergunta = resultado.map(registro => registro.Pergunta);
+                const Id = resultado.map(registro => registro.Id)
 
                 res.json({
-                    labels: pergunta,
-                    data: quiz
+                    pergunta: Pergunta,
+                    id: Id
                 });
             } else {
                 res.status(204).send("Nenhum resultado encontrado!");

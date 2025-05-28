@@ -79,6 +79,8 @@ CREATE TABLE quiz (
   CONSTRAINT chk_nivel_dificuldade CHECK (nivel_dificuldade BETWEEN 1 AND 5)
 );
 
+select a.idAlternativa as Id, a.letra as Letra, a.texto as Texto from alternativa a inner join pergunta p on p.idPergunta = a.fkPergunta where p.idPergunta = 1;
+
 -- Criando a tabela "Pergunta"
 CREATE TABLE pergunta (
   idPergunta        INT PRIMARY KEY AUTO_INCREMENT,

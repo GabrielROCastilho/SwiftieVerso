@@ -604,6 +604,8 @@ insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values ('Qual o nome 
 																  ('Qual ator aparece no clipe de "The Man" dirigido por Taylor Swift?',              3, 1),
 																  ('Qual é o nome da turnê que celebra todas as eras da carreira de Taylor Swift?',   1, 1);
 
+select titulo as Titulo, descricao as Descricao, nivel_dificuldade as NivelDificuldade from quiz;
+
 -- ATUALIZANDO O QUIZ
 update quiz set nivel_dificuldade = round((select avg(nivel_dificuldade) from pergunta where fkQuiz = 1)) where idQuiz = 1;
 
