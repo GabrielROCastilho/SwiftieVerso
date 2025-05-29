@@ -9,6 +9,16 @@ function buscar() {
     return database.executar(instrucaoSql);
 }
 
+function buscarNumeroDePerguntas(idQuiz) {
+    var instrucaoSql =
+    `
+    select count(*) as NumeroDePerguntas from quiz where idQuiz = ${idQuiz};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
-    buscar
+    buscar,
+    buscarNumeroDePerguntas
 };

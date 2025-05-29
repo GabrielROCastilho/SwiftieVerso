@@ -1,75 +1,29 @@
-// async transforma a função em assíncrona, ou seja, permite o uso de await dentro dela
-// await pausa a execução da função até que a Promise (como fetch) retorne uma resposta
-async function obterDadosQuiz(id) {
-    const idQuizVar = id;
-    const questoes = [];
-
-    // Inicia um bloco de tratamento de erros. Se algo der errado dentro do try, o catch será executado
-    try {
-        // Espera a resposta usando await
-        const respostaPerguntas = await fetch("/perguntas/buscar", {
-            // Envia uma requisição POST para buscar todas as perguntas desse quiz
-            method: "POST",
-            // Content-Type: application/json informa que o corpo da requisição está em JS
-            headers: { "Content-Type": "application/json" },
-            //O corpo (body) envia o ID do quiz em formato JSO
-            body: JSON.stringify({ idQuizServer: idQuizVar })
-        });
-
-        // Verifica se a resposta do servidor foi bem-sucedida (status 200). Se não for, lança um erro
-        if (!respostaPerguntas.ok) throw new Error("Erro ao buscar perguntas");
-
-        // Converte o conteúdo da resposta (JSON) para um objeto JavaScript
-        const dadosPerguntas = await respostaPerguntas.json();
-
-        // Percorre cada pergunta retornada
-        for (let i = 0; i < dadosPerguntas.pergunta.length; i++) {
-            // Salva o ID e o texto da pergunta at
-            const idPergunta = dadosPerguntas.id[i];
-            const textoPergunta = dadosPerguntas.pergunta[i];
-
-            // Para cada pergunta, envia nova requisição para buscar suas alternativ
-            const respostaAlternativas = await fetch("/alternativas/buscar", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                // Passa o idPergunta como corpo do PO
-                body: JSON.stringify({ idPerguntaServer: idPergunta })
-            });
-
-            // Verifica se a resposta foi ok
-            if (!respostaAlternativas.ok) throw new Error("Erro ao buscar alternativas");
-
-            // Converte as alternativas recebidas para um objeto JavaScript
-            const dadosAlternativas = await respostaAlternativas.json();
-
-            // Cria um array alternativas para armazenar as alternativas da pergunta
-            const alternativas = [];
-
-            // Cada alternativa recebe seu ID, letra (ex: A, B, C) e o texto
-            for (let j = 0; j < dadosAlternativas.id.length; j++) {
-                alternativas.push({
-                    id: dadosAlternativas.id[j],
-                    letra: dadosAlternativas.letra[j],
-                    texto: dadosAlternativas.texto[j]
+var numeroDePerguntas = 0
+// Pegar o número de questões do quiz de acordo com o id dele passado por parâmetro
+function obterDadosQuiz(idQuiz) {
+    var idQuizVar = idQuiz
+    fetch("/quizzes/buscarNumeroDePerguntas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            idQuizServer: idQuizVar,
+        })
+    })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    sessionStorage.NUMERO_QUESTOES = json.NumeroDePerguntas;
+                    console.log(sessionStorage.NUMERO_QUESTOES)
+                });
+            } else {
+                resposta.text().then(texto => {
+                    document.getElementById("cardMensagem").style.display = "block";
+                    document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
+                    finalizarAguardar();
                 });
             }
-
-            // Adiciona um objeto com a pergunta e suas alternativas ao array quest
-            questoes.push({
-                pergunta: textoPergunta,
-                alternativas: alternativas
-            });
-        }
-
-        plotarQuestoes(questoes);
-
-    } catch (err) {
-        console.error("Erro ao buscar os dados:", err);
-        cardErro.style.display = "block";
-        mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
-    }
+        })
 }
-
 
 function plotarQuestoes(questoes) {
     let mensagem = '';
@@ -88,14 +42,33 @@ function plotarQuestoes(questoes) {
 // Toda vez que pular de pergunta, acrescenta 1 na variável idPergunta, faz o fetch e plota na tela.
 // Tem que ter uma função que pega o valor de perguntas do quiz, com um count. 
 // A variável acrescenta 1 até ter o valor da quantidade de perguntas.
-//var idPergunta = 0
-//function proximaQuestao(){
-    //idPergunta += 1
-    //fetch("/pergunta/buscar"){
-        // Para a pergunta, retirar o id da pergunta e a pergunta; depois, fazer o fetch para buscar as alternativas de acordo com o id da pergunta
-    //}
-
-//}
+var idPergunta = 0
+function proximaQuestao() {
+    idPergunta += 1
+    fetch('/signos/buscar')
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(function (resposta) {
+            var signoVetor = [];
+            for (let i = 0; i < resposta.labels.length; i++) {
+                signoVetor.push({
+                    nome: resposta.labels[i],
+                    id: resposta.data[i]
+                });
+            }
+            signos = signoVetor;
+            plotarSignos(signos);
+        })
+        .catch(function (err) {
+            console.error("Erro ao buscar os dados:", err);
+            cardMensagem.style.display = "block";
+            mensagem_erro.innerHTML = "Não foi possível carregar os avatares. Tente novamente mais tarde.";
+        });
+}
 
 // conteudo.innerHTML = `
 // <div id="conteudo">

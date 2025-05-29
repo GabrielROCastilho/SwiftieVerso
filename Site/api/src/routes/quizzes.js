@@ -7,5 +7,9 @@ router.get("/buscar", function (req, res) {
     quizController.buscar(req, res);
 });
 
+router.get("/buscar", function (req, res){
+    quizController.buscarNumeroDePerguntas(req, res)
+})
+
 module.exports = router;
 
