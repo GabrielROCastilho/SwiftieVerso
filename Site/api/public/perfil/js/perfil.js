@@ -27,7 +27,7 @@ function carregarPagina() {
                 carregarPerfil()
             } else {
                 resposta.text().then(texto => {
-                    document.getElementById("cardErro").style.display = "block";
+                    document.getElementById("cardMensagem").style.display = "block";
                     document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
                     finalizarAguardar();
                 });
@@ -56,7 +56,7 @@ function obterDadosPerfil() {
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
-            cardErro.style.display = "block";
+            cardMensagem.style.display = "block";
             mensagem_erro.innerHTML = "Não foi possível carregar os avatares. Tente novamente mais tarde.";
         });
 
@@ -80,7 +80,7 @@ function obterDadosPerfil() {
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
-            cardErro.style.display = "block";
+            cardMensagem.style.display = "block";
             mensagem_erro.innerHTML = "Não foi possível carregar os álbuns. Tente novamente mais tarde.";
         });
 
@@ -102,7 +102,7 @@ function obterDadosPerfil() {
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
-            cardErro.style.display = "block";
+            cardMensagem.style.display = "block";
             mensagem_erro.innerHTML = "Não foi possível carregar as músicas. Tente novamente mais tarde.";
         });
 
@@ -126,7 +126,7 @@ function obterDadosPerfil() {
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
-            cardErro.style.display = "block";
+            cardMensagem.style.display = "block";
             mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
         });
 }
@@ -137,21 +137,12 @@ function validarSessao() {
 }
 
 function carregarPerfil() {
-    obterDadosPerfil()
-    document.querySelectorAll('.btn-areas div').forEach(div => {
-        div.classList.remove('ativo');
-    });
-
-    document.querySelectorAll('.btn-areas div')[3].classList.add('ativo');
-
     var signo = sessionStorage.SIGNO_USUARIO
     var album = sessionStorage.ALBUM_FAVORITO_USUARIO
     var musica = sessionStorage.MUSICA_FAVORITA_USUARIO
     var era = sessionStorage.ERA_FAVORITA_USUARIO
     var nome = sessionStorage.NOME_USUARIO
     var sobrenome = sessionStorage.SOBRENOME_USUARIO
-    var avatar = sessionStorage.AVATAR_USUARIO
-    console.log(signo, album, musica, era, avatar)
 
     if (signo != null && album != null && musica != null && era != null) {
         conteudo.innerHTML = `
@@ -194,43 +185,6 @@ function carregarPerfil() {
         </div>
     </div>
         `
-        var avatarPerfil = document.getElementById("avatar-imagem-perfil")
-        var avatarPerfilNavegacao = document.getElementById("avatar-imagem-navegacao");
-
-        if (avatar == 10) {
-            imagem = "aaron.png";
-        } else if (avatar == 5) {
-            imagem = "andrea.png";
-        } else if (avatar == 7) {
-            imagem = "austin.png";
-        } else if (avatar == 13) {
-            imagem = "becky.png";
-        } else if (avatar == 3) {
-            imagem = "benjamin.png";
-        } else if (avatar == 12) {
-            imagem = "cobra.png";
-        } else if (avatar == 11) {
-            imagem = "corcunda.png";
-        } else if (avatar == 9) {
-            imagem = "jack.png";
-        } else if (avatar == 1) {
-            imagem = "meredith.png";
-        } else if (avatar == 2) {
-            imagem = "olivia.png";
-        } else if (avatar == 6) {
-            imagem = "scott.png";
-        } else if (avatar == 8) {
-            imagem = "selena.png"
-        } else if (avatar == 4) {
-            imagem = "travis.png"
-        }
-
-        if (imagem != "") {
-            avatarPerfil.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
-            avatarPerfil.innerHTML = '';
-            avatarPerfilNavegacao.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
-            avatarPerfilNavegacao.innerHTML = `url('../imagens/avatares/${imagem}')`;
-        }
     } else {
         conteudo.innerHTML =
             `
@@ -271,21 +225,24 @@ function carregarPerfil() {
             <div class="era-favorita" id="era_favorita"></div>
         </div>
 
-        <div id="cardErro" style="display: none; color: red; margin: 10px 0;">
+        <div id="cardMensagem">
             <span id="mensagem_erro"></span>
+            <span id="mensagem_certo"></span>
         </div>
 
             <button class="btn-perfil" onclick="salvarPerfil()">Salvar Perfil</button>
         </div>
     </div>
     `
-        obterDadosPerfil()
     }
+    avatarSelecionado()
+    obterDadosPerfil()
 }
 
 function avatarSelecionado() {
     const avatarSelecionado = sessionStorage.AVATAR_USUARIO;
-    const avatarPerfil = document.getElementById("avatar-imagem-navegacao");
+    const avatarPerfilNavegacao = document.getElementById("avatar-imagem-navegacao");
+    const avatarPerfil = document.getElementById("avatar-imagem-perfil");
     let imagem = "";
 
     if (avatarSelecionado == 10) {
@@ -317,10 +274,18 @@ function avatarSelecionado() {
     }
 
     if (imagem !== "") {
-        avatarPerfil.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
-        avatarPerfil.innerHTML = '';
+        if (avatarPerfilNavegacao) {
+            avatarPerfilNavegacao.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
+            avatarPerfilNavegacao.innerHTML = '';
+        }
+
+        if (avatarPerfil) {
+            avatarPerfil.style.backgroundImage = `url('../imagens/avatares/${imagem}')`;
+            avatarPerfil.innerHTML = '';
+        }
     }
 }
+
 
 function plotarSignos(signos) {
     var optionsSignos = '<option value="">Selecione um signo</option>';
@@ -393,7 +358,7 @@ function salvarPerfil() {
     var eraFavoritaVar = eraFavoritaInput ? eraFavoritaInput.value : "";
 
     if (signoVar == null || albumFavoritoVar == null || musicaFavoritaVar == null || eraFavoritaVar == null) {
-        document.getElementById("cardErro").style.display = "block";
+        document.getElementById("cardMensagem").style.display = "block";
         document.getElementById("mensagem_erro").innerText = "Por favor, preencha todos os campos.";
         return;
     }
@@ -413,16 +378,16 @@ function salvarPerfil() {
     })
         .then(function (resposta) {
             if (resposta.ok) {
-                document.getElementById("cardErro").style.display = "block";
-                document.getElementById("mensagem_erro").innerText = "Perfil atualizado com sucesso! Recarregue a página para que as alterações sejam salvas!";
-                setTimeout(() => document.getElementById("cardErro").style.display = "none", 5000);
+                document.getElementById("cardMensagem").style.display = "block";
+                document.getElementById("mensagem_certo").innerText = "Perfil atualizado com sucesso! Recarregue a página para que as alterações sejam salvas!";
+                setTimeout(() => document.getElementById("cardMensagem").style.display = "none", 5000);
             } else {
                 throw "Houve um erro ao tentar atualizar o perfil.";
             }
         })
         .catch(function (erro) {
             console.error("#ERRO:", erro);
-            document.getElementById("cardErro").style.display = "block";
+            document.getElementById("cardMensagem").style.display = "block";
             document.getElementById("mensagem_erro").innerText = "Erro na atualização. Tente novamente.";
         });
 }

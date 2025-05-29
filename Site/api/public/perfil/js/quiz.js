@@ -1,201 +1,133 @@
-var perguntas = []
+// async transforma a função em assíncrona, ou seja, permite o uso de await dentro dela
+// await pausa a execução da função até que a Promise (como fetch) retorne uma resposta
+async function obterDadosQuiz(id) {
+    const idQuizVar = id;
+    const questoes = [];
 
-function obterDadosQuiz(id){
-    var idQuizVar = id
+    // Inicia um bloco de tratamento de erros. Se algo der errado dentro do try, o catch será executado
+    try {
+        // Espera a resposta usando await
+        const respostaPerguntas = await fetch("/perguntas/buscar", {
+            // Envia uma requisição POST para buscar todas as perguntas desse quiz
+            method: "POST",
+            // Content-Type: application/json informa que o corpo da requisição está em JS
+            headers: { "Content-Type": "application/json" },
+            //O corpo (body) envia o ID do quiz em formato JSO
+            body: JSON.stringify({ idQuizServer: idQuizVar })
+        });
 
-    // Buscar perguntas pelo id do quiz
-    fetch("/perguntas/buscar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            idQuizServer: idQuizVar
-        })
-    })
-    .then(function (response) {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(function (resposta) {
-        var perguntasVetor = [];
-        for (let i = 0; i < resposta.pergunta.length; i++) {
-            perguntasVetor.push({
-                pergunta: resposta.pergunta[i],
-                id: resposta.id[i]
+        // Verifica se a resposta do servidor foi bem-sucedida (status 200). Se não for, lança um erro
+        if (!respostaPerguntas.ok) throw new Error("Erro ao buscar perguntas");
+
+        // Converte o conteúdo da resposta (JSON) para um objeto JavaScript
+        const dadosPerguntas = await respostaPerguntas.json();
+
+        // Percorre cada pergunta retornada
+        for (let i = 0; i < dadosPerguntas.pergunta.length; i++) {
+            // Salva o ID e o texto da pergunta at
+            const idPergunta = dadosPerguntas.id[i];
+            const textoPergunta = dadosPerguntas.pergunta[i];
+
+            // Para cada pergunta, envia nova requisição para buscar suas alternativ
+            const respostaAlternativas = await fetch("/alternativas/buscar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                // Passa o idPergunta como corpo do PO
+                body: JSON.stringify({ idPerguntaServer: idPergunta })
+            });
+
+            // Verifica se a resposta foi ok
+            if (!respostaAlternativas.ok) throw new Error("Erro ao buscar alternativas");
+
+            // Converte as alternativas recebidas para um objeto JavaScript
+            const dadosAlternativas = await respostaAlternativas.json();
+
+            // Cria um array alternativas para armazenar as alternativas da pergunta
+            const alternativas = [];
+
+            // Cada alternativa recebe seu ID, letra (ex: A, B, C) e o texto
+            for (let j = 0; j < dadosAlternativas.id.length; j++) {
+                alternativas.push({
+                    id: dadosAlternativas.id[j],
+                    letra: dadosAlternativas.letra[j],
+                    texto: dadosAlternativas.texto[j]
+                });
+            }
+
+            // Adiciona um objeto com a pergunta e suas alternativas ao array quest
+            questoes.push({
+                pergunta: textoPergunta,
+                alternativas: alternativas
             });
         }
-        perguntas = perguntasVetor;
-        plotarPerguntas(perguntas);
-    })
-    .catch(function (err) {
+
+        plotarQuestoes(questoes);
+
+    } catch (err) {
         console.error("Erro ao buscar os dados:", err);
         cardErro.style.display = "block";
         mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
-    });
-}
-
-function plotarPerguntas(perguntas){
-    conteudo.innerHTML = ''
-    for(var i = 0; i < perguntas.length; i++){
-        conteudo.innerHTML += 
-        `
-        <div id="perguntaDaQuestaoAtual" class="padding-8">
-            <span id="spanQuestaoExibida" class="text-bold">${perguntas[i].pergunta}</span>
-        </div>
-        `
-        var idPerguntaVar = perguntas[i].id
-        var alternativas = []
-
-        // Buscar alternativas pelo id do da pergunta
-        fetch("/alternativas/buscar", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                idPerguntaServer: idPerguntaVar
-            })
-        })
-        .then(function (response) {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(function (resposta) {
-            var alternativasVetor = [];
-            for (let i = 0; i < resposta.id.length; i++) {
-                alternativasVetor.push({
-                    id: resposta.id[i],
-                    letra: resposta.letra[i],
-                    texto: resposta.texto[i]
-                });
-            }
-            alternativas = alternativasVetor;
-            plotarAlternativas(alternativas);
-        })
     }
 }
 
-function plotarAlternativas(alternativas) {
-    for(var i = 0; i < alternativas.length; i++){
-        conteudo.innerHTML += 
-        `
-        <p>Alternativa ${i + 1}: ${alternativas[i].texto}</p>
-        `
+
+function plotarQuestoes(questoes) {
+    let mensagem = '';
+
+    for (let i = 0; i < questoes.length; i++) {
+        mensagem += `<h1>${questoes[i].pergunta}</h1>`;
+
+        for (let j = 0; j < questoes[i].alternativas.length; j++) {
+            mensagem += `<p>${questoes[i].alternativas[j].letra}) ${questoes[i].alternativas[j].texto}</p>`;
+        }
     }
+
+    conteudo.innerHTML = mensagem;
 }
+
 
 // conteudo.innerHTML = `
-// <div id="pontuacaoEJogo">
+// <div id="conteudo">
+//   <div id="pontuacaoEJogo">
 //     <button id="btnIniciarQuiz" onclick="iniciarQuiz()">INICIAR QUIZ</button>
 
-//     <!-- Div que mostra a pontuação -->
-//     <div id="pontuacao" class="flex-colunar width-fit-content border-primary">
-//         <!-- Div que exibe os erros e acertos atualizados automaticamente -->
-//         <div id="pontuacaoDuranteJogo" class="flex-colunar padding-8">
-//             <span class="width-fit-content">Quantidade de acertos: <span id="spanCertas"></span></span>
-//             <span class="width-fit-content">Quantidade de erros: <span id="spanErradas"></span></span>
-//         </div>
-//         <!-- Mostra a pontuação e uma mensagem final personalizada -->
-//         <div id="pontuacaoFinalJogo" class="flex-colunar padding-8">
-//             <span id="pontuacaoFinal" class="width-fit-content">Pontuação Final:
-//                 <span id="spanPontuacaoFinal">***</span>
-//             </span>
-//             <span id="msgFinal" class="width-fit-content">***</span>
-//         </div>
+//     <div id="pontuacao" style="display: none">
+//       <div id="pontuacaoDuranteJogo">
+//         Acertos: <span id="spanCertas"></span> |
+//         Erros: <span id="spanErradas"></span>
+//       </div>
+//       <div id="pontuacaoFinalJogo">
+//         Pontuação Final: <span id="spanPontuacaoFinal">***</span><br />
+//         <span id="msgFinal">***</span>
+//       </div>
 //     </div>
 
-//     <!-- Div que mostra as questões e as alternativas -->
-//     <div id="jogo" class="width-fit-content flex-colunar border-secondary">
-        
-//         <!-- Div que exibe qual questão está sendo mostrada -->
-//         <div id="infoQuestao" class="padding-8">
-//             <span>Questão atual: <span id="spanNumeroDaQuestaoAtual"></span> de <span id="qtdQuestoes"></span>
-//                 questões.</span>
-//         </div>
-
-//         <!-- Grupo de 4 opções de resposta -->
-//         <div id="opcoes" class="flex-colunar padding-8">
-//             <span>
-//                 <input type="radio" id="primeiraOpcao" name="option" class="radio" value="alternativaA" />
-//                 <label for="primeiraOpcao" class="option" id="labelOpcaoUm"></label>
-//             </span>
-//             <span>
-//                 <input type="radio" id="segundaOpcao" name="option" class="radio" value="alternativaB" />
-//                 <label for="segundaOpcao" class="option" id="labelOpcaoDois"></label>
-//             </span>
-//             <span>
-//                 <input type="radio" id="terceiraOpcao" name="option" class="radio" value="alternativaC" />
-//                 <label for="terceiraOpcao" class="option" id="labelOpcaoTres"></label>
-//             </span>
-//             <span>
-//                 <input type="radio" id="quartaOpcao" name="option" class="radio" value="alternativaD" />
-//                 <label for="quartaOpcao" class="option" id="labelOpcaoQuatro"></label>
-//             </span>
-//         </div>
-
-//         <!-- Botões de ação -->
-//         <div id="botoes" class="flex-colunar padding-8">
-//             <button onclick="submeter()" id="btnSubmeter">Submeter resposta</button>
-//             <button onclick="avancar()" id="btnProx" disabled>Avançar para próxima questão</button>
-//             <!-- <button onclick="finalizar()" id="btnConcluir" disabled>Finalizar Quiz</button> -->
-//             <button onclick="tentarNovamente()" id="btnTentarNovamente" disabled>Tentar novamente</button>
-//         </div>
-
+//     <div id="jogo" style="display: none">
+//       <div id="infoQuestao">
+//         Questão <span id="spanNumeroDaQuestaoAtual"></span> de <span id="qtdQuestoes"></span>
+//       </div>
+//       <div id="perguntaDaQuestaoAtual">
+//         <span id="spanQuestaoExibida"></span>
+//       </div>
+//       <div id="opcoes"></div>
+//       <div id="botoes">
+//         <button onclick="submeter()" id="btnSubmeter">Submeter resposta</button>
+//         <button onclick="avancar()" id="btnProx" disabled>Avançar</button>
+//         <button onclick="tentarNovamente()" id="btnTentarNovamente" disabled>Tentar novamente</button>
+//       </div>
 //     </div>
+//   </div>
 // </div>
+
 // `
 
-// function plotarPerguntas(perguntas) {
-    
-// }
-
-// // Array com todas as perguntas e alternativas
-// const listaDeQuestoes = [
-
-//     {
-//         pergunta: "Qual mês tem 30 dias?",
-//         alternativaA: "Janeiro",
-//         alternativaB: "Dezembro",
-//         alternativaC: "Junho",
-//         alternativaD: "Agosto",
-//         alternativaCorreta: "alternativaC"
-//     },
-
-//     {
-//         pergunta: "Quantas horas tem em um dia?",
-//         alternativaA: "30 horas",
-//         alternativaB: "38 horas",
-//         alternativaC: "48 horas",
-//         alternativaD: "24 horas",
-//         alternativaCorreta: "alternativaD"
-//     },
-
-//     {
-//         pergunta: "Qual destes números é ímpar?",
-//         alternativaA: "Dez",
-//         alternativaB: "Doze",
-//         alternativaC: "Oito",
-//         alternativaD: "Onze",
-//         alternativaCorreta: "alternativaD"
-//     }
-
-// ]
-
-// // variáveis globais    
+// // variáveis globais
 // let numeroDaQuestaoAtual = 0
 // let pontuacaoFinal = 0
 // let tentativaIncorreta = 0
 // let certas = 0
 // let erradas = 0
 // let quantidadeDeQuestoes = listaDeQuestoes.length
-// // let isUltima = numeroDaQuestaoAtual == quantidadeDeQuestoes-1 ? true : false
-
-// // Esconde as partes do quiz até o usuários clicar em "Iniciar"
-// function onloadEsconder() {
-//     document.getElementById('pontuacao').style.display = "none"
-//     document.getElementById('jogo').style.display = "none"
-// }
 
 // // Mostra o quiz e carrega a primeira questão
 // function iniciarQuiz() {
@@ -291,7 +223,7 @@ function plotarAlternativas(alternativas) {
 // // Resposta errada com classe CSS vermelha
 // // Atualiza pontuação
 // function checarResposta() {
-//     const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual] // questão atual 
+//     const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual] // questão atual
 //     const respostaQuestaoAtual = questaoAtual.alternativaCorreta // qual é a resposta correta da questão atual
 
 //     const options = document.getElementsByName("option"); // recupera alternativas no html

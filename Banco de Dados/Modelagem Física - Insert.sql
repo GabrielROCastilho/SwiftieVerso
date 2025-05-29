@@ -282,7 +282,7 @@ INSERT INTO musica (nome, duracao_musica) VALUES('Tim McGraw', 3.54),
 												('Say Don\'t Go (From The Vault)', 4.39),
 												('Is It Over Now? (From The Vault)', 3.49),
 												('Now That We Don\'t Talk (From The Vault)', 2.26);
-
+select * from usuario;
 insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEstado, fkSigno, fkEraFavorita, fkAlbumFavorito) values ('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3);
 
 -- USUARIO

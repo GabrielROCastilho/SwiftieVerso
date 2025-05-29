@@ -51,6 +51,7 @@ create table usuario(
     email varchar(100) not null,
     senha varchar(15) not null,
     nickname varchar(50) not null,
+    bio varchar(500),
     pontuacao_total int default 0,
     minutagem decimal(5.2) default 0,
     fkEstado int not null,

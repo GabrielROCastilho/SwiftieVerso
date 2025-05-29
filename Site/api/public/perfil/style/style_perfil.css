@@ -159,3 +159,16 @@ select.info-input {
     background: linear-gradient(135deg, #ff9cda, #9b59b6);
     color: white;
 }
+
+.cardMensagem{
+    margin: 10px 0;
+    display: none;    
+}
+
+#mensagem_erro{
+    color: red;
+}
+
+#mensagem_certo{
+    color: rgb(50, 232, 50);
+}
