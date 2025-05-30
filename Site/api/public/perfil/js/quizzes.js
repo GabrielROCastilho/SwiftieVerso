@@ -19,7 +19,6 @@ function obterDadosQuizzes() {
                 });
             }
             quizzes = quizzesVetor;
-            console.log(quizzes)
             plotarCards(quizzes);
         })
         .catch(function (err) {
@@ -34,8 +33,10 @@ function carregarQuizzes() {
 }
 
 function plotarCards(quizzes) {
+    var quizzesHTML = ''
+    console.log(quizzes)
     for (var i = 0; i < quizzes.length; i++) {
-        conteudo.innerHTML =
+        quizzesHTML +=
         `
         <div class="card" id="card">
             <h2 class="quiz-title">${quizzes[i].titulo}</h2>
@@ -46,4 +47,10 @@ function plotarCards(quizzes) {
         </div>
         `
     }
+
+    conteudo.innerHTML = `
+    <div class="cards-quizzes">
+        ${quizzesHTML}
+    </div>
+    `
 }

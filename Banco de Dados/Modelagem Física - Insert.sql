@@ -282,9 +282,7 @@ INSERT INTO musica (nome, duracao_musica) VALUES('Tim McGraw', 3.54),
 												('Say Don\'t Go (From The Vault)', 4.39),
 												('Is It Over Now? (From The Vault)', 3.49),
 												('Now That We Don\'t Talk (From The Vault)', 2.26);
-select * from usuario;
-insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEstado, fkSigno, fkEraFavorita, fkAlbumFavorito) values ('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3);
-
+                                                
 -- USUARIO
 insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEstado, fkSigno, fkEraFavorita, fkAlbumFavorito) values ('Gabriel', 'Castilho', '2004-05-20', 52437201866, 'gabrielcastilho08@gmail.com', 'badliar2004', 'ts1fan', 1, 2, 6, 3),
 																																					  ('Joaquim', 'Souza', '2007-01-06', 03629758410, 'ycavalcanti@gmail.com', 'xuFEq4Vj$*', 'vmartins', 11, 12, 11, 1),
@@ -591,6 +589,7 @@ insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, 
                                                                                                                                                     
 -- QUIZ
 insert into quiz (titulo, nivel_dificuldade, descricao) values ('Conhecimentos Gerais da Loirinha', 1, 'Teste seus conhecimentos gerais sobre a loirinha');
+insert into quiz (titulo, nivel_dificuldade, descricao) values ('Quiz sobre Taylor Swift - Álbum 1989', 1, 'Veja se você realmente gosta do 1989');
 
 -- PERGUNTA
 insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values ('Qual o nome do documentário de Taylor Swift lançado na Netflix em 2020?',          3, 1),
@@ -603,86 +602,126 @@ insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values ('Qual o nome 
 																  ('Qual o nome do álbum lançado por surpresa em julho de 2020?',                     2, 1),
 																  ('Qual ator aparece no clipe de "The Man" dirigido por Taylor Swift?',              3, 1),
 																  ('Qual é o nome da turnê que celebra todas as eras da carreira de Taylor Swift?',   1, 1);
+                                                                  
+insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values
+('Qual música abre o álbum "1989"?',                                     2, 2),
+('Qual foi o terceiro single lançado do álbum "1989"?',                  3, 2),
+('Qual dessas faixas não faz parte do álbum "1989"?',                    1, 2),
+('Qual produtor trabalhou extensivamente com Taylor em "1989"?',         3, 2),
+('Qual dessas músicas de "1989" ganhou um Grammy?',                      2, 2),
+('Quantas faixas tem a versão padrão do álbum "1989"?',                  4, 2),
+('Qual foi a inspiração sonora principal para o estilo de "1989"?',      3, 2),
+('Qual dessas músicas tem um videoclipe ambientado em um hospital?',     2, 2),
+('Em qual cidade Taylor escreveu grande parte do álbum "1989"?',         3, 2),
+('Qual dessas faixas foi escrita exclusivamente por Taylor Swift?',      4, 2);
 
-select titulo as Titulo, descricao as Descricao, nivel_dificuldade as NivelDificuldade from quiz;
 
 -- ATUALIZANDO O QUIZ
 update quiz set nivel_dificuldade = round((select avg(nivel_dificuldade) from pergunta where fkQuiz = 1)) where idQuiz = 1;
+update quiz set nivel_dificuldade = round((select avg(nivel_dificuldade) from pergunta where fkQuiz = 2)) where idQuiz = 2;
 
 -- ALTERNATIVA
-insert into alternativa (letra, texto, fkPergunta) values
+insert into alternativa (letra, texto, correta, fkPergunta) values
 -- P1
- ('A', 'Folklore: The Long Pond Studio Sessions',      1),
- ('B', 'Miss Americana',                               1),
- ('C', 'The Eras Tour',                                1),
- ('D', 'Taylor Swift: Reputation Stadium Tour',        1),
+ ('A', 'Folklore: The Long Pond Studio Sessions', TRUE, 1),
+ ('B', 'Miss Americana', FALSE, 1),
+ ('C', 'The Eras Tour', FALSE, 1),
+ ('D', 'Taylor Swift: Reputation Stadium Tour', FALSE, 1),
 -- P2
- ('A', '2006',                                         2),
- ('B', '2004',                                         2),
- ('C', '2008',                                         2),
- ('D', '2010',                                         2),
+ ('A', '2006', TRUE, 2),
+ ('B', '2004', FALSE, 2),
+ ('C', '2008', FALSE, 2),
+ ('D', '2010', FALSE, 2),
 -- P3
- ('A', 'Nashville, Tennessee',                         3),
- ('B', 'Austin, Texas',                                3),
- ('C', 'Wyomissing, Pensilvânia',                      3),
- ('D', 'Reading, Pensilvânia',                         3),
+('A', 'Nashville, Tennessee', FALSE, 3),
+('B', 'Austin, Texas', FALSE, 3),
+('C', 'Wyomissing, Pensilvânia', TRUE, 3),
+('D', 'Reading, Pensilvânia', FALSE, 3),
 -- P4
- ('A', 'Fearless',                                     4),
- ('B', 'Red',                                           4),
- ('C', '1989',                                          4),
- ('D', 'Speak Now',                                    4),
+('A', 'Fearless', TRUE, 4),
+('B', 'Red', FALSE, 4),
+('C', '1989', FALSE, 4),
+('D', 'Speak Now', FALSE, 4),
 -- P5
- ('A', 'Fearless',                                     5),
- ('B', 'Speak Now',                                    5),
- ('C', 'Red',                                           5),
- ('D', 'Evermore',                                     5),
+('A', 'Fearless', FALSE, 5),
+('B', 'Speak Now', FALSE, 5),
+('C', 'Red', TRUE, 5),
+('D', 'Evermore', FALSE, 5),
 -- P6
- ('A', '2',                                            6),
- ('B', '3',                                            6),
- ('C', '4',                                            6),
- ('D', '5',                                            6),
+('A', '2', FALSE, 6),
+('B', '3', FALSE, 6),
+('C', '4', TRUE, 6),
+('D', '5', FALSE, 6),
 -- P7
- ('A', 'Style',                                        7),
- ('B', 'Blank Space',                                  7),
- ('C', 'Wildest Dreams',                               7),
- ('D', 'I Know Places',                                7),
+('A', 'Style', FALSE, 7),
+('B', 'Blank Space', TRUE, 7),
+('C', 'Wildest Dreams', FALSE, 7),
+('D', 'I Know Places', FALSE, 7),
 -- P8
- ('A', 'Folklore',                                     8),
- ('B', 'Evermore',                                     8),
- ('C', 'Lover',                                        8),
- ('D', 'Fearless (Taylor''s Version)',                 8),
+('A', 'Folklore', TRUE, 8),
+('B', 'Evermore', FALSE, 8),
+('C', 'Lover', FALSE, 8),
+('D', 'Fearless (Taylor''s Version)', FALSE, 8),
 -- P9
- ('A', 'David Harbour',                                9),
- ('B', 'Idris Elba',                                   9),
- ('C', 'Tom Hiddleston',                               9),
- ('D', 'Aaron Paul',                                   9),
+('A', 'David Harbour', FALSE, 9),
+('B', 'Idris Elba', FALSE, 9),
+('C', 'Tom Hiddleston', FALSE, 9),
+('D', 'Aaron Paul', TRUE, 9),
 -- P10
- ('A', 'Reputation Stadium Tour',                     10),
- ('B', 'The Eras Tour',                               10),
- ('C', 'Red Tour',                                     10),
- ('D', 'Speak Now World Tour',                        10);
+('A', 'Reputation Stadium Tour', FALSE, 10),
+('B', 'The Eras Tour', TRUE, 10),
+('C', 'Red Tour', FALSE, 10),
+('D', 'Speak Now World Tour', FALSE, 10);
 
--- DESEMPENHO
-insert into desempenho (fkUsuario, fkQuiz, pontuacao) values (1, 1, 0);
-
--- RESPOSTA
-insert into resposta (resposta, correta, fkDesempenho, fkPergunta, fkAlternativa) values ('A', true, 1, 1, 1),
-																						 ('B', false, 1, 2, 6),
-																						 ('C', true, 1, 3, 11),
-																						 ('A', true, 1, 4, 13),
-																						 ('A', false, 1, 5, 19),
-																						 ('C', true, 1, 6, 22),
-																						 ('B', true, 1, 7, 26),
-																						 ('A', true, 1, 8, 29),
-																						 ('B', false, 1, 9, 34),
-																						 ('B', true, 1, 10, 38);
-
--- ATUALIZANDO O DESEMPENHO
-update desempenho set pontuacao = (select count(*) from resposta where correta = true and fkDesempenho = 1) where idDesempenho = 1;
-
--- ALBUM PERSONALIZADO
-insert into album_personalizado (nome, qtd_musica, duracao_album, fkUsuario) values ('The Tortured Gabriel', 1, 4.02, 1);
-
--- COMPOSIÇÃO
-insert into composicao (fkAlbumPersonalizado, fkMusica) values (1, 1);
+insert into alternativa (letra, texto, correta, fkPergunta) values
+-- P1
+('A', 'Welcome to New York', TRUE, 11),
+('B', 'Style', FALSE, 11),
+('C', 'Blank Space', FALSE, 11),
+('D', 'Shake It Off', FALSE, 11),
+-- P2
+('A', 'Blank Space', FALSE, 12),
+('B', 'Shake It Off', FALSE, 12),
+('C', 'Style', TRUE, 12),
+('D', 'Out of the Woods', FALSE, 12),
+-- P3
+('A', 'All You Had To Do Was Stay', FALSE, 13),
+('B', 'This Love', FALSE, 13),
+('C', 'Delicate', TRUE, 13),
+('D', 'Wildest Dreams', FALSE, 13),
+-- P4
+('A', 'Jack Antonoff', FALSE, 14),
+('B', 'Max Martin', TRUE, 14),
+('C', 'Aaron Dessner', FALSE, 14),
+('D', 'Ryan Tedder', FALSE, 14),
+-- P5
+('A', 'Style', FALSE, 15),
+('B', 'Out of the Woods', FALSE, 15),
+('C', 'Blank Space', TRUE, 15),
+('D', 'I Wish You Would', FALSE, 15),
+-- P6
+('A', '10', FALSE, 16),
+('B', '13', TRUE, 16),
+('C', '15', FALSE, 16),
+('D', '17', FALSE, 16),
+-- P7
+('A', 'Synth-pop dos anos 80', TRUE, 17),
+('B', 'Country', FALSE, 17),
+('C', 'Jazz', FALSE, 17),
+('D', 'Rock alternativo', FALSE, 17),
+-- P8
+('A', 'Style', FALSE, 18),
+('B', 'Bad Blood', TRUE, 18),
+('C', 'Clean', FALSE, 18),
+('D', 'How You Get the Girl', FALSE, 18),
+-- P9
+('A', 'Nova Iorque', TRUE, 19),
+('B', 'Los Angeles', FALSE, 19),
+('C', 'Nashville', FALSE, 19),
+('D', 'Chicago', FALSE, 19),
+-- P10
+('A', 'This Love', TRUE, 20),
+('B', 'Style', FALSE, 20),
+('C', 'All You Had To Do Was Stay', FALSE, 20),
+('D', 'Wonderland', FALSE, 20);
 

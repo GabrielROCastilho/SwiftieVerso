@@ -26,8 +26,9 @@ var musicaRouter = require("./src/routes/musicas");
 var eraRouter = require("./src/routes/eras");
 var quizRouter = require("./src/routes/quizzes");
 var perguntaRouter = require("./src/routes/perguntas");
+var respostaRouter = require("./src/routes/respostas");
 var alternativaRouter = require("./src/routes/alternativas");
-
+var desempenhoRouter = require("./src/routes/desempenhos");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -44,9 +45,11 @@ app.use("/signos", signoRouter);
 app.use("/albuns", albumRouter);
 app.use("/musicas", musicaRouter);
 app.use("/eras", eraRouter);
-app.use("/quizzes/", quizRouter);
+app.use("/quizzes", quizRouter);
 app.use("/perguntas", perguntaRouter);
 app.use("/alternativas", alternativaRouter);
+app.use("/respostas", respostaRouter);
+app.use("/desempenhos", desempenhoRouter);
 
 
 app.listen(PORTA_APP, function () {

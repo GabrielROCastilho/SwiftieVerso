@@ -12,7 +12,11 @@ function buscar() {
 function buscarNumeroDePerguntas(idQuiz) {
     var instrucaoSql =
     `
-    select count(*) as NumeroDePerguntas from quiz where idQuiz = ${idQuiz};
+    select count(*) as NumeroDePerguntas,
+                    min(idPergunta) as IdMinimo
+    from quiz q
+    inner join pergunta p on q.idQuiz = p.fkQuiz
+    where q.idQuiz = ${idQuiz};
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

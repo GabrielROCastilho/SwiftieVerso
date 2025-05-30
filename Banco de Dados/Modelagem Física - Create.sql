@@ -80,8 +80,6 @@ CREATE TABLE quiz (
   CONSTRAINT chk_nivel_dificuldade CHECK (nivel_dificuldade BETWEEN 1 AND 5)
 );
 
-select a.idAlternativa as Id, a.letra as Letra, a.texto as Texto from alternativa a inner join pergunta p on p.idPergunta = a.fkPergunta where p.idPergunta = 1;
-
 -- Criando a tabela "Pergunta"
 CREATE TABLE pergunta (
   idPergunta        INT PRIMARY KEY AUTO_INCREMENT,
@@ -97,51 +95,31 @@ CREATE TABLE alternativa (
   idAlternativa INT PRIMARY KEY AUTO_INCREMENT,
   letra         CHAR(1),
   texto         VARCHAR(200),
+  correta bool,
   fkPergunta    INT,
-  CONSTRAINT fk_pergunta_alternativa FOREIGN KEY (fkPergunta) REFERENCES pergunta(idPergunta)
+  constraint fk_pergunta_alternativa foreign key (fkPergunta) references pergunta(idPergunta)
 );
 
 -- Criando a tabela "Desempenho"
-CREATE TABLE desempenho (
-  idDesempenho INT PRIMARY KEY AUTO_INCREMENT,
-  fkUsuario    INT,
-  fkQuiz       INT,
-  pontuacao    INT NOT NULL,
-  CONSTRAINT fk_usuario_desempenho FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario),
-  CONSTRAINT fk_quiz_desempenho      FOREIGN KEY (fkQuiz)    REFERENCES quiz(idQuiz),
-  CONSTRAINT chk_pontuacao           CHECK (pontuacao BETWEEN 0 AND 10)
+create table desempenho (
+  idDesempenho int primary key auto_increment,
+  pontuacao int, 
+  fkUsuario    int,
+  fkQuiz       int,
+  constraint fk_usuario_desempenho foreign key (fkUsuario) references usuario(idUsuario),
+  constraint fk_quiz_desempenho foreign key (fkQuiz) references quiz(idQuiz),
+  constraint chk_pontuacao check (pontuacao between 0 and 10)
 );
 
 -- Criando a tabela "Resposta"
-CREATE TABLE resposta (
-  idResposta    INT    PRIMARY KEY AUTO_INCREMENT,
-  resposta      CHAR(1),
-  correta       TINYINT,
-  fkDesempenho  INT,
-  fkPergunta    INT,
-  fkAlternativa INT,
-  CONSTRAINT fk_desempenho_resposta    FOREIGN KEY (fkDesempenho) REFERENCES desempenho(idDesempenho),
-  CONSTRAINT fk_pergunta_resposta      FOREIGN KEY (fkPergunta)    REFERENCES pergunta(idPergunta),
-  CONSTRAINT fk_alternativa_resposta   FOREIGN KEY (fkAlternativa) REFERENCES alternativa(idAlternativa)
-);
-
--- Criando a tabela "Álbum Personalizado"
-create table album_personalizado(
-	idAlbum int primary key auto_increment,
-    nome varchar(50) not null,
-    qtd_musica int not null,
-    duracao_album decimal(5,2) not null,
-    fkUsuario int,
-    constraint fk_usuario_album foreign key(fkUsuario) references usuario(idUsuario)
-);
-
--- Criando a tabela "Composição"
-create table composicao(
-	fkAlbumPersonalizado int,
-    fkMusica int,
-    constraint fk_album_personalizado foreign key(fkAlbumPersonalizado) references album_personalizado(idAlbum),
-    constraint fk_musica foreign key(fkMusica) references musica(idMusica),
-    primary key(fkAlbumPersonalizado, fkMusica)
+create table resposta (
+  idResposta int primary key auto_increment,
+  fkUsuario      int,
+  fkQuiz       int,
+  fkAlternativa  int,
+  constraint fk_usuario_resposta foreign key (fkUsuario) references usuario(idUsuario),
+  constraint fk_quiz_resposta foreign key (fkQuiz) references quiz(idQuiz),
+  constraint fk_alternativa_resposta foreign key (fkAlternativa) references alternativa(idAlternativa)
 );
 
 

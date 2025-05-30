@@ -1,9 +1,10 @@
 var perguntaModel = require("../models/perguntaModel");
 
 function buscar(req, res){
-    var idQuiz = req.body.idQuizServer;
+    var idPergunta = req.body.numeroDaQuestaoServer;
+    var idQuiz = req.body.fkQuizServer;
 
-    perguntaModel.buscar(idQuiz)
+    perguntaModel.buscar(idQuiz, idPergunta)
         .then(function (resultado) {
             if (resultado.length > 0) {
                 const Pergunta = resultado.map(registro => registro.Pergunta);

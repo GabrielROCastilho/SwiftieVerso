@@ -1,8 +1,108 @@
-// async transforma a função em assíncrona, ou seja, permite o uso de await dentro dela
-// await pausa a execução da função até que a Promise (como fetch) retorne uma resposta
-async function obterDadosQuiz(id) {
-    const idQuizVar = id;
-    const questoes = [];
+var numeroDaQuestaoVar = Number(sessionStorage.ID_MINIMO) - 1
+function obterDadosQuiz(idQuiz) {
+    sessionStorage.ID_QUIZ = idQuiz
+    var idQuizVar = idQuiz
+    fetch("/quizzes/buscarNumeroDePerguntas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            idQuizServer: idQuizVar,
+        })
+    })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    sessionStorage.NUMERO_QUESTOES = json.NumeroDePerguntas;
+                    sessionStorage.ID_MINIMO = json.IdMinimo;
+                    proximaPergunta(null)
+                });
+            } else {
+                resposta.text().then(texto => {
+                    document.getElementById("cardMensagem").style.display = "block";
+                    document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
+                    finalizarAguardar();
+                });
+            }
+        })
+}
+
+function plotarQuestao(questao, numeroDaQuestaoVar) {
+    var qtdDePerguntas = sessionStorage.NUMERO_QUESTOES
+    var numeroDaQuestao = numeroDaQuestaoVar
+    var questaoHTML = ''
+    var alternativasHTML = ''
+
+    for (let i = 0; i < questao.length; i++) {
+        questaoHTML = `<h1>${questao[i].pergunta}</h1>`
+
+        for (let j = 0; j < questao[i].alternativas.length; j++) {
+            alternativasHTML += `<input type="radio" name="alternativa" value="${questao[i].alternativas[j].id}"/>${questao[i].alternativas[j].texto}`;
+        }
+    }
+
+    if (numeroDaQuestao < qtdDePerguntas) {
+        conteudo.innerHTML = `
+        <div class="container_questao">
+            <div class="questao">
+                ${questaoHTML}
+                <div class="input_alternativas">
+                    ${alternativasHTML}
+                </div>
+                <button onclick="salvarResposta()">Próxima Pergunta</button>
+            </div>
+        </div>
+        `
+    } else if (numeroDaQuestao == qtdDePerguntas) {
+        conteudo.innerHTML = `
+        <div class="container_questao">
+            <div class="questao">
+                ${questaoHTML}
+                <div class="input_alternativas">
+                    ${alternativasHTML}
+                </div>
+                <button onclick="calcularPontuacao()">Finalizar Quiz</button>
+            </div>
+        </div>
+        `
+    }
+}
+
+function salvarResposta() {
+    var opcoes = document.getElementsByName('alternativa');
+    var selecionado = null;
+
+    for (var i = 0; i < opcoes.length; i++) {
+        if (opcoes[i].checked) {
+            selecionado = opcoes[i].value;
+            proximaPergunta(selecionado)
+            break;
+        }
+    }
+}
+
+async function proximaPergunta(selecionado) {
+    var alternativaSelecionadaVar = selecionado
+    var fkQuizVar = sessionStorage.ID_QUIZ
+    var usuarioVar = sessionStorage.ID_USUARIO
+
+    if (alternativaSelecionadaVar != null) {
+        fetch("/respostas/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                alternativaSelecionadaServer: alternativaSelecionadaVar,
+                usuarioServer: usuarioVar,
+                fkQuizServer: fkQuizVar
+            }),
+        })
+    }else{
+        
+    }
+
+    numeroDaQuestaoVar += 1
+    const questao = [];
 
     // Inicia um bloco de tratamento de erros. Se algo der errado dentro do try, o catch será executado
     try {
@@ -13,7 +113,7 @@ async function obterDadosQuiz(id) {
             // Content-Type: application/json informa que o corpo da requisição está em JS
             headers: { "Content-Type": "application/json" },
             //O corpo (body) envia o ID do quiz em formato JSO
-            body: JSON.stringify({ idQuizServer: idQuizVar })
+            body: JSON.stringify({ numeroDaQuestaoServer: numeroDaQuestaoVar, fkQuizServer: fkQuizVar })
         });
 
         // Verifica se a resposta do servidor foi bem-sucedida (status 200). Se não for, lança um erro
@@ -55,13 +155,13 @@ async function obterDadosQuiz(id) {
             }
 
             // Adiciona um objeto com a pergunta e suas alternativas ao array quest
-            questoes.push({
+            questao.push({
                 pergunta: textoPergunta,
                 alternativas: alternativas
             });
         }
 
-        plotarQuestoes(questoes);
+        plotarQuestao(questao, numeroDaQuestaoVar);
 
     } catch (err) {
         console.error("Erro ao buscar os dados:", err);
@@ -70,253 +170,91 @@ async function obterDadosQuiz(id) {
     }
 }
 
+function calcularPontuacao() {
+    var fkQuizVar = sessionStorage.ID_QUIZ
+    var fkUsuarioVar = sessionStorage.ID_USUARIO
 
-function plotarQuestoes(questoes) {
-    let mensagem = '';
-
-    for (let i = 0; i < questoes.length; i++) {
-        mensagem += `<h1>${questoes[i].pergunta}</h1>`;
-
-        for (let j = 0; j < questoes[i].alternativas.length; j++) {
-            mensagem += `<p>${questoes[i].alternativas[j].letra}) ${questoes[i].alternativas[j].texto}</p>`;
-        }
-    }
-
-    conteudo.innerHTML = mensagem;
+    fetch("/respostas/calcular", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            fkQuizServer: fkQuizVar,
+            fkUsuarioServer: fkUsuarioVar
+        })
+    })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    sessionStorage.PONTUACAO = json.Pontuacao;
+                    var pontuacao = sessionStorage.PONTUACAO
+                    adicionarDesempenho(pontuacao)
+                });
+            } else {
+                resposta.text().then(texto => {
+                    document.getElementById("cardErro").style.display = "block";
+                    document.getElementById("mensagem_erro").innerText = "Usuário ou senha inválidos.";
+                    finalizarAguardar();
+                });
+            }
+        })
+        .catch(function (erro) {
+            document.getElementById("mensagem_erro").innerText = "Erro ao conectar com o servidor.";
+            document.getElementById("cardErro").style.display = "block";
+            finalizarAguardar();
+        });
 }
 
-// Toda vez que pular de pergunta, acrescenta 1 na variável idPergunta, faz o fetch e plota na tela.
-// Tem que ter uma função que pega o valor de perguntas do quiz, com um count. 
-// A variável acrescenta 1 até ter o valor da quantidade de perguntas.
-//var idPergunta = 0
-//function proximaQuestao(){
-    //idPergunta += 1
-    //fetch("/pergunta/buscar"){
-        // Para a pergunta, retirar o id da pergunta e a pergunta; depois, fazer o fetch para buscar as alternativas de acordo com o id da pergunta
-    //}
+function adicionarDesempenho(pontuacao){
+    var pontuacaoVar = 0
+    for(var i = 0; i < pontuacao.length; i++){
+        pontuacaoVar += pontuacao[i]
+    }
 
-//}
+    var fkQuizVar = sessionStorage.ID_QUIZ
+    var fkUsuarioVar = sessionStorage.ID_USUARIO
 
-// conteudo.innerHTML = `
-// <div id="conteudo">
-//   <div id="pontuacaoEJogo">
-//     <button id="btnIniciarQuiz" onclick="iniciarQuiz()">INICIAR QUIZ</button>
+    fetch("/desempenhos/cadastrar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            pontuacaoServer: pontuacaoVar,
+            fkUsuarioServer: fkUsuarioVar,
+            fkQuizServer: fkQuizVar
+        }),
+    })
+        .then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (resposta.ok) {
+                exibirResultado(pontuacaoVar)
+            } else {
+                throw "Houve um erro ao tentar realizar o cadastro!";
+            }
+        })
+        .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+            finalizarAguardar();
+        });
 
-//     <div id="pontuacao" style="display: none">
-//       <div id="pontuacaoDuranteJogo">
-//         Acertos: <span id="spanCertas"></span> |
-//         Erros: <span id="spanErradas"></span>
-//       </div>
-//       <div id="pontuacaoFinalJogo">
-//         Pontuação Final: <span id="spanPontuacaoFinal">***</span><br />
-//         <span id="msgFinal">***</span>
-//       </div>
-//     </div>
+    return false;
+}
 
-//     <div id="jogo" style="display: none">
-//       <div id="infoQuestao">
-//         Questão <span id="spanNumeroDaQuestaoAtual"></span> de <span id="qtdQuestoes"></span>
-//       </div>
-//       <div id="perguntaDaQuestaoAtual">
-//         <span id="spanQuestaoExibida"></span>
-//       </div>
-//       <div id="opcoes"></div>
-//       <div id="botoes">
-//         <button onclick="submeter()" id="btnSubmeter">Submeter resposta</button>
-//         <button onclick="avancar()" id="btnProx" disabled>Avançar</button>
-//         <button onclick="tentarNovamente()" id="btnTentarNovamente" disabled>Tentar novamente</button>
-//       </div>
-//     </div>
-//   </div>
-// </div>
+function exibirResultado(pontuacaoVar) {
+    var pontuacao = 0
+    for(var i = 0; i < pontuacaoVar.length; i++){
+        pontuacao += pontuacaoVar[i]
+    }
+    conteudo.innerHTML = 
+    `
+        <h1>Sua pontuação é de ${pontuacao}</h1>
+        <button onclick="retornarQuizzes()">Retornar à area principal</button>
+    `
+}
 
-// `
-
-// // variáveis globais
-// let numeroDaQuestaoAtual = 0
-// let pontuacaoFinal = 0
-// let tentativaIncorreta = 0
-// let certas = 0
-// let erradas = 0
-// let quantidadeDeQuestoes = listaDeQuestoes.length
-
-// // Mostra o quiz e carrega a primeira questão
-// function iniciarQuiz() {
-//     document.getElementById('pontuacao').style.display = "flex"
-//     document.getElementById('jogo').style.display = "flex"
-//     document.getElementById('btnIniciarQuiz').style.display = "none"
-
-//     document.getElementById('qtdQuestoes').innerHTML = quantidadeDeQuestoes
-
-//     preencherHTMLcomQuestaoAtual(0)
-
-//     btnSubmeter.disabled = false
-//     btnProx.disabled = true
-//     // btnConcluir.disabled = true
-//     btnTentarNovamente.disabled = true
-// }
-
-// // // Preenche textos e alternativas com os dados da questão atual
-// function preencherHTMLcomQuestaoAtual(index) {
-//     habilitarAlternativas(true)
-//     const questaoAtual = listaDeQuestoes[index]
-//     numeroDaQuestaoAtual = index
-//     console.log("questaoAtual")
-//     console.log(questaoAtual)
-//     document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = Number(index) + 1 // ajustando porque o index começa em 0
-//     document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.pergunta;
-//     document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alternativaA;
-//     document.getElementById("labelOpcaoDois").innerHTML = questaoAtual.alternativaB;
-//     document.getElementById("labelOpcaoTres").innerHTML = questaoAtual.alternativaC;
-//     document.getElementById("labelOpcaoQuatro").innerHTML = questaoAtual.alternativaD;
-// }
-
-// // Verifica se o usuário marcou uma resposta
-// // Chama a função checarResposta()
-// function submeter() {
-//     const options = document.getElementsByName("option"); // recupera alternativas no html
-
-//     let hasChecked = false
-//     for (let i = 0; i < options.length; i++) {
-//         if (options[i].checked) {
-//             hasChecked = true
-//             break
-//         }
-//     }
-
-//     if (!hasChecked) {
-//         alert("Não há alternativas escolhidas. Escolha uma opção.")
-//     } else {
-//         btnSubmeter.disabled = true
-//         btnProx.disabled = false
-
-//         habilitarAlternativas(false)
-
-//         checarResposta()
-//     }
-// }
-
-// // Ativa ou desativa os radio buttons
-// function habilitarAlternativas(trueOrFalse) {
-//     let opcaoEscolhida = trueOrFalse ? false : true
-
-//     primeiraOpcao.disabled = opcaoEscolhida
-//     segundaOpcao.disabled = opcaoEscolhida
-//     terceiraOpcao.disabled = opcaoEscolhida
-//     quartaOpcao.disabled = opcaoEscolhida
-
-// }
-
-// // Avança para a próxima questão ou finaliza o jogo
-// function avancar() {
-//     btnProx.disabled = true
-//     btnSubmeter.disabled = false
-
-//     desmarcarRadioButtons()
-
-//     if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
-//         preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
-//     } else if (numeroDaQuestaoAtual == quantidadeDeQuestoes - 1) {
-//         alert("Atenção... a próxima é a ultima questão!")
-//         preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual)
-//     } else {
-//         finalizarJogo()
-//     }
-//     limparCoresBackgroundOpcoes()
-// }
-
-// // Recarrega a página
-// function tentarNovamente() {
-//     window.location.reload()
-// }
-
-// // Marca resposta correta com classe CSS verde
-// // Resposta errada com classe CSS vermelha
-// // Atualiza pontuação
-// function checarResposta() {
-//     const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual] // questão atual
-//     const respostaQuestaoAtual = questaoAtual.alternativaCorreta // qual é a resposta correta da questão atual
-
-//     const options = document.getElementsByName("option"); // recupera alternativas no html
-
-//     let alternativaCorreta = null // variável para armazenar a alternativa correta
-
-//     options.forEach((option) => {
-//         if (option.value === respostaQuestaoAtual) {
-//             console.log("alternativaCorreta está no componente: " + alternativaCorreta)
-//             alternativaCorreta = option.labels[0].id
-//         }
-//     })
-
-//     // verifica se resposta assinalada é correta
-//     options.forEach((option) => {
-//         if (option.checked === true && option.value === respostaQuestaoAtual) {
-//             document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
-//             pontuacaoFinal++
-//             certas++
-//             document.getElementById("spanCertas").innerHTML = certas
-//             numeroDaQuestaoAtual++
-//         } else if (option.checked && option.value !== respostaQuestaoAtual) {
-//             const wrongLabelId = option.labels[0].id
-
-//             document.getElementById(wrongLabelId).classList.add("text-danger-with-bg")
-//             document.getElementById(alternativaCorreta).classList.add("text-success-with-bg")
-//             tentativaIncorreta++
-//             erradas++
-//             document.getElementById("spanErradas").innerHTML = erradas
-//             numeroDaQuestaoAtual++
-//         }
-//     })
-// }
-
-// // Remove classes visuais de certo/errado
-// function limparCoresBackgroundOpcoes() {
-//     const options = document.getElementsByName("option");
-//     options.forEach((option) => {
-//         document.getElementById(option.labels[0].id).classList.remove("text-danger-with-bg")
-//         document.getElementById(option.labels[0].id).classList.remove("text-success-with-bg")
-//     })
-// }
-
-// // Desmarca todas as opções
-// function desmarcarRadioButtons() {
-//     const options = document.getElementsByName("option");
-//     for (let i = 0; i < options.length; i++) {
-//         options[i].checked = false;
-//     }
-// }
-
-// // Mostra mensagem final com base na porcentagem de acertos
-// function finalizarJogo() {
-//     let textoParaMensagemFinal = null
-//     let classComCoresParaMensagemFinal = null
-//     const porcentagemFinalDeAcertos = pontuacaoFinal / quantidadeDeQuestoes
-
-//     if (porcentagemFinalDeAcertos <= 0.3) {
-//         textoParaMensagemFinal = "Parece que você não estudou..."
-//         classComCoresParaMensagemFinal = "text-danger-with-bg"
-//     }
-//     else if (porcentagemFinalDeAcertos > 0.3 && porcentagemFinalDeAcertos < 0.9) {
-//         textoParaMensagemFinal = "Pode melhorar na próxima, hein!"
-//         classComCoresParaMensagemFinal = "text-warning-with-bg"
-//     }
-//     else if (porcentagemFinalDeAcertos >= 0.9) {
-//         textoParaMensagemFinal = "Uau, parabéns!"
-//         classComCoresParaMensagemFinal = "text-success-with-bg"
-//     }
-
-//     textoParaMensagemFinal += "<br> Você acertou " + Math.round((porcentagemFinalDeAcertos) * 100) + "% das questões."
-
-
-//     document.getElementById('msgFinal').innerHTML = textoParaMensagemFinal
-//     document.getElementById('msgFinal').classList.add(classComCoresParaMensagemFinal)
-//     document.getElementById('spanPontuacaoFinal').innerHTML = pontuacaoFinal
-
-//     document.getElementById('jogo').classList.add("text-new-gray")
-
-//     btnProx.disabled = true
-//     btnSubmeter.disabled = true
-//     // btnConcluir.disabled = true
-//     btnTentarNovamente.disabled = false
-
-// }
+function retornarQuizzes(){
+    conteudo.innerHTML = 'Retornando'
+    setTimeout(() => {
+        window.location = "./index.html";
+    }, 2000);
+}

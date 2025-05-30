@@ -29,7 +29,7 @@ function buscarNumeroDePerguntas(req, res) {
 
     var idQuiz = req.body.idQuizServer;
 
-    usuarioModel.buscarDados(idQuiz)
+    quizModel.buscarNumeroDePerguntas(idQuiz)
         .then(
             function (resultadoAutenticar) {
                 console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);

@@ -54,6 +54,11 @@ select pergunta, fkQuiz from pergunta;
 select count(*) from quiz;
 select * from usuario;
 
+    select p.pergunta as Pergunta, 
+           p.idPergunta as Id
+    from pergunta p 
+    inner join quiz q on p.fkQuiz = q.idQuiz where q.idQuiz = 1 and p.idPergunta = 1;
+
 -- Signos que mais aparecem
 select s.nome_signo AS Signo,
 	   COUNT(u.idUsuario) AS QtdDeUsuarios
