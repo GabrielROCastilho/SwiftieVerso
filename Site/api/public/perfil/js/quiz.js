@@ -1,4 +1,3 @@
-var numeroDaQuestaoVar = Number(sessionStorage.ID_MINIMO) - 1
 function obterDadosQuiz(idQuiz) {
     sessionStorage.ID_QUIZ = idQuiz
     var idQuizVar = idQuiz
@@ -14,7 +13,8 @@ function obterDadosQuiz(idQuiz) {
                 resposta.json().then(json => {
                     sessionStorage.NUMERO_QUESTOES = json.NumeroDePerguntas;
                     sessionStorage.ID_MINIMO = json.IdMinimo;
-                    proximaPergunta(null)
+                    var numeroDaQuestao = Number(json.IdMinimo);
+                    proximaPergunta(null, numeroDaQuestao)
                 });
             } else {
                 resposta.text().then(texto => {
@@ -29,6 +29,7 @@ function obterDadosQuiz(idQuiz) {
 function plotarQuestao(questao, numeroDaQuestaoVar) {
     var qtdDePerguntas = sessionStorage.NUMERO_QUESTOES
     var numeroDaQuestao = numeroDaQuestaoVar
+
     var questaoHTML = ''
     var alternativasHTML = ''
 
@@ -40,7 +41,12 @@ function plotarQuestao(questao, numeroDaQuestaoVar) {
         }
     }
 
+    while (numeroDaQuestao > 10) {
+        numeroDaQuestao -= 10;
+    }
+
     if (numeroDaQuestao < qtdDePerguntas) {
+        console.log('Entrou aqui -> primeiro if')
         conteudo.innerHTML = `
         <div class="container_questao">
             <div class="questao">
@@ -48,11 +54,12 @@ function plotarQuestao(questao, numeroDaQuestaoVar) {
                 <div class="input_alternativas">
                     ${alternativasHTML}
                 </div>
-                <button onclick="salvarResposta()">Próxima Pergunta</button>
+                <button onclick="salvarResposta(${numeroDaQuestao})">Próxima Pergunta</button>
             </div>
         </div>
         `
     } else if (numeroDaQuestao == qtdDePerguntas) {
+        console.log('Entrou aqui -> segundo if')
         conteudo.innerHTML = `
         <div class="container_questao">
             <div class="questao">
@@ -67,23 +74,28 @@ function plotarQuestao(questao, numeroDaQuestaoVar) {
     }
 }
 
-function salvarResposta() {
+function salvarResposta(numeroDaQuestao) {
+    console.log('Entrou aqui -> salvar')
+    var numeroQuestao = numeroDaQuestao
     var opcoes = document.getElementsByName('alternativa');
     var selecionado = null;
 
     for (var i = 0; i < opcoes.length; i++) {
+        console.log('Entrou no for')
         if (opcoes[i].checked) {
             selecionado = opcoes[i].value;
-            proximaPergunta(selecionado)
+            console.log('Entrou no if -> ', selecionado, numeroQuestao)
+            proximaPergunta(selecionado, numeroQuestao)
             break;
         }
     }
 }
 
-async function proximaPergunta(selecionado) {
+async function proximaPergunta(selecionado, numeroDaQuestao) {
     var alternativaSelecionadaVar = selecionado
     var fkQuizVar = sessionStorage.ID_QUIZ
     var usuarioVar = sessionStorage.ID_USUARIO
+    var numeroDaQuestaoVar = numeroDaQuestao
 
     if (alternativaSelecionadaVar != null) {
         fetch("/respostas/cadastrar", {
@@ -97,11 +109,8 @@ async function proximaPergunta(selecionado) {
                 fkQuizServer: fkQuizVar
             }),
         })
-    }else{
-        
+        numeroDaQuestaoVar += 1
     }
-
-    numeroDaQuestaoVar += 1
     const questao = [];
 
     // Inicia um bloco de tratamento de erros. Se algo der errado dentro do try, o catch será executado
@@ -204,9 +213,9 @@ function calcularPontuacao() {
         });
 }
 
-function adicionarDesempenho(pontuacao){
+function adicionarDesempenho(pontuacao) {
     var pontuacaoVar = 0
-    for(var i = 0; i < pontuacao.length; i++){
+    for (var i = 0; i < pontuacao.length; i++) {
         pontuacaoVar += pontuacao[i]
     }
 
@@ -242,17 +251,17 @@ function adicionarDesempenho(pontuacao){
 
 function exibirResultado(pontuacaoVar) {
     var pontuacao = 0
-    for(var i = 0; i < pontuacaoVar.length; i++){
+    for (var i = 0; i < pontuacaoVar.length; i++) {
         pontuacao += pontuacaoVar[i]
     }
-    conteudo.innerHTML = 
-    `
+    conteudo.innerHTML =
+        `
         <h1>Sua pontuação é de ${pontuacao}</h1>
         <button onclick="retornarQuizzes()">Retornar à area principal</button>
     `
 }
 
-function retornarQuizzes(){
+function retornarQuizzes() {
     conteudo.innerHTML = 'Retornando'
     setTimeout(() => {
         window.location = "./index.html";
