@@ -288,16 +288,17 @@ insert into quiz (titulo, nivel_dificuldade, descricao) values ('Conhecimentos G
 insert into quiz (titulo, nivel_dificuldade, descricao) values ('Quiz sobre Taylor Swift - Álbum 1989', 1, 'Veja se você realmente gosta do 1989');
 
 -- PERGUNTA
-insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values ('Qual o nome do documentário de Taylor Swift lançado na Netflix em 2020?',          3, 1),
-																  ('Em que ano Taylor Swift lançou seu primeiro álbum?',                                2, 1),
-																  ('Qual é o nome da cidade natal de Taylor Swift?',                                   4, 1),
-																  ('Qual foi o primeiro álbum de Taylor Swift a ganhar o Grammy de Álbum do Ano?',    2, 1),
-																  ('Em qual álbum está a música "All Too Well"?',                                     1, 1),
-																  ('Quantos álbuns regravados ("Taylor''s Version") Taylor Swift lançou até 2024?',  3, 1),
-																  ('Qual música contém o verso "Darling I''m a nightmare dressed like a daydream"?',  2, 1),
-																  ('Qual o nome do álbum lançado por surpresa em julho de 2020?',                     2, 1),
-																  ('Qual ator aparece no clipe de "The Man" dirigido por Taylor Swift?',              3, 1),
-																  ('Qual é o nome da turnê que celebra todas as eras da carreira de Taylor Swift?',   1, 1);
+insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values 
+('Qual o nome do documentário de Taylor Swift lançado na Netflix em 2020?',          3, 1),
+('Em que ano Taylor Swift lançou seu primeiro álbum?',                                2, 1),
+('Qual é o nome da cidade natal de Taylor Swift?',                                   4, 1),
+('Qual foi o primeiro álbum de Taylor Swift a ganhar o Grammy de Álbum do Ano?',    2, 1),
+('Em qual álbum está a música "All Too Well"?',                                     1, 1),
+('Quantos álbuns regravados ("Taylor''s Version") Taylor Swift lançou até 2024?',  3, 1),
+('Qual música contém o verso "Darling I''m a nightmare dressed like a daydream"?',  2, 1),
+('Qual o nome do álbum lançado por surpresa em julho de 2020?',                     2, 1),
+('Qual ator aparece no clipe de "The Man" dirigido por Taylor Swift?',              3, 1),
+('Qual é o nome da turnê que celebra todas as eras da carreira de Taylor Swift?',   1, 1);
                                                                   
 insert into pergunta (pergunta, nivel_dificuldade, fkQuiz) values
 ('Qual música abre o álbum "1989"?',                                     2, 2),
@@ -419,10 +420,6 @@ insert into alternativa (letra, texto, correta, fkPergunta) values
 ('B', 'Style', FALSE, 20),
 ('C', 'All You Had To Do Was Stay', FALSE, 20),
 ('D', 'Wonderland', FALSE, 20);
-
-truncate desempenho;
-truncate resposta;
-select * from usuario;
 
 -- DADOS PARA SIMULAÇÃO
 insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, nickname, fkEstado, fkSigno, fkAlbumFavorito, fkEraFavorita, fkAvatar, fkMusicaFavorita) values
@@ -626,3 +623,5 @@ insert into usuario (primeiro_nome, sobrenome, dtNascimento, cpf, email, senha, 
 ('Luana', 'Lopes', '1984-07-31', '85617324900', 'almeidaryan@bol.com.br', '$xFyf_4e@2', 'luana3234', 4, 10, 10, 7, 10, 176),
 ('Theo', 'Freitas', '1983-09-23', '97402381650', 'joao-miguelfarias@da.org', '4+3rQls%4E', 'theo8771', 27, 4, 2, 7, 13, 187),
 ('Luiz Gustavo', 'Novaes', '2001-08-07', '74215360943', 'wcunha@gmail.com', 'Q!0PyRIQ)l', 'luiz gustavo9253', 4, 10, 8, 10, 4, 19);
+
+insert into 
