@@ -11,11 +11,12 @@ function carregarPagina() {
 
 function obterDadosPerfil() {
     var idUsuarioVar = sessionStorage.ID_USUARIO
+    console.log('eu', idUsuarioVar)
     fetch("/usuarios/buscarDados", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            idUsuarioServer: idUsuarioVar,
+            idUsuarioServer: idUsuarioVar
         })
     })
         .then(function (resposta) {
@@ -26,7 +27,6 @@ function obterDadosPerfil() {
                     sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
                     sessionStorage.SIGNO_USUARIO = json.NomeSigno;
                 });
-                carregarPerfil()
             }
         })
 
@@ -47,81 +47,79 @@ function obterDadosPerfil() {
             }
             signos = signoVetor;
             plotarSignos(signos);
+            fetch('/albuns/buscar')
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(function (resposta) {
+                var albumVetor = [];
+                for (let i = 0; i < resposta.labels.length; i++) {
+                    albumVetor.push({
+                        nome: resposta.labels[i],
+                        id: resposta.data[i]
+                    });
+                }
+                albuns = albumVetor;
+                plotarAlbuns(albuns);
+                fetch('/musicas/buscar')
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(function (resposta) {
+                    for (let i = 0; i < resposta.labels.length; i++) {
+                        musicas.push({
+                            nome: resposta.labels[i],
+                            id: resposta.data[i]
+                        });
+                    }
+                    filtrarMusicas();
+                    fetch('/eras/buscar')
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(function (resposta) {
+                        var erasVetor = [];
+                        for (let i = 0; i < resposta.labels.length; i++) {
+                            erasVetor.push({
+                                nome: resposta.labels[i],
+                                id: resposta.data[i]
+                            });
+                        }
+                        eras = erasVetor;
+                        plotarEras(eras);
+                        carregarPerfil();
+                    })
+                    .catch(function (err) {
+                        console.error("Erro ao buscar os dados:", err);
+                        cardMensagem.style.display = "block";
+                        mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
+                    });
+                })
+                .catch(function (err) {
+                    console.error("Erro ao buscar os dados:", err);
+                    cardMensagem.style.display = "block";
+                    mensagem_erro.innerHTML = "Não foi possível carregar as músicas. Tente novamente mais tarde.";
+                });
+            })
+            .catch(function (err) {
+                console.error("Erro ao buscar os dados:", err);
+                cardMensagem.style.display = "block";
+                mensagem_erro.innerHTML = "Não foi possível carregar os álbuns. Tente novamente mais tarde.";
+            });
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
             cardMensagem.style.display = "block";
             mensagem_erro.innerHTML = "Não foi possível carregar os signos. Tente novamente mais tarde.";
-        });
-
-    fetch('/albuns/buscar')
-        .then(function (response) {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(function (resposta) {
-            var albumVetor = [];
-            for (let i = 0; i < resposta.labels.length; i++) {
-                albumVetor.push({
-                    nome: resposta.labels[i],
-                    id: resposta.data[i]
-                });
-            }
-            albuns = albumVetor;
-            plotarAlbuns(albuns);
-        })
-        .catch(function (err) {
-            console.error("Erro ao buscar os dados:", err);
-            cardMensagem.style.display = "block";
-            mensagem_erro.innerHTML = "Não foi possível carregar os álbuns. Tente novamente mais tarde.";
-        });
-
-    fetch('/musicas/buscar')
-        .then(function (response) {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(function (resposta) {
-            for (let i = 0; i < resposta.labels.length; i++) {
-                musicas.push({
-                    nome: resposta.labels[i],
-                    id: resposta.data[i]
-                });
-            }
-            filtrarMusicas();
-        })
-        .catch(function (err) {
-            console.error("Erro ao buscar os dados:", err);
-            cardMensagem.style.display = "block";
-            mensagem_erro.innerHTML = "Não foi possível carregar as músicas. Tente novamente mais tarde.";
-        });
-
-    fetch('/eras/buscar')
-        .then(function (response) {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(function (resposta) {
-            var erasVetor = [];
-            for (let i = 0; i < resposta.labels.length; i++) {
-                erasVetor.push({
-                    nome: resposta.labels[i],
-                    id: resposta.data[i]
-                });
-            }
-            eras = erasVetor;
-            plotarEras(eras);
-        })
-        .catch(function (err) {
-            console.error("Erro ao buscar os dados:", err);
-            cardMensagem.style.display = "block";
-            mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
         });
 }
 
@@ -132,7 +130,6 @@ function validarSessao() {
 }
 
 function carregarPerfil() {
-    obterDadosPerfil()
     var signo = sessionStorage.SIGNO_USUARIO
     var album = sessionStorage.ALBUM_FAVORITO_USUARIO
     var musica = sessionStorage.MUSICA_FAVORITA_USUARIO
