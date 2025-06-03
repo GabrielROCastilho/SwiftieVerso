@@ -1,5 +1,9 @@
 var quizzes = []
 
+function carregarQuizzes() {
+    obterDadosQuizzes()
+}
+
 function obterDadosQuizzes() {
     fetch('/quizzes/buscar')
         .then(function (response) {
@@ -28,16 +32,12 @@ function obterDadosQuizzes() {
         });
 }
 
-function carregarQuizzes() {
-    obterDadosQuizzes()
-}
-
 function plotarCards(quizzes) {
     var quizzesHTML = ''
     console.log(quizzes)
     for (var i = 0; i < quizzes.length; i++) {
         quizzesHTML +=
-        `
+            `
         <div class="card" id="card">
             <h2 class="quiz-title">${quizzes[i].titulo}</h2>
             <p class="quiz-desc">${quizzes[i].descricao}</p>

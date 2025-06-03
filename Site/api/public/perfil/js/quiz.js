@@ -29,6 +29,7 @@ function obterDadosQuiz(idQuiz) {
 function plotarQuestao(questao, numeroDaQuestaoVar) {
     var qtdDePerguntas = sessionStorage.NUMERO_QUESTOES
     var numeroDaQuestao = numeroDaQuestaoVar
+    var qtdDePerguntasDiminuidas = 0
 
     var questaoHTML = ''
     var alternativasHTML = ''
@@ -37,16 +38,21 @@ function plotarQuestao(questao, numeroDaQuestaoVar) {
         questaoHTML = `<h1>${questao[i].pergunta}</h1>`
 
         for (let j = 0; j < questao[i].alternativas.length; j++) {
-            alternativasHTML += `<input type="radio" name="alternativa" value="${questao[i].alternativas[j].id}"/>${questao[i].alternativas[j].texto}`;
+            alternativasHTML += `              
+            <div class="alternativa">
+                <input type="radio" name="alternativa" value="${questao[i].alternativas[j].id}" id="alt${questao[i].alternativas[j].id}"/>
+                <label for="alt${questao[i].alternativas[j].id}">${questao[i].alternativas[j].texto}</label>
+            </div>
+        `
         }
     }
 
-    while (numeroDaQuestao > 10) {
-        numeroDaQuestao -= 10;
+    while (numeroDaQuestao > qtdDePerguntas) {
+        numeroDaQuestao -= 10
+        qtdDePerguntasDiminuidas += 10
     }
 
     if (numeroDaQuestao < qtdDePerguntas) {
-        console.log('Entrou aqui -> primeiro if')
         conteudo.innerHTML = `
         <div class="container_questao">
             <div class="questao">
@@ -54,12 +60,11 @@ function plotarQuestao(questao, numeroDaQuestaoVar) {
                 <div class="input_alternativas">
                     ${alternativasHTML}
                 </div>
-                <button onclick="salvarResposta(${numeroDaQuestao})">Próxima Pergunta</button>
+                <button class="btn-proxima" onclick="salvarResposta(${numeroDaQuestao + qtdDePerguntasDiminuidas})">Próxima Pergunta</button>
             </div>
         </div>
         `
     } else if (numeroDaQuestao == qtdDePerguntas) {
-        console.log('Entrou aqui -> segundo if')
         conteudo.innerHTML = `
         <div class="container_questao">
             <div class="questao">
@@ -67,7 +72,7 @@ function plotarQuestao(questao, numeroDaQuestaoVar) {
                 <div class="input_alternativas">
                     ${alternativasHTML}
                 </div>
-                <button onclick="calcularPontuacao()">Finalizar Quiz</button>
+                <button onclick="salvarUltimaResposta(${numeroDaQuestao + qtdDePerguntasDiminuidas})" class="btn-proxima">Finalizar Quiz</button>
             </div>
         </div>
         `
@@ -75,7 +80,6 @@ function plotarQuestao(questao, numeroDaQuestaoVar) {
 }
 
 function salvarResposta(numeroDaQuestao) {
-    console.log('Entrou aqui -> salvar')
     var numeroQuestao = numeroDaQuestao
     var opcoes = document.getElementsByName('alternativa');
     var selecionado = null;
@@ -84,7 +88,6 @@ function salvarResposta(numeroDaQuestao) {
         console.log('Entrou no for')
         if (opcoes[i].checked) {
             selecionado = opcoes[i].value;
-            console.log('Entrou no if -> ', selecionado, numeroQuestao)
             proximaPergunta(selecionado, numeroQuestao)
             break;
         }
@@ -179,6 +182,43 @@ async function proximaPergunta(selecionado, numeroDaQuestao) {
     }
 }
 
+function salvarUltimaResposta() {
+    var opcoes = document.getElementsByName('alternativa');
+    var alternativaSelecionadaVar = null;
+    var fkQuizVar = sessionStorage.ID_QUIZ
+    var usuarioVar = sessionStorage.ID_USUARIO
+
+    for (var i = 0; i < opcoes.length; i++) {
+        if (opcoes[i].checked) {
+            alternativaSelecionadaVar = opcoes[i].value;
+            break;
+        }
+    }
+
+    fetch("/respostas/cadastrar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            alternativaSelecionadaServer: alternativaSelecionadaVar,
+            usuarioServer: usuarioVar,
+            fkQuizServer: fkQuizVar
+        }),
+    })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                calcularPontuacao()
+            } else {
+                resposta.text().then(texto => {
+                    document.getElementById("cardMensagem").style.display = "block";
+                    document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
+                    finalizarAguardar();
+                });
+            }
+        })
+}
+
 function calcularPontuacao() {
     var fkQuizVar = sessionStorage.ID_QUIZ
     var fkUsuarioVar = sessionStorage.ID_USUARIO
@@ -218,6 +258,7 @@ function adicionarDesempenho(pontuacao) {
     for (var i = 0; i < pontuacao.length; i++) {
         pontuacaoVar += pontuacao[i]
     }
+    console.log(pontuacaoVar)
 
     var fkQuizVar = sessionStorage.ID_QUIZ
     var fkUsuarioVar = sessionStorage.ID_USUARIO
@@ -236,7 +277,7 @@ function adicionarDesempenho(pontuacao) {
         .then(function (resposta) {
             console.log("resposta: ", resposta);
             if (resposta.ok) {
-                exibirResultado(pontuacaoVar)
+                exibirResultado()
             } else {
                 throw "Houve um erro ao tentar realizar o cadastro!";
             }
@@ -249,20 +290,71 @@ function adicionarDesempenho(pontuacao) {
     return false;
 }
 
-function exibirResultado(pontuacaoVar) {
-    var pontuacao = 0
-    for (var i = 0; i < pontuacaoVar.length; i++) {
-        pontuacao += pontuacaoVar[i]
-    }
-    conteudo.innerHTML =
-        `
-        <h1>Sua pontuação é de ${pontuacao}</h1>
-        <button onclick="retornarQuizzes()">Retornar à area principal</button>
-    `
+function exibirResultado() {
+    var fkQuizVar = sessionStorage.ID_QUIZ;
+    var fkUsuarioVar = sessionStorage.ID_USUARIO;
+
+    console.log(fkUsuarioVar);
+
+    fetch("/desempenhos/buscar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            fkUsuarioServer: fkUsuarioVar,
+            fkQuizServer: fkQuizVar
+        }),
+    })
+        .then(function (resposta) {
+            console.log("resposta: ", resposta);
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    sessionStorage.NUMERO_ACERTOS = json.NumeroAcertos;
+                    sessionStorage.TOTAL_PERGUNTAS = json.TotalPerguntas;
+
+                    var numeroAcertos = Number(json.NumeroAcertos);
+                    var totalPerguntas = Number(json.TotalPerguntas);
+                    var desempenho = ((numeroAcertos * 100) / totalPerguntas).toFixed(0);
+
+                    conteudo.innerHTML =
+                        `
+                    <div class="container_pontuacao">    
+                        <div class="cards">
+                            <div class="kpi-card">
+                            <div>
+                                <div class="kpi-icon">🏆</div>
+                                <h3 class="kpi-title">Sua Pontuação</h3>
+                                <div class="kpi-value">${numeroAcertos}/${totalPerguntas}</div>
+                                <p class="kpi-subtitle">Parabéns!</p>
+                            </div>
+                        </div>
+                            <div class="kpi-card">
+                                <div class="kpi-icon">✅</div>
+                                <h3 class="kpi-title">Acertos</h3>
+                                <div class="kpi-value">${desempenho}%</div>
+                                <p class="kpi-subtitle">Muito bem!</p>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn-salvar-quiz" onclick="retornarQuizzes()">Retornar ao menu inicial</button>
+                        </div>
+                    </div>
+                    `;
+                });
+            } else {
+                throw "Houve um erro ao carregar os dados!";
+            }
+        })
+        .catch(function (erro) {
+            console.error("Erro ao buscar desempenho: ", erro);
+        });
 }
 
 function retornarQuizzes() {
-    conteudo.innerHTML = 'Retornando'
+    conteudo.innerHTML = `
+    <h2 class="aviso-retorno-quiz">Retornando...</h2>
+    `
     setTimeout(() => {
         window.location = "./index.html";
     }, 2000);

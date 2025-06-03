@@ -45,8 +45,24 @@ function albuns() {
     return database.executar(instrucaoSql);
 }
 
+function avatares() {
+    var instrucaoSql =
+    `
+    select a.nome_avatar as NomeAvatar,
+    idAvatar as IdAvatar,
+    count(u.fkAvatar) as QtdDeUsuarios
+    from usuario u 
+    inner join avatar a on u.fkAvatar = a.idAvatar
+    group by a.idAvatar, a.nome_avatar
+    limit 3;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     signos,
     eras,
-    albuns
+    albuns,
+    avatares
 };

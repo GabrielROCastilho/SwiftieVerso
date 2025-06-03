@@ -7,6 +7,9 @@ var avatares = [];
 function carregarPagina() {
     validarSessao()
     avatarSelecionado()
+}
+
+function obterDadosPerfil() {
     var idUsuarioVar = sessionStorage.ID_USUARIO
     fetch("/usuarios/buscarDados", {
         method: "POST",
@@ -18,24 +21,15 @@ function carregarPagina() {
         .then(function (resposta) {
             if (resposta.ok) {
                 resposta.json().then(json => {
-                    sessionStorage.AVATAR_USUARIO = json.FkAvatar;
                     sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
                     sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
                     sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
                     sessionStorage.SIGNO_USUARIO = json.NomeSigno;
                 });
                 carregarPerfil()
-            } else {
-                resposta.text().then(texto => {
-                    document.getElementById("cardMensagem").style.display = "block";
-                    document.getElementById("mensagem_erro").innerText = "Erro ao carregar seus dados";
-                    finalizarAguardar();
-                });
             }
         })
-}
 
-function obterDadosPerfil() {
     fetch('/signos/buscar')
         .then(function (response) {
             if (!response.ok) {
@@ -57,7 +51,7 @@ function obterDadosPerfil() {
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
             cardMensagem.style.display = "block";
-            mensagem_erro.innerHTML = "Não foi possível carregar os avatares. Tente novamente mais tarde.";
+            mensagem_erro.innerHTML = "Não foi possível carregar os signos. Tente novamente mais tarde.";
         });
 
     fetch('/albuns/buscar')
@@ -134,9 +128,11 @@ function obterDadosPerfil() {
 function validarSessao() {
     var b_usuario = document.getElementById("b_usuario")
     b_usuario.innerHTML = `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`
+    avatarSelecionado()
 }
 
 function carregarPerfil() {
+    obterDadosPerfil()
     var signo = sessionStorage.SIGNO_USUARIO
     var album = sessionStorage.ALBUM_FAVORITO_USUARIO
     var musica = sessionStorage.MUSICA_FAVORITA_USUARIO
@@ -185,6 +181,7 @@ function carregarPerfil() {
         </div>
     </div>
         `
+        avatarSelecionado()
     } else {
         conteudo.innerHTML =
             `
@@ -236,7 +233,6 @@ function carregarPerfil() {
     `
     }
     avatarSelecionado()
-    obterDadosPerfil()
 }
 
 function avatarSelecionado() {
@@ -356,6 +352,7 @@ function salvarPerfil() {
     var musicaFavoritaVar = document.getElementById("musica_favorita").value;;
     var eraFavoritaInput = document.querySelector('input[name="era"]:checked');
     var eraFavoritaVar = eraFavoritaInput ? eraFavoritaInput.value : "";
+    console.log(idUsuarioVar, signoVar, albumFavoritoVar,)
 
     if (signoVar == null || albumFavoritoVar == null || musicaFavoritaVar == null || eraFavoritaVar == null) {
         document.getElementById("cardMensagem").style.display = "block";

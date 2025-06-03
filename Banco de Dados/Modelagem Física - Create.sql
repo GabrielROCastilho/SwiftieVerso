@@ -123,5 +123,3 @@ create table resposta (
 );
 
 
-
-

@@ -15,4 +15,8 @@ router.get("/albuns", function (req, res) {
     graficoController.albuns(req, res);
 });
 
+router.get("/avatares", function (req, res) {
+    graficoController.avatares(req, res);
+});
+
 module.exports = router;

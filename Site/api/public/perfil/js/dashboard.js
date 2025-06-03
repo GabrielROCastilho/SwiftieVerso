@@ -31,14 +31,31 @@ function obterDadosGraficos() {
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
         });
+
+    fetch('/graficos/avatares')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (resposta) {
+            var nomesAvatares = [];
+            var qtdDeUsuarios = [];
+            var idsAvatares = [];
+
+            for (var i = 0; i < resposta.length; i++) {
+                nomesAvatares.push(resposta[i].NomeAvatar);
+                qtdDeUsuarios.push(resposta[i].QtdDeUsuarios);
+                idsAvatares.push(resposta[i].IdAvatar);
+            }
+
+            plotarKpiAvatares(nomesAvatares, qtdDeUsuarios, idsAvatares);
+        })
+        .catch(function (err) {
+            console.error("Erro ao buscar os dados:", err);
+        });
+
 }
 
 function carregarDashboards() {
-    document.querySelectorAll('.btn-areas div').forEach(div => {
-        div.classList.remove('ativo');
-    });
-
-    document.querySelectorAll('.btn-areas div')[0].classList.add('ativo');
     conteudo.innerHTML =
         `
     <div class="container-estatistica">
@@ -66,7 +83,12 @@ function estatisticaPessoal() {
     //2. Pegar pelo índice do botão: document.querySelectorAll('.botoes-estatisticas button')[0]
 
     estatisticas.innerHTML =
-        ``
+        `
+        <div class="card-dashboard">
+            <h2>Os Swifties são, em sua maioria, dos signos de...</h2>
+            <canvas id="pontuacaoMediaDosQuizzes"></canvas>
+        </div>
+        `
 }
 
 function estatisticaGeral() {
@@ -77,11 +99,17 @@ function estatisticaGeral() {
 
     estatisticas.innerHTML =
         `
-    <div class="card-dashboard">
-        <h2>Os Swifties são, em sua maioria, dos signos de...</h2>
-        <canvas id="signos"></canvas>
+    <div class="cards-dashboard">
+        <div class="card-dashboard">
+            <h2>Os Swifties são, em sua maioria, dos signos de...</h2>
+            <canvas id="signos" class="dashboard-signos"></canvas>
+        </div>
+        <div class="kpi-dashboard">
+            <h2>Ícones mais utilizados</h2>
+            <div id="icones_mais_utilizados"></div>
+        </div>
     </div>
-    <div>
+    <div class="cards-dashboard">
         <div class="card-dashboard">
             <h2>Top 5 eras favoritas dos swifties</h2>
             <canvas id="eras"></canvas>
@@ -93,6 +121,55 @@ function estatisticaGeral() {
     </div>
     `
     obterDadosGraficos();
+}
+
+function plotarKpiAvatares(nomesAvatares, qtdDeUsuarios, idsAvatares) {
+    var imagens = []
+    for (var i = 0; i < nomesAvatares.length; i++) {
+        if (idsAvatares[i] == 10) {
+            imagens.push("aaron.png");
+        } else if (idsAvatares[i] == 5) {
+            imagens.push("andrea.png");
+        } else if (idsAvatares[i] == 7) {
+            imagens.push("austin.png");
+        } else if (idsAvatares[i] == 13) {
+            imagens.push("becky.png");
+        } else if (idsAvatares[i] == 3) {
+            imagens.push("benjamin.png");
+        } else if (idsAvatares[i] == 12) {
+            imagens.push("cobra.png");
+        } else if (idsAvatares[i] == 11) {
+            imagens.push("corcunda.png");
+        } else if (idsAvatares[i] == 9) {
+            imagens.push("jack.png");
+        } else if (idsAvatares[i] == 1) {
+            imagens.push("meredith.png");
+        } else if (idsAvatares[i] == 2) {
+            imagens.push("olivia.png");
+        } else if (idsAvatares[i] == 6) {
+            imagens.push("scott.png");
+        } else if (idsAvatares[i] == 8) {
+            imagens.push("selena.png");
+        } else if (idsAvatares[i] == 4) {
+            imagens.push("travis.png");
+        }
+    }
+
+    var conteudo = ''
+    for(var i = 0; i < imagens.length; i++){
+        conteudo += `
+        <div class="avatar">
+            <p>Usuários: <b>${qtdDeUsuarios[i]}</b></p>
+            <img src="../imagens/avatares/${imagens[i]}" class="img-dashboard"></img>
+        </div>
+        `;
+    }
+
+    icones_mais_utilizados.innerHTML = `
+    <div class="div-avatares">
+        ${conteudo}
+    </div>
+    `
 }
 
 var graficoSignos = null;
@@ -135,7 +212,6 @@ function plotarGraficoSignos(labels, data) {
 var graficoEras = null;
 function plotarGraficoEras(labels, data) {
     var ctx = document.getElementById('eras').getContext('2d');
-    console.log(labels, data)
     if (graficoEras !== null) {
         graficoEras.destroy();
     }
@@ -175,7 +251,6 @@ function plotarGraficoEras(labels, data) {
 var graficoAlbuns = null;
 function plotarGraficoAlbuns(labels, data) {
     var ctx = document.getElementById('albuns').getContext('2d');
-    console.log(labels, data)
     if (graficoAlbuns !== null) {
         graficoAlbuns.destroy();
     }

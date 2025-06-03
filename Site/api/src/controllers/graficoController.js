@@ -1,6 +1,6 @@
 var graficoModel = require("../models/graficoModel");
 
-function signos(_, res){
+function signos(_, res) {
     graficoModel.signos()
         .then(function (resultado) {
             if (resultado.length > 0) {
@@ -21,7 +21,7 @@ function signos(_, res){
         });
 }
 
-function eras(_, res){
+function eras(_, res) {
     graficoModel.eras()
         .then(function (resultado) {
             if (resultado.length > 0) {
@@ -42,7 +42,7 @@ function eras(_, res){
         });
 }
 
-function albuns(_, res){
+function albuns(_, res) {
     graficoModel.albuns()
         .then(function (resultado) {
             if (resultado.length > 0) {
@@ -63,8 +63,24 @@ function albuns(_, res){
         });
 }
 
+function avatares(_, res) {
+    graficoModel.avatares()
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!");
+            }
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
 module.exports = {
     signos,
     eras,
-    albuns
+    albuns,
+    avatares
 };
