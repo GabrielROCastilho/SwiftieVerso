@@ -19,4 +19,8 @@ router.get("/avatares", function (req, res) {
     graficoController.avatares(req, res);
 });
 
+router.post("/desempenhoquizzesporusuario", function (req, res) {
+    graficoController.desempenhoQuizzesPorUsuario(req, res);
+});
+
 module.exports = router;

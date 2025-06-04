@@ -121,5 +121,3 @@ create table resposta (
   constraint fk_quiz_resposta foreign key (fkQuiz) references quiz(idQuiz),
   constraint fk_alternativa_resposta foreign key (fkAlternativa) references alternativa(idAlternativa)
 );
-
-

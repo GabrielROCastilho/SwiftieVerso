@@ -11,7 +11,6 @@ function carregarPagina() {
 
 function obterDadosPerfil() {
     var idUsuarioVar = sessionStorage.ID_USUARIO
-    console.log('eu', idUsuarioVar)
     fetch("/usuarios/buscarDados", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -20,16 +19,26 @@ function obterDadosPerfil() {
         })
     })
         .then(function (resposta) {
-            if (resposta.ok) {
-                resposta.json().then(json => {
-                    sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
-                    sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
-                    sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
-                    sessionStorage.SIGNO_USUARIO = json.NomeSigno;
-                });
+            if (!resposta.ok) {
+                console.warn('Resposta com erro. Status:', resposta.status);
+                if (resposta.status === 403) {
+                    console.log('oiii – usuário não encontrado ou inválido');
+                }
+                return;
             }
-        })
 
+            resposta.json().then(json => {
+                sessionStorage.MUSICA_FAVORITA_USUARIO = json.NomeMusica;
+                sessionStorage.ALBUM_FAVORITO_USUARIO = json.NomeAlbum;
+                sessionStorage.ERA_FAVORITA_USUARIO = json.NomeEra;
+                sessionStorage.SIGNO_USUARIO = json.NomeSigno;
+
+                carregarPerfil();
+            });
+        })
+}
+
+function buscarDadosPerfil() {
     fetch('/signos/buscar')
         .then(function (response) {
             if (!response.ok) {
@@ -48,23 +57,6 @@ function obterDadosPerfil() {
             signos = signoVetor;
             plotarSignos(signos);
             fetch('/albuns/buscar')
-            .then(function (response) {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(function (resposta) {
-                var albumVetor = [];
-                for (let i = 0; i < resposta.labels.length; i++) {
-                    albumVetor.push({
-                        nome: resposta.labels[i],
-                        id: resposta.data[i]
-                    });
-                }
-                albuns = albumVetor;
-                plotarAlbuns(albuns);
-                fetch('/musicas/buscar')
                 .then(function (response) {
                     if (!response.ok) {
                         throw new Error('Network response was not ok ' + response.statusText);
@@ -72,49 +64,65 @@ function obterDadosPerfil() {
                     return response.json();
                 })
                 .then(function (resposta) {
+                    var albumVetor = [];
                     for (let i = 0; i < resposta.labels.length; i++) {
-                        musicas.push({
+                        albumVetor.push({
                             nome: resposta.labels[i],
                             id: resposta.data[i]
                         });
                     }
-                    filtrarMusicas();
-                    fetch('/eras/buscar')
-                    .then(function (response) {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then(function (resposta) {
-                        var erasVetor = [];
-                        for (let i = 0; i < resposta.labels.length; i++) {
-                            erasVetor.push({
-                                nome: resposta.labels[i],
-                                id: resposta.data[i]
-                            });
-                        }
-                        eras = erasVetor;
-                        plotarEras(eras);
-                        carregarPerfil();
-                    })
-                    .catch(function (err) {
-                        console.error("Erro ao buscar os dados:", err);
-                        cardMensagem.style.display = "block";
-                        mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
-                    });
+                    albuns = albumVetor;
+                    plotarAlbuns(albuns);
+                    fetch('/musicas/buscar')
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(function (resposta) {
+                            for (let i = 0; i < resposta.labels.length; i++) {
+                                musicas.push({
+                                    nome: resposta.labels[i],
+                                    id: resposta.data[i]
+                                });
+                            }
+                            filtrarMusicas();
+                            fetch('/eras/buscar')
+                                .then(function (response) {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok ' + response.statusText);
+                                    }
+                                    return response.json();
+                                })
+                                .then(function (resposta) {
+                                    var erasVetor = [];
+                                    for (let i = 0; i < resposta.labels.length; i++) {
+                                        erasVetor.push({
+                                            nome: resposta.labels[i],
+                                            id: resposta.data[i]
+                                        });
+                                    }
+                                    eras = erasVetor;
+                                    plotarEras(eras);
+                                })
+                                .catch(function (err) {
+                                    console.error("Erro ao buscar os dados:", err);
+                                    cardMensagem.style.display = "block";
+                                    mensagem_erro.innerHTML = "Não foi possível carregar as eras. Tente novamente mais tarde.";
+                                });
+                        })
+                        .catch(function (err) {
+                            console.error("Erro ao buscar os dados:", err);
+                            cardMensagem.style.display = "block";
+                            mensagem_erro.innerHTML = "Não foi possível carregar as músicas. Tente novamente mais tarde.";
+                        });
                 })
                 .catch(function (err) {
                     console.error("Erro ao buscar os dados:", err);
                     cardMensagem.style.display = "block";
-                    mensagem_erro.innerHTML = "Não foi possível carregar as músicas. Tente novamente mais tarde.";
+                    mensagem_erro.innerHTML = "Não foi possível carregar os álbuns. Tente novamente mais tarde.";
                 });
-            })
-            .catch(function (err) {
-                console.error("Erro ao buscar os dados:", err);
-                cardMensagem.style.display = "block";
-                mensagem_erro.innerHTML = "Não foi possível carregar os álbuns. Tente novamente mais tarde.";
-            });
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
@@ -137,22 +145,22 @@ function carregarPerfil() {
     var nome = sessionStorage.NOME_USUARIO
     var sobrenome = sessionStorage.SOBRENOME_USUARIO
 
-    if (signo != null && album != null && musica != null && era != null) {
-        conteudo.innerHTML = `
-        <div class="profile-container">
+    if (signo != 'undefined' && album != 'undefined' && musica != 'undefined' && era != 'undefined') {
+    conteudo.innerHTML = `
+    <div class="profile-container">
         <h1>Seu Perfil</h1>
 
-    <div class="profile-header">
-        <a href="#" class="mudar_foto_perfil" onclick="mudarAvatarPerfil()">
-            <div class="imagem-perfil" id="avatar-imagem-perfil">
-                <span class="avatar-placeholder">👤</span>
+        <div class="profile-header">
+            <a href="#" class="mudar_foto_perfil" onclick="mudarAvatarPerfil()">
+                <div class="imagem-perfil" id="avatar-imagem-perfil">
+                    <span class="avatar-placeholder">👤</span>
+                </div>
+            </a>
+            <div>
+                <h2>${nome} ${sobrenome}</h2>
+                <span>Sempre no lugar certo, na hora certa</span>
             </div>
-        </a>
-        <div>
-            <h2>${nome} ${sobrenome}</h2>
-            <span>Sempre no lugar certo, na hora certa</span>
         </div>
-    </div>
 
     <div class="profile-info">
         <div class="info-item">
@@ -180,54 +188,55 @@ function carregarPerfil() {
         `
         avatarSelecionado()
     } else {
-        conteudo.innerHTML =
-            `
+    conteudo.innerHTML =
+        `
     <div class="profile-container">
         <h1>Seu Perfil</h1>
 
-    <div class="profile-header">
-        <a href="#" class="mudar_foto_perfil" onclick="mudarAvatarPerfil()">
-            <div class="imagem-perfil" id="avatar-imagem-perfil">
-                <span class="avatar-placeholder">👤</span>
+        <div class="profile-header">
+            <a href="#" class="mudar_foto_perfil" onclick="mudarAvatarPerfil()">
+                <div class="imagem-perfil" id="avatar-imagem-perfil">
+                    <span class="avatar-placeholder">👤</span>
+                </div>
+            </a>
+            <div>
+                <h2>${nome} ${sobrenome}</h2>
+                <span>Sempre no lugar certo, na hora certa</span>
             </div>
-        </a>
-        <div>
-            <h2>${nome} ${sobrenome}</h2>
-            <span>Sempre no lugar certo, na hora certa</span>
-        </div>
-    </div>
-
-    <div class="profile-info">
-        <div class="info-item">
-            <div class="info-label">Seu Signo</div>
-            <select id="slc_signo" class="info-input"></select>
         </div>
 
-        <div class="info-item">
-            <div class="info-label">Álbum Favorito</div>
-            <select id="slc_album" class="info-input"></select>
-        </div>
+        <div class="profile-info">
+            <div class="info-item">
+                <div class="info-label">Seu Signo</div>
+                <select id="slc_signo" class="info-input"></select>
+            </div>
 
-        <div class="info-item">
-            <div class="info-label">Música Favorita</div>
-            <input type="text" id="musica_favorita" class="info-input" placeholder="Digite sua música favorita da Taylor Swift" oninput="filtrarMusicas()" autocomplete="off">
-            <ul id="sugestoes_musicas" class="dropdown-lista oculto"></ul>
-        </div>
+            <div class="info-item">
+                <div class="info-label">Álbum Favorito</div>
+                <select id="slc_album" class="info-input"></select>
+            </div>
 
-        <div class="info-item">
-            <div class="info-label">Era Favorita</div>
-            <div class="era-favorita" id="era_favorita"></div>
-        </div>
+            <div class="info-item">
+                <div class="info-label">Música Favorita</div>
+                <input type="text" id="musica_favorita" class="info-input" placeholder="Digite sua música favorita da Taylor Swift" oninput="filtrarMusicas()" autocomplete="off">
+                <ul id="sugestoes_musicas" class="dropdown-lista oculto"></ul>
+            </div>
 
-        <div id="cardMensagem">
-            <span id="mensagem_erro"></span>
-            <span id="mensagem_certo"></span>
-        </div>
+            <div class="info-item">
+                <div class="info-label">Era Favorita</div>
+                <div class="era-favorita" id="era_favorita"></div>
+            </div>
 
-            <button class="btn-perfil" onclick="salvarPerfil()">Salvar Perfil</button>
-        </div>
+            <div id="cardMensagem">
+                <span id="mensagem_erro"></span>
+                <span id="mensagem_certo"></span>
+            </div>
+
+                <button class="btn-perfil" onclick="salvarPerfil()">Salvar Perfil</button>
+            </div>
     </div>
     `
+        buscarDadosPerfil()
     }
     avatarSelecionado()
 }

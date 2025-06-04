@@ -54,8 +54,25 @@ function avatares() {
     from usuario u 
     inner join avatar a on u.fkAvatar = a.idAvatar
     group by a.idAvatar, a.nome_avatar
-    limit 3;
+    order by QtdDeUsuarios desc
+    limit 4;
     `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function desempenhoQuizzesPorUsuario(idUsuario){
+    var instrucaoSql = 
+    `
+    select sum(d.pontuacao) as PontuacaoUsuario,
+    count(d.idDesempenho) * 10 as PontuacaoTotalEsperada,
+    fkQuiz as IdQuiz,
+    q.titulo as TituloQuiz
+    from desempenho d
+    inner join quiz q on d.fkQuiz = q.idQuiz
+    where d.fkUsuario = ${idUsuario}
+    group by fkQuiz;
+    `
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
@@ -64,5 +81,6 @@ module.exports = {
     signos,
     eras,
     albuns,
-    avatares
+    avatares,
+    desempenhoQuizzesPorUsuario
 };

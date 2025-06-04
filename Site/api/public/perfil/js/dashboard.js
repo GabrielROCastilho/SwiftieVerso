@@ -1,58 +1,85 @@
-function obterDadosGraficos() {
+function obterDadosGraficosGeral() {
     fetch('/graficos/signos')
         .then(function (response) {
             return response.json();
         })
         .then(function (resposta) {
             plotarGraficoSignos(resposta.labels, resposta.data);
+            fetch('/graficos/albuns')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (resposta) {
+                    plotarGraficoAlbuns(resposta.labels, resposta.data);
+                    fetch('/graficos/avatares')
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (resposta) {
+                            var nomesAvatares = [];
+                            var qtdDeUsuarios = [];
+                            var idsAvatares = [];
+
+                            for (var i = 0; i < resposta.length; i++) {
+                                nomesAvatares.push(resposta[i].NomeAvatar);
+                                qtdDeUsuarios.push(resposta[i].QtdDeUsuarios);
+                                idsAvatares.push(resposta[i].IdAvatar);
+                            }
+
+                            plotarKpiAvatares(nomesAvatares, qtdDeUsuarios, idsAvatares);
+                            fetch('/graficos/eras')
+                                .then(function (response) {
+                                    return response.json();
+                                })
+                                .then(function (resposta) {
+                                    plotarGraficoEras(resposta.labels, resposta.data);
+                                })
+                                .catch(function (err) {
+                                    console.error("Erro ao buscar os dados:", err);
+                                });
+                        })
+                        .catch(function (err) {
+                            console.error("Erro ao buscar os dados:", err);
+                        });
+                })
+                .catch(function (err) {
+                    console.error("Erro ao buscar os dados:", err);
+                });
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
         });
+}
 
-    fetch('/graficos/eras')
+function obterDadosGraficosPessoal() {
+    var idUsuarioVar = sessionStorage.ID_USUARIO
+    var quizzes = []
+    var pontuacoesUsuario = []
+    var pontuacoesTotais = []
+    var titulos = []
+
+    fetch("/graficos/desempenhoquizzesporusuario", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            idUsuarioServer: idUsuarioVar
+        })
+    })
         .then(function (response) {
             return response.json();
         })
         .then(function (resposta) {
-            plotarGraficoEras(resposta.labels, resposta.data);
-        })
-        .catch(function (err) {
-            console.error("Erro ao buscar os dados:", err);
-        });
-
-    fetch('/graficos/albuns')
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (resposta) {
-            plotarGraficoAlbuns(resposta.labels, resposta.data);
-        })
-        .catch(function (err) {
-            console.error("Erro ao buscar os dados:", err);
-        });
-
-    fetch('/graficos/avatares')
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (resposta) {
-            var nomesAvatares = [];
-            var qtdDeUsuarios = [];
-            var idsAvatares = [];
-
             for (var i = 0; i < resposta.length; i++) {
-                nomesAvatares.push(resposta[i].NomeAvatar);
-                qtdDeUsuarios.push(resposta[i].QtdDeUsuarios);
-                idsAvatares.push(resposta[i].IdAvatar);
+                pontuacoesUsuario.push(Number(resposta[i].PontuacaoUsuario))
+                pontuacoesTotais.push(Number(resposta[i].PontuacaoTotalEsperada))
+                quizzes.push(Number(resposta[i].IdQuiz))
+                titulos.push(resposta[i].TituloQuiz)
             }
-
-            plotarKpiAvatares(nomesAvatares, qtdDeUsuarios, idsAvatares);
+            plotarKpisDesempenho(pontuacoesUsuario, pontuacoesTotais, quizzes, titulos);
         })
         .catch(function (err) {
             console.error("Erro ao buscar os dados:", err);
         });
-
 }
 
 function carregarDashboards() {
@@ -84,11 +111,16 @@ function estatisticaPessoal() {
 
     estatisticas.innerHTML =
         `
-        <div class="card-dashboard">
-            <h2>Os Swifties são, em sua maioria, dos signos de...</h2>
-            <canvas id="pontuacaoMediaDosQuizzes"></canvas>
+        <div class="kpi-dashboard-pessoal" id="kpi_performance_geral"></div>
+        <div class="kpi-grid">
+            <div class="kpi-small" id="media_por_quiz"></div>
+
+            <div class="kpi-small" id="total_de_quizzes"></div>
+
+            <div class="kpi-small" id="quiz_com_maior_pontuacao"></div>
         </div>
         `
+    obterDadosGraficosPessoal();
 }
 
 function estatisticaGeral() {
@@ -102,7 +134,7 @@ function estatisticaGeral() {
     <div class="cards-dashboard">
         <div class="card-dashboard">
             <h2>Os Swifties são, em sua maioria, dos signos de...</h2>
-            <canvas id="signos" class="dashboard-signos"></canvas>
+            <canvas id="signos" class="dashboard-signos" width="700" height="700" style="width: 100%; max-width: 700px; height: auto;"></canvas>
         </div>
         <div class="kpi-dashboard">
             <h2>Ícones mais utilizados</h2>
@@ -112,15 +144,91 @@ function estatisticaGeral() {
     <div class="cards-dashboard">
         <div class="card-dashboard">
             <h2>Top 5 eras favoritas dos swifties</h2>
-            <canvas id="eras"></canvas>
+            <canvas id="eras" width="550" height="250"></canvas>
         </div>
         <div class="card-dashboard">
             <h2>Top 5 álbuns favoritos dos swifties</h2>
-            <canvas id="albuns"></canvas>
+            <canvas id="albuns" width="550" height="250"></canvas>
         </div>
     </div>
     `
-    obterDadosGraficos();
+    obterDadosGraficosGeral();
+}
+
+function plotarKpisDesempenho(pontuacoesUsuario, pontuacoesTotais, quizzes, titulos) {
+    var pontuacaoUsuario = 0
+    var pontuacaoGeral = 0
+    var quantidadeDeQuizzes = quizzes.length
+    var desempenho = 0
+    var status = ''
+    var mediaPorQuiz = 0
+    var melhorDesempenho = ''
+
+    var maiorPontuacao = -1
+    var indiceMelhorQuiz = -1
+
+    for (var i = 0; i < pontuacoesUsuario.length; i++) {
+        pontuacaoUsuario += pontuacoesUsuario[i]
+        if (pontuacoesUsuario[i] > maiorPontuacao) {
+            maiorPontuacao = pontuacoesUsuario[i]
+            indiceMelhorQuiz = i
+        }
+    }
+
+    for (var i = 0; i < pontuacoesTotais.length; i++) {
+        pontuacaoGeral += pontuacoesTotais[i]
+    }
+
+    desempenho = (pontuacaoUsuario * 100) / pontuacaoGeral
+    mediaPorQuiz = pontuacaoUsuario / quantidadeDeQuizzes
+
+    if (desempenho < 40) {
+        status = 'Pois trate de estudar mais 😤'
+    } else if (desempenho >= 40 && desempenho < 50) {
+        status = 'Uma recuperaçãozinha resolve 🫠'
+    } else if (desempenho >= 50 && desempenho < 60) {
+        status = 'Passou de ano 🥵'
+    } else if (desempenho >= 60 && desempenho < 80) {
+        status = 'Um swiftie digno de respeito 🫡'
+    } else if (desempenho >= 80 && desempenho < 100) {
+        status = 'Uau! Merece até uma carteirinha de swiftie 🪪'
+    } else if (desempenho == 100) {
+        status = 'Sabe mais dela do que ela mesma 😮‍💨'
+    }
+
+    if (indiceMelhorQuiz >= 0 && titulos[indiceMelhorQuiz]) {
+        melhorDesempenho = titulos[indiceMelhorQuiz]
+    }
+
+    kpi_performance_geral.innerHTML =
+        `
+        <div class="icon icon-award">🏆</div>
+        <div class="kpi-title" style="font-size: 40px;">Performance Geral</div>
+        <div id="performance-percentage" class="kpi-value" style="font-size: 40px;">${desempenho.toFixed(0)}%</div>
+        <div id="total-points" class="kpi-subtitle" style="font-size: 15px; color: white;">${pontuacaoUsuario} de ${pontuacaoGeral} pontos</div>
+        <div id="status-badge" class="status-badge" style="font-size: 18px;">${status}</div>
+    `
+
+    media_por_quiz.innerHTML =
+        `
+    <div class="icon icon-trend">📈</div>
+    <h3>Média por Quiz</h3>
+    <div id="average-score" class="kpi-value" style="font-size: 40px;">${mediaPorQuiz.toFixed(1)}</div>
+    `
+
+    total_de_quizzes.innerHTML =
+        `
+    <div class="icon icon-chart">📊</div>
+    <h3>Total de Quizzes</h3>
+    <div id="total-quizzes" class="kpi-value" style="font-size: 40px;">${quantidadeDeQuizzes}</div>
+    `
+
+    quiz_com_maior_pontuacao.innerHTML =
+        `
+    <div class="icon icon-target">🎯</div>
+    <h3>Melhor Quiz</h3>
+    <div id="best-quiz" class="kpi-value" style="font-size: 35px;">${melhorDesempenho}</div>
+    `
 }
 
 function plotarKpiAvatares(nomesAvatares, qtdDeUsuarios, idsAvatares) {
@@ -156,7 +264,7 @@ function plotarKpiAvatares(nomesAvatares, qtdDeUsuarios, idsAvatares) {
     }
 
     var conteudo = ''
-    for(var i = 0; i < imagens.length; i++){
+    for (var i = 0; i < imagens.length; i++) {
         conteudo += `
         <div class="avatar">
             <p>Usuários: <b>${qtdDeUsuarios[i]}</b></p>

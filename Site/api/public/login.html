@@ -60,7 +60,7 @@
             var senhaVar = document.getElementById("ipt_login_senha").value;
 
             if (!emailVar || !senhaVar) {
-                document.getElementById("cardErro").style.display = "block";
+                document.getElementById("cardDeuCerto").style.display = "block";
                 document.getElementById("mensagem_erro").innerText = "Por favor, preencha todos os campos.";
                 finalizarAguardar();
                 return;
