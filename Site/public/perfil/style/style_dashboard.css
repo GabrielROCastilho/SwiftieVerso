@@ -152,6 +152,10 @@
     border-radius: 1rem;
     padding: 1.5rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon {
@@ -211,3 +215,21 @@
     font-weight: 600;
     margin-top: 10px;
 }
+
+canvas {
+    display: block;
+    margin: 2rem auto;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .chart-bar {
+    max-width: 900px;
+    aspect-ratio: 2 / 1; /* Largura 2x maior que a altura */
+  }
+  
+  .chart-polar {
+    max-width: 700px;
+    aspect-ratio: 1 / 1; /* Proporção quadrada */
+  }
+  

@@ -137,7 +137,7 @@ function estatisticaGeral() {
     <div class="cards-dashboard">
         <div class="card-dashboard">
             <h2 "font-size: 35px;">Os Swifties são, em sua maioria, dos signos de...</h2>
-            <canvas id="signos" class="dashboard-signos" width="700" height="700" style="width: 100%; max-width: 700px; height: auto;"></canvas>
+            <canvas id="signos" class="chart-polar"></canvas>
         </div>
         <div class="kpi-dashboard">
             <h2 style="font-size: 35px;">Ícones mais utilizados</h2>
@@ -147,15 +147,15 @@ function estatisticaGeral() {
     <div class="cards-dashboard">
         <div class="card-dashboard">
             <h2 "font-size: 35px;">Top 5 eras favoritas dos swifties</h2>
-            <canvas id="eras" width="550" height="250"></canvas>
+            <canvas id="eras" class="chart-bar"></canvas>
         </div>
         <div class="card-dashboard">
             <h2 "font-size: 35px;">Top 5 álbuns favoritos dos swifties</h2>
-            <canvas id="albuns" width="550" height="250"></canvas>
+            <canvas id="albuns" class="chart-bar"></canvas>
         </div>
         <div class="card-dashboard">
             <h2 "font-size: 35px;">Os Swifties são, em sua maioria, de...</h2>
-            <canvas id="estados" class="dashboard-estados" width="700" height="700" style="width: 100%; max-width: 700px; height: auto;"></canvas>
+            <canvas id="estados" class="chart-polar"></canvas>
         </div>
     </div>
     `
@@ -182,13 +182,15 @@ function plotarGraficoEstados(labels, data) {
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 159, 64, 0.2)',
                     'rgba(255, 205, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(20, 48, 176, 0.2)'
                 ],
                 borderColor: [
                     'rgb(245, 99, 132)',
                     'rgb(235, 159, 64)',
                     'rgb(225, 205, 86)',
-                    'rgb(77, 192, 192)'
+                    'rgb(77, 192, 192)',
+                    'rgb(20, 48, 176)'
                 ],
                 borderWidth: 3,
             }]
@@ -212,6 +214,7 @@ function plotarGraficoEstados(labels, data) {
                     labels: {
                         color: 'white',
                         font: {
+                            size: 14,
                             weight: 'bold'
                         }
                     }
@@ -400,6 +403,7 @@ function plotarGraficoSignos(labels, data) {
                     labels: {
                         color: 'white',
                         font: {
+                            size: 14,
                             weight: 'bold'
                         }
                     }
@@ -465,6 +469,7 @@ function plotarGraficoEras(labels, data) {
                     labels: {
                         color: 'white',
                         font: {
+                            size: 14,
                             weight: 'bold'
                         }
                     }
@@ -530,6 +535,7 @@ function plotarGraficoAlbuns(labels, data) {
                     labels: {
                         color: 'white',
                         font: {
+                            size: 14,
                             weight: 'bold'
                         }
                     }
