@@ -1,0 +1,175 @@
+body {
+    font-family: 'Helvetica', sans-serif;
+    background: linear-gradient(135deg, #ff9cda, #9b59b6);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+}
+
+h1 {
+    text-align: center;
+    color: #9b59b6;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h2{
+    font-size: 24px;
+    color: #9b59b6;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.profile-header span{
+    margin-left: 20px;
+    font-style: italic;
+    color: #777;
+}
+
+.imagem-perfil {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    font-weight: bold;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.avatar-placeholder {
+    font-size: 36px;
+    color: white;
+}
+
+.imagem-perfil img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.imagem-perfil .avatar-imagem{
+    display: none;
+}
+
+.mudar_foto_perfil:hover{
+    cursor: pointer;
+}
+
+.profile-info {
+    margin-top: 30px;
+}
+
+.info-item {
+    margin-bottom: 20px;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #9b59b6;
+    margin-bottom: 5px;
+}
+
+.info-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ff9cda;
+    border-radius: 8px;
+    font-size: 16px;
+    color: rgb(86, 0, 79);
+}
+    
+select.info-input {
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+.btn-perfil {
+    background: linear-gradient(135deg, #ff9cda, #9b59b6);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-perfil:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+}
+
+.era-favorita {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.era-option {
+    display: none;
+}
+
+.era-label {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.era-option:checked + .era-label {
+    background: linear-gradient(135deg, #ff9cda, #9b59b6);
+    color: white;
+}
+
+.cardMensagem{
+    margin: 10px 0;
+    display: none;    
+}
+
+#mensagem_erro{
+    color: red;
+}
+
+#mensagem_certo{
+    color: rgb(50, 232, 50);
+}
+

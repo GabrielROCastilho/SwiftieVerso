@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/style_dashboard.css">
+    <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" href="./style/style_perfil.css">
+    <link rel="stylesheet" href="./style/style_quiz.css">
+    <script src="./js/dashboard.js" defer></script>
+    <script src="./js/quizzes.js" defer></script>
+    <script src="./js/perfil.js" defer></script>
+    <script src="./js/quiz.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Perfil</title>
+</head>
+
+<body onload="validarSessao()">
+    <div class="container_home_page_perfil">
+        <div class="navegacao">
+            <div class="imagem-perfil" id="avatar-imagem-navegacao">
+                <span class="avatar-placeholder">👤</span>
+            </div>
+            <div class="nome-usuario">
+                <h2 id="b_usuario"></h2>
+            </div>
+            <div class="btn-areas">
+                <ul>
+                    <li>
+                        <div class="btn-area">
+                            <span>📊</span>
+                            <a onclick="carregarDashboards()">
+                                <h3>Dashboards</h3>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-area">
+                            <span>❔</span>
+                            <a onclick="carregarQuizzes()">
+                                <h3>Quizzes</h3>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-area">
+                            <span>👻</span>
+                            <a class="perfil" onclick="obterDadosPerfil()" href="#">
+                                <h3>Perfil</h3>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="conteudo" id="conteudo"></div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const botoes = document.querySelectorAll('.btn-area');
+        botoes.forEach(botao => {
+            botao.addEventListener('click', function () {
+                botoes.forEach(b => b.style.backgroundColor = '');
+                this.style.backgroundColor = '#d36da3';
+            });
+        });
+    });
+
+    function carregarPagina() {
+        validarSessao()
+        avatarSelecionado()
+    }
+</script>
+
+</html>

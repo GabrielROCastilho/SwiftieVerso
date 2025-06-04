@@ -1,0 +1,788 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=DM+Serif+Display:ital@0;1&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', serif;
+    padding-top: 10vh;
+}
+
+/* Container Home Page */
+.container_home_page {
+    width: 100%;
+    box-sizing: border-box;
+    height: 90vh;
+    background-image: url('imagens/home.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.container_home_page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+/* Nav-Bar */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(235, 172, 210, 0.95);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.links-nav-bar {
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.links-nav-bar a {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.links-nav-bar a:hover {
+    color: black;
+    text-decoration: none;
+    background-color: rgb(255, 223, 228);
+}
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background-color: black;
+}
+
+/* Home */
+.home {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 5rem;
+    padding-top: 5vh;
+    color: white;
+}
+
+.home-textos {
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.home-textos h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ffccf9;
+    text-shadow: 0 0 10px #ff99dd;
+}
+
+.home-textos h2,
+.home-textos h3 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-shadow: 0 0 5px #ffb3e6;
+}
+
+
+/* Timeline */
+.timeline {
+    background-color: #fbd5e5;
+    min-height: 100vh;
+    padding: 100px 15px;
+}
+
+.timeline-items {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.timeline-items::before {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: #e5b8d1;
+    left: calc(50% - 1px);
+}
+
+.timeline-item {
+    margin-bottom: 40px;
+    width: 100%;
+    position: relative;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-item:nth-child(odd) {
+    padding-right: calc(50% + 30px);
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+    padding-left: calc(50% + 30px);
+}
+
+.timeline-dot {
+    height: 16px;
+    width: 16px;
+    background-color: #d36da3;
+    position: absolute;
+    left: calc(50% - 8px);
+    border-radius: 50%;
+    top: 10px;
+}
+
+.timeline-date {
+    font-size: 20px;
+    font-weight: bold;
+    color: #574864;
+    margin: 6px 0 15px;
+}
+
+.timeline-content {
+    background-color: #a267c3;
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.timeline-content h3 {
+    font-size: 25px;
+    color: #fef6f9;
+    margin: 0 0 10px;
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+.timeline-content p {
+    color: #dedcdc;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 22px;
+}
+
+
+/* Álbuns */
+.albuns {
+    width: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 20px;
+    padding: 40px 0;
+    justify-items: center;
+}
+
+
+.album {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 20px auto;
+    background-color: #fce4ec;
+    padding: 20px;
+    transition: 0.3s;
+    border-radius: 20px;
+}
+
+.album:hover {
+    transform: scale(1.01);
+}
+
+.info_album {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info_album h3 {
+    align-self: center;
+    font-size: 30px;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.info_album p {
+    font-size: 17px;
+    margin: 10px 0px 20px 0px;
+}
+
+.dados_album ul {
+    list-style-type: none;
+}
+
+
+.img_album_debut {
+    background-image: url('imagens/albuns/debut.jpg');
+}
+
+.img_album_fearless {
+    background-image: url('imagens/albuns/fearless.jpg');
+}
+
+.img_album_speak_now {
+    background-image: url('imagens/albuns/speaknow.jpg');
+}
+
+.img_album_red {
+    background-image: url('imagens/albuns/red.jpg');
+}
+
+.img_album_pop {
+    background-image: url('imagens/albuns/1989.jpg');
+}
+
+.img_album_reputation {
+    background-image: url('imagens/albuns/reputation.jpg');
+}
+
+.img_album_lover {
+    background-image: url('imagens/albuns/lover.png');
+}
+
+.img_album_folklore {
+    background-image: url('imagens/albuns/folklore.png');
+}
+
+.img_album_evermore {
+    background-image: url('imagens/albuns/evermore.png');
+}
+
+.img_album_fearless_tv {
+    background-image: url('imagens/albuns/fearlesstv.png');
+}
+
+.img_album_red_tv {
+    background-image: url('imagens/albuns/redtv.png');
+}
+
+.img_album_midnights {
+    background-image: url('imagens/albuns/midnights.png');
+}
+
+.img_album_speak_now_tv {
+    background-image: url('imagens/albuns/speaknowtv.png');
+}
+
+.img_album_pop_tv {
+    background-image: url('imagens/albuns/1989tv.png');
+}
+
+.img_album_ttpd {
+    background-image: url('imagens/albuns/ttpd.jpg');
+}
+
+[class^="img_album_"] {
+    text-decoration: underline;
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    margin: 20px;
+}
+
+
+/* Turnê */
+.titulo-secao {
+    font-size: 40px;
+    color: #a267c3;
+    margin: 40px 0 30px 0;
+    text-align: center;
+    text-shadow: 0 0 5px #fbd5e5;
+}
+
+.turnes {
+    background-color: #fff0f5;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+}
+
+.tour {
+    width: 85%;
+    display: flex;
+    flex-direction: row;
+    background-color: #fce4ec;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 30px 0;
+    padding: 20px;
+    gap: 20px;
+    transition: 0.3s;
+    align-items: center;
+}
+
+.tour:hover {
+    transform: scale(1.01);
+}
+
+.info_tour {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info_tour h3 {
+    font-size: 32px;
+    color: #a267c3;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.info_tour p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.dados_tour ul {
+    font-size: 17px;
+    padding-left: 20px;
+}
+
+.dados_tour ul li {
+    margin-bottom: 10px;
+}
+
+[class^="img_tour_"] {
+    width: 50%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.img_tour_fearless_tour {
+    background-image: url('imagens/turnes/fearless.jpg');
+}
+
+.img_tour_speak_now_tour {
+    background-image: url('imagens/turnes/speaknow.png');
+}
+
+.img_tour_red_tour {
+    background-image: url('imagens/turnes/red.png');
+}
+
+.img_tour_1989_tour {
+    background-image: url('imagens/turnes/pop.png');
+}
+
+.img_tour_reputation_tour {
+    background-image: url('imagens/turnes/rep.png');
+}
+
+.img_tour_the_eras_tour {
+    background-image: url('imagens/turnes/theeras.png');
+}
+
+
+
+/* Prêmios */
+/* Prêmios */
+.container-premios {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+    background-color: #fbd5e5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.premio {
+    width: 80%;
+    background-color: #ffe6f0;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px;
+    transition: transform 0.3s;
+}
+
+.premio:hover {
+    transform: scale(1.01);
+}
+
+.video {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0;
+    margin: 0;
+}
+
+.text-premio {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #574864;
+}
+
+.text-premio h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #a267c3;
+    font-weight: 600;
+}
+
+.text-premio p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.container_home_page,
+.albuns,
+.turnes,
+.container-premios {
+    width: 100%;
+    box-sizing: border-box;
+    /* importante para que padding não aumente a largura */
+}
+
+
+/* Login / Cadastro */
+.body-login-cadastro {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.container-login-cadastro {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-login-cadastro {
+    background-image: url('imagens/login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 40%;
+    height: 100vh;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 950px;
+    max-width: 90vw;
+    height: fit-content;
+    padding: 50px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.card h2 {
+    margin: 0px 0px 35px 0px;
+    color: #2c3e50;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.card h2 span {
+    background: none;
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: initial;
+    font-size: 26px;
+    text-align: initial;
+}
+
+.form-cadastro {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.form-login {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    flex-wrap: wrap;
+}
+
+.parte {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: calc(50% - 20px);
+    margin: 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    width: 100%;
+}
+
+.ipt-campos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    width: 100%;
+    position: relative;
+}
+
+.ipt-campos input,
+.ipt-campos select {
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 15px;
+    padding: 10px 16px;
+    width: calc(100% - 32px);
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.ipt-campos input:focus,
+.ipt-campos select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-2px);
+}
+
+.ipt-campos label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.btn {
+    padding: 14px 28px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-login {
+    width: 100%;
+}
+
+.btn-login:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-cadastro {
+    width: 50%;
+}
+
+.btn-cadastro:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.mensagem-cadastro {
+    font-size: 14px;
+    border-top: 1.5px solid rgba(102, 126, 234, 0.3);
+    padding-top: 15px;
+    width: 100%;
+    margin: 15px auto 0;
+    text-align: center;
+}
+
+.mensagem-cadastro a {
+    text-decoration: none;
+    color: #667eea;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.mensagem-cadastro a:hover {
+    text-decoration: underline;
+    color: #764ba2;
+}
+
+#mensagem_erro {
+    color: #e74c3c;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.alerta_erro {
+    width: 100%;
+}
+
+.card_erro {
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 10px 0;
+    display: none;
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* Removed specific width for these, as .ipt-campos now handles it */
+/* #ipt_primeiro_nome, #ipt_sobrenome, #ipt_senha, #ipt_senha_confirmada are no longer needed here due to the .form-group and .ipt-campos changes */
+
+/* Avatar Preview Styles */
+.avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    /* Ensure it aligns well within the .ipt-campos */
+}
+
+.avatar-select-container {
+    flex: 1;
+}
+
+.avatar-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+    font-weight: bold;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.avatar-preview:hover::before {
+    opacity: 1;
+    transform: rotate(45deg) translate(50%, 50%);
+}
+
+.avatar-preview.has-selection .avatar-placeholder {
+    display: none;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+    }
+}
+
+.avatar-placeholder {
+    font-size: 20px;
+    opacity: 0.7;
+}
+
+.loading-div {
+    display: none;
+}
